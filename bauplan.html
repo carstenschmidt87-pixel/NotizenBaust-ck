@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meister</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --vd:#1a0a2e; --vm:#3d1a6e; --vg:#b06ad4;
+    --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+  }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--vd); font-family:'Cormorant Garamond',serif;
+    min-height:100dvh; color:var(--cr); position:relative; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 60% 80% at 50% 30%,rgba(61,26,110,0.9) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── Login ── */
+  #loginScreen {
+    position:fixed; inset:0; z-index:10;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:2rem; gap:2rem; text-align:center;
+  }
+  #loginScreen svg { width:52px; opacity:0.5; }
+  #loginScreen h1 {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase;
+  }
+  .inp {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.25); border-radius:2px;
+    color:var(--gl); font-family:'Cinzel',serif; font-size:1.1rem;
+    letter-spacing:0.3em; text-align:center; text-transform:uppercase;
+    width:100%; max-width:260px; padding:0.7rem 1rem; outline:none;
+    transition:border-color 0.3s; -webkit-appearance:none;
+  }
+  .inp::placeholder { color:rgba(201,168,76,0.2); }
+  .inp:focus { border-color:rgba(201,168,76,0.6); }
+  .inp.wrong { animation:shake 0.4s ease; border-color:rgba(255,100,100,0.5); }
+  .btn {
+    background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+    padding:0.7rem 2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px; width:100%; max-width:260px;
+  }
+  .btn:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .btn:active { transform:scale(0.97); }
+
+  /* ── Dashboard ── */
+  #dashboard {
+    display:none; position:relative; z-index:1;
+    max-width:520px; margin:0 auto; padding:2rem 1.2rem 3rem;
+  }
+
+  .dash-header { text-align:center; margin-bottom:2.5rem; }
+  .dash-header svg { width:44px; opacity:0.5; margin-bottom:1.2rem; }
+  .dash-title {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase; margin-bottom:0.4rem;
+  }
+  .dash-sub {
+    font-style:italic; font-size:0.9rem; color:var(--vg); opacity:0.7;
+  }
+
+  /* Solution words summary */
+  .solutions {
+    background:rgba(61,26,110,0.3); border:1px solid rgba(201,168,76,0.15);
+    border-radius:4px; padding:1.2rem; margin-bottom:2rem;
+  }
+  .solutions-title {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.8;
+    margin-bottom:0.8rem; text-align:center;
+  }
+  .solutions-grid {
+    display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center;
+  }
+  .sol-chip {
+    font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em;
+    color:var(--go); border:1px solid rgba(201,168,76,0.3);
+    padding:0.3rem 0.8rem; border-radius:2px;
+    background:rgba(201,168,76,0.06);
+  }
+
+  /* Pair cards */
+  .pair-card {
+    border:1px solid rgba(201,168,76,0.12); border-radius:4px;
+    margin-bottom:1rem; overflow:hidden;
+  }
+  .pair-header {
+    background:rgba(61,26,110,0.4); padding:0.6rem 1rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .pair-label {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.25em;
+    color:var(--go); text-transform:uppercase; opacity:0.7;
+  }
+  .pair-combined {
+    font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.2em;
+    color:var(--gl);
+  }
+  .pair-loesung {
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em;
+    color:var(--go); background:rgba(201,168,76,0.1);
+    padding:0.15rem 0.5rem; border-radius:2px;
+  }
+
+  .person-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.7rem 1rem; border-top:1px solid rgba(201,168,76,0.08);
+    gap:0.5rem;
+  }
+  .person-name {
+    font-style:italic; font-size:clamp(0.9rem,3.5vw,1.05rem);
+    color:var(--cr); flex:1; min-width:0;
+  }
+  .person-half {
+    font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.2em;
+    color:var(--vg); white-space:nowrap;
+  }
+  .person-link {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.2em;
+    color:rgba(201,168,76,0.5); text-decoration:none; text-transform:uppercase;
+    border:1px solid rgba(201,168,76,0.2); padding:0.25rem 0.6rem; border-radius:2px;
+    transition:all 0.2s; white-space:nowrap;
+  }
+  .person-link:hover { color:var(--go); border-color:rgba(201,168,76,0.5); }
+
+  /* Riddle answers section */
+  .riddles {
+    background:rgba(61,26,110,0.2); border:1px solid rgba(201,168,76,0.1);
+    border-radius:4px; padding:1.2rem; margin-bottom:2rem;
+  }
+  .riddles-title {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.8;
+    margin-bottom:1rem; text-align:center;
+  }
+  .riddle-row {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:0.6rem 0; border-bottom:1px solid rgba(201,168,76,0.08); gap:1rem;
+  }
+  .riddle-row:last-child { border-bottom:none; }
+  .riddle-q-text {
+    font-style:italic; font-size:0.9rem; color:var(--cr); opacity:0.8;
+    line-height:1.5; flex:1;
+  }
+  .riddle-a-text {
+    font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.15em;
+    color:var(--go); white-space:nowrap; padding-top:0.15rem;
+  }
+
+  /* Camera link */
+  .camera-link {
+    text-align:center; margin-top:1.5rem;
+  }
+  .btn-cam {
+    background:transparent; border:1px solid rgba(201,168,76,0.35); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
+    padding:0.8rem 2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px; text-decoration:none; display:inline-block;
+  }
+  .btn-cam:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+
+  .foot {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.3; text-align:center; margin-top:2.5rem;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.7;
+    margin:1.8rem 0 0.8rem; text-align:center;
+  }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);}
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+  #dashboard.show { display:block; animation:fadeIn 0.8s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text>
+  </svg>
+  <h1>Meister</h1>
+  <input class="inp" id="pwInput" type="password" placeholder="· · · · · ·"
+    autocomplete="off" spellcheck="false"/>
+  <button class="btn" id="pwBtn">Eintreten</button>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+
+  <div class="dash-header">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text>
+    </svg>
+    <div class="dash-title">Gesellenstück — Übersicht</div>
+    <div class="dash-sub">Nur für den Meister des Abends</div>
+  </div>
+
+  <!-- Die fünf Lösungswörter -->
+  <div class="solutions">
+    <div class="solutions-title">Die fünf Lösungswörter</div>
+    <div class="solutions-grid">
+      <span class="sol-chip">BOAS</span>
+      <span class="sol-chip">LICHT</span>
+      <span class="sol-chip">STEIN</span>
+      <span class="sol-chip">SCHURZ</span>
+      <span class="sol-chip">OSTEN</span>
+    </div>
+  </div>
+
+  <!-- Die fünf Paare -->
+  <div class="section-title">Die fünf Paare</div>
+
+  <!-- Paar 1 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 1</span>
+      <span class="pair-combined">JAKIN</span>
+      <span class="pair-loesung">BOAS</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sabrina Yvonne</span>
+      <span class="person-half">JA —</span>
+      <a class="person-link" href="sabrina-yvonne.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Constantin</span>
+      <span class="person-half">— KIN</span>
+      <a class="person-link" href="constantin.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 2 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 2</span>
+      <span class="pair-combined">TEMPEL</span>
+      <span class="pair-loesung">LICHT</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sabrina</span>
+      <span class="person-half">TEM —</span>
+      <a class="person-link" href="sabrina.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Arno</span>
+      <span class="person-half">— PEL</span>
+      <a class="person-link" href="arno.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 3 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 3</span>
+      <span class="pair-combined">WINKEL</span>
+      <span class="pair-loesung">STEIN</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Stefanie</span>
+      <span class="person-half">WINK —</span>
+      <a class="person-link" href="stefanie.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Sven</span>
+      <span class="person-half">— EL</span>
+      <a class="person-link" href="sven.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 4 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 4</span>
+      <span class="pair-combined">ZIRKEL</span>
+      <span class="pair-loesung">SCHURZ</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sandra</span>
+      <span class="person-half">ZIRK —</span>
+      <a class="person-link" href="sandra.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Uwe</span>
+      <span class="person-half">— EL</span>
+      <a class="person-link" href="uwe.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 5 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 5</span>
+      <span class="pair-combined">LEHRLING</span>
+      <span class="pair-loesung">OSTEN</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Ursula</span>
+      <span class="person-half">LEHR —</span>
+      <a class="person-link" href="ursula.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Carsten</span>
+      <span class="person-half">— LING</span>
+      <a class="person-link" href="carsten.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Rätsel-Antworten -->
+  <div class="section-title">Rätsel &amp; Antworten</div>
+  <div class="riddles">
+    <div class="riddles-title">Falls jemand Hilfe braucht</div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Ich bin die linke Säule des Tempels. Wie lautet mein Name?</span>
+      <span class="riddle-a-text">BOAS</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Was empfängt der Lehrling, wenn er aus der Dunkelheit tritt?</span>
+      <span class="riddle-a-text">LICHT</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Der Lehrling trägt ihn roh mit sich. Was ist er?</span>
+      <span class="riddle-a-text">STEIN</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Das erste Geschenk der Loge. Was trägt der Lehrling um seine Hüften?</span>
+      <span class="riddle-a-text">SCHURZ</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Wohin richtet der Lehrling seinen Blick im Tempel?</span>
+      <span class="riddle-a-text">OSTEN</span>
+    </div>
+  </div>
+
+  <!-- Kamera -->
+  <div class="section-title">Finale</div>
+  <div class="camera-link">
+    <a class="btn-cam" href="kamera.html">✦ &nbsp; Kamera-Seite öffnen</a>
+  </div>
+
+  <div class="foot">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
+</div>
+
+<script>
+// ── Password ──────────────────────────────
+// Ändere dieses Wort um das Passwort anzupassen:
+const PASSWORD = 'MEISTER';
+
+const pwInput = document.getElementById('pwInput');
+const pwBtn   = document.getElementById('pwBtn');
+const login   = document.getElementById('loginScreen');
+const dash    = document.getElementById('dashboard');
+
+function tryLogin() {
+  if (pwInput.value.trim().toUpperCase() === PASSWORD) {
+    login.style.display = 'none';
+    dash.classList.add('show');
+  } else {
+    pwInput.classList.add('wrong');
+    setTimeout(() => pwInput.classList.remove('wrong'), 500);
+    pwInput.value = '';
+    pwInput.focus();
+  }
+}
+
+pwBtn.addEventListener('click', tryLogin);
+pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+</script>
+</body>
+</html>
