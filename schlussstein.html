@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der Schlussstein</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --vd:#1a0a2e; --vm:#3d1a6e; --vg:#b06ad4;
+    --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+  }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--vd); font-family:'Cormorant Garamond',serif;
+    min-height:100dvh; color:var(--cr); position:relative; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 60% 80% at 50% 30%,rgba(61,26,110,0.9) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  body::after {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.4; pointer-events:none; z-index:0;
+  }
+  #fxCanvas { position:fixed; inset:0; pointer-events:none; z-index:100; opacity:0; }
+
+  .screen {
+    position:relative; z-index:1; display:flex; flex-direction:column;
+    align-items:center; padding:2.5rem 1.5rem 3rem; min-height:100dvh; width:100%;
+  }
+  .hidden { display:none !important; }
+  .orn { margin-bottom:1.6rem; }
+  .orn svg { width:46px; opacity:0.55; }
+  .name {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.35rem);
+    font-weight:400; letter-spacing:0.22em; color:var(--gl);
+    text-align:center; text-transform:uppercase; margin-bottom:0.5rem;
+  }
+  .rule {
+    width:54px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--go),transparent);
+    margin:0 auto 1.8rem;
+  }
+  .eyebrow {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em;
+    color:var(--go); text-transform:uppercase; opacity:0.75;
+    text-align:center; margin-bottom:1rem;
+  }
+  .lead {
+    font-style:italic; font-weight:300; font-size:clamp(1.05rem,4.2vw,1.3rem);
+    line-height:1.7; color:var(--cr); text-align:center;
+    max-width:330px; margin-bottom:0.6rem;
+  }
+  .sub {
+    font-size:0.85rem; color:var(--vg); opacity:0.6;
+    letter-spacing:0.08em; text-align:center; margin-bottom:2.4rem; line-height:1.5;
+  }
+
+  /* ── Die zehn Stellen ── */
+  .slots {
+    display:grid; grid-template-columns:repeat(5,1fr);
+    gap:0.55rem; width:100%; max-width:340px; margin-bottom:1.6rem;
+  }
+  .slot { display:flex; flex-direction:column; align-items:center; gap:0.3rem; }
+  .slot-num {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.1em;
+    color:var(--vg); opacity:0.55;
+  }
+  .slot input {
+    width:100%; aspect-ratio:1; padding:0;
+    background:rgba(255,255,255,0.03); border:1px solid rgba(201,168,76,0.2);
+    border-radius:3px; color:var(--go); font-family:'Cinzel',serif;
+    font-size:clamp(1.1rem,5vw,1.5rem); text-align:center; text-transform:uppercase;
+    outline:none; transition:border-color 0.25s,box-shadow 0.25s;
+    -webkit-appearance:none;
+  }
+  .slot input:focus { border-color:rgba(201,168,76,0.6); box-shadow:0 0 12px rgba(201,168,76,0.15); }
+  .slot input.filled { border-color:rgba(201,168,76,0.45); color:var(--go); }
+  .slots.wrong { animation:shake 0.45s ease; }
+  .slots.solved input { border-color:rgba(201,168,76,0.6); pointer-events:none;
+    text-shadow:0 0 16px rgba(201,168,76,0.5); }
+
+  .btn {
+    background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+    padding:0.85rem 2.2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px;
+  }
+  .btn:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .btn:active { transform:scale(0.97); }
+
+  .hint-line {
+    font-style:italic; font-size:0.8rem; color:var(--vg); opacity:0.5;
+    text-align:center; max-width:280px; margin-top:1.6rem; line-height:1.55;
+  }
+  .meister {
+    background:transparent; border:none; cursor:pointer; margin-top:2.5rem;
+    font-family:'Cinzel',serif; font-size:0.45rem; letter-spacing:0.25em;
+    color:rgba(201,168,76,0.18); text-transform:uppercase; padding:0.4rem;
+  }
+  .meister:hover { color:rgba(201,168,76,0.45); }
+
+  /* ── Vollendet ── */
+  #done { justify-content:center; }
+  .done-inter {
+    font-style:italic; font-weight:300; font-size:clamp(1.2rem,5vw,1.5rem);
+    line-height:1.95; color:var(--cr); text-align:center; margin-bottom:3rem;
+    opacity:0; animation:fadeUp 1.5s ease forwards 0.3s; max-width:320px;
+  }
+  .btn-cam {
+    opacity:0; animation:fadeUp 1.2s ease forwards 1.3s;
+  }
+
+  .foot {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.35; text-align:center; margin-top:2.4rem;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes shake {
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);}
+    40%{transform:translateX(7px);} 60%{transform:translateX(-5px);} 80%{transform:translateX(5px);}
+  }
+</style>
+</head>
+<body>
+<canvas id="fxCanvas"></canvas>
+
+<!-- ══ Eingabe ══ -->
+<div id="ph1" class="screen">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="name">Der Schlussstein</div>
+  <div class="rule"></div>
+  <div class="eyebrow">Zehn Splitter — ein Wort</div>
+  <p class="lead">Jeder trägt einen Buchstaben und seine Stelle.<br>Fügt sie in der rechten Ordnung zusammen.</p>
+  <p class="sub">Erst das vollendete Wort öffnet den Weg zum Werk.</p>
+
+  <div class="slots" id="slots">
+    <!-- 10 Stellen -->
+  </div>
+
+  <button class="btn" id="doneBtn">Vollenden</button>
+
+  <p class="hint-line">Was die zehn Steine im Dreieck bilden,<br>trägt seit der Antike denselben Namen.</p>
+
+  <button class="meister" id="meisterBtn">✦</button>
+  <div class="foot">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
+</div>
+
+<!-- ══ Vollendet ══ -->
+<div id="done" class="screen hidden">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <p class="done-inter">
+    Der Stein ist gesetzt.<br>
+    Zehn Steine der Weisen —<br>
+    formt ein Dreieck<br>
+    und haltet die Kamera darüber.
+  </p>
+  <button class="btn btn-cam" id="camBtn">✦ &nbsp; Kamera öffnen</button>
+</div>
+
+<script>
+const KEYSTONE = 'PYTHAGORAS';
+const CAMERA_URL = 'kamera.html';
+const N = KEYSTONE.length;
+
+const slotsWrap = document.getElementById('slots');
+const ph1  = document.getElementById('ph1');
+const done = document.getElementById('done');
+
+// Stellen aufbauen
+const inputs = [];
+for (let i = 0; i < N; i++) {
+  const wrap = document.createElement('div');
+  wrap.className = 'slot';
+  const num = document.createElement('div');
+  num.className = 'slot-num';
+  num.textContent = (i + 1);
+  const inp = document.createElement('input');
+  inp.type = 'text'; inp.maxLength = 1; inp.autocomplete = 'off';
+  inp.autocapitalize = 'characters'; inp.spellcheck = false; inp.inputMode = 'text';
+  inp.dataset.idx = i;
+  wrap.appendChild(num); wrap.appendChild(inp);
+  slotsWrap.appendChild(wrap);
+  inputs.push(inp);
+}
+
+inputs.forEach((inp, i) => {
+  inp.addEventListener('input', () => {
+    inp.value = inp.value.toUpperCase().slice(0, 1);
+    inp.classList.toggle('filled', inp.value.length > 0);
+    if (inp.value.length === 1 && i < N - 1) inputs[i + 1].focus();
+    if (inputs.every(x => x.value.trim().length === 1)) checkWord();
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && inp.value.length === 0 && i > 0) inputs[i - 1].focus();
+    if (e.key === 'Enter') checkWord();
+  });
+});
+
+document.getElementById('doneBtn').addEventListener('click', checkWord);
+
+function currentWord() {
+  return inputs.map(x => x.value.trim().toUpperCase()).join('');
+}
+
+function checkWord() {
+  const w = currentWord();
+  if (w.length < N) {
+    slotsWrap.classList.add('wrong');
+    setTimeout(() => slotsWrap.classList.remove('wrong'), 480);
+    return;
+  }
+  if (w === KEYSTONE) { solve(); }
+  else {
+    slotsWrap.classList.add('wrong');
+    setTimeout(() => slotsWrap.classList.remove('wrong'), 480);
+  }
+}
+
+function solve() {
+  unlockAudio();
+  slotsWrap.classList.add('solved');
+  inputs.forEach(x => x.blur());
+  playFinaleSound();
+  const r = slotsWrap.getBoundingClientRect();
+  runFX(r.left + r.width / 2, r.top + r.height / 2);
+  setTimeout(() => { ph1.classList.add('hidden'); done.classList.remove('hidden'); window.scrollTo(0, 0); }, 750);
+}
+
+// Meister-Notausgang: dreimal tippen blendet das Wort ein
+let mc = 0;
+document.getElementById('meisterBtn').addEventListener('click', () => {
+  mc++;
+  if (mc >= 3) {
+    [...KEYSTONE].forEach((c, i) => { inputs[i].value = c; inputs[i].classList.add('filled'); });
+    mc = 0;
+  }
+});
+
+document.getElementById('camBtn').addEventListener('click', () => { window.location.href = CAMERA_URL; });
+
+/* ════ FX (Strahlen + Ringe) ════ */
+const fxCanvas = document.getElementById('fxCanvas');
+const fxCtx = fxCanvas.getContext('2d');
+function resizeFx(){fxCanvas.width=window.innerWidth;fxCanvas.height=window.innerHeight;}
+resizeFx();window.addEventListener('resize',resizeFx);
+
+class Ray{
+  constructor(i,n,cx,cy){
+    this.cx=cx;this.cy=cy;
+    this.angle=(i/n)*Math.PI*2+(Math.random()-0.5)*0.22;
+    this.maxLen=Math.max(window.innerWidth,window.innerHeight)*0.75+Math.random()*200;
+    this.width=1.4+Math.random()*4.5;this.delay=Math.random()*0.18;
+    this.speed=0.45+Math.random()*0.32;this.gold=Math.random()>0.32;
+  }
+  draw(t){
+    const tA=Math.max(0,t-this.delay);if(!tA)return;
+    const p=Math.min(1,tA*this.speed),ease=1-Math.pow(1-p,3);
+    const fade=p<0.45?p/0.45:1-(p-0.45)/0.55;
+    const x2=this.cx+Math.cos(this.angle)*ease*this.maxLen;
+    const y2=this.cy+Math.sin(this.angle)*ease*this.maxLen;
+    const g=fxCtx.createLinearGradient(this.cx,this.cy,x2,y2);
+    if(this.gold){g.addColorStop(0,`rgba(255,242,160,${fade*0.95})`);g.addColorStop(0.3,`rgba(255,200,70,${fade*0.7})`);g.addColorStop(1,'rgba(201,168,76,0)');}
+    else{g.addColorStop(0,`rgba(255,255,255,${fade*0.9})`);g.addColorStop(0.3,`rgba(210,160,255,${fade*0.6})`);g.addColorStop(1,'rgba(176,106,212,0)');}
+    fxCtx.save();fxCtx.shadowBlur=24;fxCtx.shadowColor=this.gold?`rgba(255,200,80,${fade*0.5})`:`rgba(200,140,255,${fade*0.4})`;
+    fxCtx.beginPath();fxCtx.moveTo(this.cx,this.cy);fxCtx.lineTo(x2,y2);
+    fxCtx.strokeStyle=g;fxCtx.lineWidth=this.width*(1-p*0.3);fxCtx.lineCap='round';fxCtx.stroke();fxCtx.restore();
+  }
+}
+class Ring{
+  constructor(cx,cy,d,c){this.cx=cx;this.cy=cy;this.d=d;this.c=c;}
+  draw(t){
+    const tA=Math.max(0,t-this.d);if(!tA)return;
+    const p=Math.min(1,tA*0.72),maxR=Math.max(fxCanvas.width,fxCanvas.height)*0.68;
+    const r=(1-Math.pow(1-p,2))*maxR,al=(1-p)*0.85;
+    fxCtx.save();fxCtx.shadowBlur=28;fxCtx.shadowColor=`rgba(${this.c},${al*0.6})`;
+    fxCtx.beginPath();fxCtx.arc(this.cx,this.cy,Math.max(1,r),0,Math.PI*2);
+    fxCtx.strokeStyle=`rgba(${this.c},${al})`;fxCtx.lineWidth=(1-p)*4+0.5;fxCtx.stroke();fxCtx.restore();
+  }
+}
+function runFX(cx,cy){
+  fxCanvas.style.opacity='1';
+  const rays=[...Array(34)].map((_,i)=>new Ray(i,34,cx,cy));
+  const rings=[
+    new Ring(cx,cy,0.00,'255,240,160'),new Ring(cx,cy,0.10,'255,210,80'),
+    new Ring(cx,cy,0.22,'201,168,76'), new Ring(cx,cy,0.36,'255,200,120'),
+    new Ring(cx,cy,0.52,'176,106,212'),new Ring(cx,cy,0.70,'255,255,200'),
+  ];
+  let start=null,fin=false;
+  function frame(ts){
+    if(fin)return;if(!start)start=ts;
+    const t=(ts-start)/1000;
+    fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+    let fl=0;if(t<0.08)fl=t/0.08;else if(t<0.3)fl=1-(t-0.08)/0.22;
+    if(fl>0){
+      const fg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,fxCanvas.width*0.65);
+      fg.addColorStop(0,`rgba(255,248,210,${fl*0.96})`);fg.addColorStop(0.28,`rgba(255,220,100,${fl*0.68})`);fg.addColorStop(1,`rgba(80,20,140,${fl*0.1})`);
+      fxCtx.fillStyle=fg;fxCtx.fillRect(0,0,fxCanvas.width,fxCanvas.height);
+    }
+    rays.forEach(r=>r.draw(t));rings.forEach(r=>r.draw(t));
+    if(t<1.3){
+      const cAl=Math.max(0,1-t/1.3)*0.78,cR=30+t*28;
+      const cg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,cR);
+      cg.addColorStop(0,`rgba(255,252,210,${cAl})`);cg.addColorStop(0.5,`rgba(255,200,80,${cAl*0.5})`);cg.addColorStop(1,'rgba(201,168,76,0)');
+      fxCtx.beginPath();fxCtx.arc(cx,cy,cR,0,Math.PI*2);fxCtx.fillStyle=cg;fxCtx.fill();
+    }
+    if(t>1.3){
+      const fp=Math.min(1,(t-1.3)/0.8);
+      fxCanvas.style.opacity=String(1-fp);
+      if(fp>=1){fin=true;fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);fxCanvas.style.opacity='0';return;}
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ════ Klang ════ */
+function playFinaleSound(){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  const ac=new AC();if(ac.state==='suspended')ac.resume();
+  const now=ac.currentTime,master=ac.createGain();
+  master.gain.setValueAtTime(0.7,now);master.connect(ac.destination);
+  const freqs=[198,264,396,528,639,792,1056];
+  const amps =[0.20,0.25,0.35,0.5,0.2,0.16,0.1];
+  const decays=[6,7,8,9,7,6,5];
+  freqs.forEach((f,i)=>{
+    const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0,now+i*0.06);g.gain.linearRampToValueAtTime(amps[i],now+i*0.06+0.04);
+    g.gain.exponentialRampToValueAtTime(0.001,now+i*0.06+decays[i]);
+    o.connect(g);g.connect(master);o.start(now+i*0.06);o.stop(now+i*0.06+decays[i]+0.1);
+  });
+  const bass=ac.createOscillator(),bg=ac.createGain();
+  bass.type='sine';bass.frequency.value=99;
+  bg.gain.setValueAtTime(0,now);bg.gain.linearRampToValueAtTime(0.3,now+0.08);bg.gain.exponentialRampToValueAtTime(0.001,now+5);
+  bass.connect(bg);bg.connect(master);bass.start(now);bass.stop(now+5.1);
+  master.gain.setValueAtTime(0.7,now+6);master.gain.linearRampToValueAtTime(0,now+9);
+}
+let audioUnlocked=false;
+function unlockAudio(){
+  if(audioUnlocked)return;
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  const ac=new AC(),buf=ac.createBuffer(1,1,22050),src=ac.createBufferSource();
+  src.buffer=buf;src.connect(ac.destination);src.start(0);
+  setTimeout(()=>ac.close(),100);audioUnlocked=true;
+}
+document.addEventListener('click',unlockAudio,{once:true});
+</script>
+</body>
+</html>

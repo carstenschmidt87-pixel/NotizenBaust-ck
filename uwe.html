@@ -213,6 +213,80 @@
     50%{opacity:0.5;transform:scale(1.5);filter:brightness(6) blur(3px);}
     100%{opacity:0;transform:scale(0.1);filter:brightness(10) blur(15px);}
   }
+
+  /* ── Pigpen ── */
+  .secret-sub {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.25em;
+    color:var(--vg); text-transform:uppercase; opacity:0.55; margin-bottom:0.9rem;
+  }
+  .pigpen-row {
+    display:flex; gap:0.5rem; justify-content:center; align-items:center;
+    flex-wrap:wrap; margin-bottom:0.9rem;
+  }
+  .pg {
+    width:clamp(38px,11vw,52px); height:clamp(38px,11vw,52px);
+    filter:drop-shadow(0 0 10px rgba(201,168,76,0.35));
+  }
+  .key-toggle {
+    background:transparent; border:none; cursor:pointer;
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.22em;
+    color:rgba(201,168,76,0.4); text-transform:uppercase;
+    text-decoration:underline; text-underline-offset:3px; padding:0.3rem;
+  }
+  .key-toggle:hover { color:var(--go); }
+  .key-panel {
+    display:none; margin-top:1rem; padding:1rem;
+    border:1px solid rgba(201,168,76,0.15); border-radius:4px;
+    background:rgba(61,26,110,0.25);
+  }
+  .key-panel.show { display:block; animation:fadeUp 0.5s ease; }
+  .key-grid {
+    display:grid; grid-template-columns:repeat(6,1fr); gap:0.4rem;
+  }
+  .key-cell {
+    display:flex; flex-direction:column; align-items:center; gap:0.15rem;
+  }
+  .key-cell .pg { width:26px; height:26px; filter:none; opacity:0.85; }
+  .key-cell span {
+    font-family:'Cinzel',serif; font-size:0.55rem; color:var(--vg); opacity:0.7;
+  }
+  /* ── Vers / Reihenfolge ── */
+  .verse {
+    font-style:italic; font-weight:300; font-size:clamp(0.85rem,3.4vw,1rem);
+    line-height:1.85; color:var(--cr); opacity:0.78; text-align:center;
+    max-width:300px; margin:0 auto 1.4rem;
+  }
+  .five-wrap.wrong { animation:inputShake 0.4s ease; }
+  .five-wrap.locked .ff { border-color:rgba(201,168,76,0.4); color:var(--go); }
+  .check-btn { margin:0 auto 2rem; display:block; }
+  /* ── Splitter ── */
+  .frag-reveal { display:none; flex-direction:column; align-items:center; width:100%; }
+  .frag-reveal.show { display:flex; animation:fadeUp 0.8s ease; }
+  .frag-glyph {
+    width:84px; height:84px; border:1px solid rgba(201,168,76,0.4);
+    border-radius:6px; display:flex; align-items:center; justify-content:center;
+    margin:0.6rem 0; background:rgba(201,168,76,0.06);
+    box-shadow:0 0 30px rgba(201,168,76,0.25);
+  }
+  .frag-letter {
+    font-family:'Cinzel',serif; font-size:2.6rem; color:var(--go);
+    text-shadow:0 0 24px rgba(201,168,76,0.6);
+  }
+  .frag-pos {
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em;
+    color:var(--vg); text-transform:uppercase; opacity:0.8;
+  }
+  .frag-note {
+    font-style:italic; font-size:0.85rem; color:var(--cr); opacity:0.65;
+    line-height:1.6; text-align:center; max-width:260px; margin:1rem 0 1.6rem;
+  }
+
+  .order-hint {
+    display:none; font-style:italic; font-size:0.85rem; color:var(--vg);
+    opacity:0.8; text-align:center; max-width:280px;
+    margin:-0.4rem auto 1.4rem; line-height:1.55;
+  }
+  .order-hint.show { display:block; animation:fadeUp 0.5s ease; }
 </style>
 </head>
 <body>
@@ -226,7 +300,10 @@
   
   <div class="secret-box">
     <div class="secret-label">Deine Hälfte</div>
-    <div class="secret-word">EL</div>
+    <div class="secret-sub">Maurer-Alphabet — entschlüssle deine Hälfte</div>
+    <div class="pigpen-row"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg></div>
+    <button class="key-toggle" id="keyToggle">Festgefahren? Maurer-Schlüssel</button>
+    <div class="key-panel" id="keyPanel"><div class="key-grid"><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>A</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>B</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>C</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>D</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/></svg><span>E</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>F</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/></svg><span>G</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/></svg><span>H</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/></svg><span>I</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>J</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>K</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>L</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>M</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>N</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>O</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>P</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Q</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>R</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/></svg><span>S</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/></svg><span>T</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/></svg><span>U</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/></svg><span>V</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/><circle cx="78" cy="50" r="6.5" fill="#c9a84c"/></svg><span>W</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/><circle cx="50" cy="78" r="6.5" fill="#c9a84c"/></svg><span>X</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/><circle cx="22" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Y</span></div><div class="key-cell"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/><circle cx="50" cy="22" r="6.5" fill="#c9a84c"/></svg><span>Z</span></div></div></div>
     <p class="secret-hint">Finde Schwester Sandra<br>und fügt eure Hälften zusammen.</p>
   </div>
   <div class="egg-wrap" id="eggWrap">
@@ -263,6 +340,14 @@
     SCHURZ
   </div>
   <div class="divider"></div>
+  <div class="eyebrow">Die fünf Worte — in der rechten Ordnung</div>
+  <p class="verse">
+    Zuerst das erste Geschenk, um die Hüften gelegt,<br>
+    dann das rohe Werk, das der Hammer noch prägt,<br>
+    der Blick zur Quelle, woher der Morgen zieht,<br>
+    was dort empfangen, wenn die Dunkelheit flieht,<br>
+    zuletzt die linke Säule, in Kraft erbaut.
+  </p>
   <div class="five-wrap" id="fiveWrap">
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
@@ -270,24 +355,37 @@
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
   </div>
+  <button class="btn btn-sm check-btn" id="checkBtn">Ordnung prüfen</button>
+  <div class="order-hint" id="orderHint"></div>
+  <div class="frag-reveal" id="fragReveal">
+    <div class="eyebrow">Dein Splitter des Schlusssteins</div>
+    <div class="frag-glyph"><span class="frag-letter" id="fragLetterP2">?</span></div>
+    <div class="frag-pos">Stelle <span id="fragPosP2">?</span> von zehn</div>
+    <p class="frag-note">Merkt euch Buchstabe und Stelle.<br>Alle zehn zusammen vollenden den Schlussstein.</p>
+    <button class="btn btn-sm" id="toPh3Btn">Weiter</button>
+  </div>
   <div class="foot">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
 </div>
 
 <div id="ph3" class="screen hidden">
   <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="eyebrow">Der Schlussstein</div>
   <p class="inter">
-    Zehn Steine der Weisen.<br>
-    Formt ein Dreieck.<br>
-    Haltet die Kamera darüber.
+    Zehn Splitter,<br>ein verborgenes Wort.<br>
+    Tragt sie zusammen.
   </p>
-  <button class="btn-cam" id="camBtn">✦ &nbsp; Kamera öffnen</button>
+  <div class="frag-glyph"><span class="frag-letter" id="fragLetterP3">?</span></div>
+  <div class="frag-pos" style="margin-bottom:2.2rem;">Dein Splitter — Stelle <span id="fragPosP3">?</span></div>
+  <button class="btn-cam" id="camBtn">✦ &nbsp; Zum Schlussstein</button>
 </div>
 
 <script>
 const ANSWER   = 'SCHURZ';
 const COMBINED = 'ZIRKEL';  // empty string = tap-to-open
 const SOLUTIONS = ['BOAS','LICHT','STEIN','SCHURZ','OSTEN'];
-const CAMERA_URL = 'kamera.html';
+const CAMERA_URL = 'schlussstein.html';
+const FRAG_LETTER='R';
+const FRAG_POS=8;
 
 const ph1 = document.getElementById('ph1');
 const ph2 = document.getElementById('ph2');
@@ -448,17 +546,55 @@ riddleInp.addEventListener('keydown',e=>{if(e.key==='Enter')riddleBtn.click();})
 
 // Five fields
 ffs.forEach(f=>{
-  f.addEventListener('input',()=>{f.classList.toggle('filled',f.value.trim().length>0);checkFive();});
+  f.addEventListener('input',()=>{f.classList.toggle('filled',f.value.trim().length>0);});
   f.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkFive();}});
 });
+const ORDER=['SCHURZ','STEIN','OSTEN','LICHT','BOAS'];
+let _tries=0;
 function checkFive(){
-  const vals=[...ffs].map(f=>f.value.trim().toUpperCase()).filter(v=>v.length>0);
-  if(vals.length<5)return;
-  const rem=[...SOLUTIONS];let ok=true;
-  for(const v of vals){const i=rem.indexOf(v);if(i===-1){ok=false;break;}rem.splice(i,1);}
-  if(ok&&rem.length===0)setTimeout(()=>{ph2.classList.add('hidden');ph3.classList.remove('hidden');window.scrollTo(0,0);},400);
+  const vals=[...ffs].map(f=>f.value.trim().toUpperCase());
+  const hint=document.getElementById('orderHint');
+  if(vals.some(v=>v.length===0)){
+    fiveWrap.classList.add('wrong');setTimeout(()=>fiveWrap.classList.remove('wrong'),450);return;
+  }
+  const ok=ORDER.every((w,i)=>vals[i]===w);
+  if(ok){
+    ffs.forEach(f=>{f.classList.add('filled');f.readOnly=true;});
+    fiveWrap.classList.add('locked');
+    document.getElementById('checkBtn').style.display='none';
+    if(hint)hint.classList.remove('show');
+    const fr=document.getElementById('fragReveal');fr.classList.add('show');
+    setTimeout(()=>fr.scrollIntoView({behavior:'smooth',block:'center'}),250);
+  } else {
+    _tries++;
+    fiveWrap.classList.add('wrong');setTimeout(()=>fiveWrap.classList.remove('wrong'),450);
+    if(hint&&_tries>=2){
+      const sameSet=[...vals].sort().join('|')===[...ORDER].sort().join('|');
+      hint.textContent=sameSet
+        ? 'Die fünf Worte stimmen — prüft nur ihre Reihenfolge.'
+        : 'Ein Wort passt noch nicht.';
+      hint.classList.add('show');
+    }
+  }
 }
 document.getElementById('camBtn').addEventListener('click',()=>{window.location.href=CAMERA_URL;});
+
+// ── Pigpen-Schlüssel ──
+(function(){
+  const t=document.getElementById('keyToggle'),p=document.getElementById('keyPanel');
+  if(t&&p)t.addEventListener('click',()=>{
+    p.classList.toggle('show');
+    t.textContent=p.classList.contains('show')?'Schlüssel verbergen':'Festgefahren? Maurer-Schlüssel';
+  });
+})();
+// ── Splitter ──
+['fragLetterP2','fragLetterP3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='R';});
+['fragPosP2','fragPosP3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='8';});
+(function(){
+  const c=document.getElementById('checkBtn');if(c)c.addEventListener('click',checkFive);
+  const b=document.getElementById('toPh3Btn');
+  if(b)b.addEventListener('click',()=>{ph2.classList.add('hidden');ph3.classList.remove('hidden');window.scrollTo(0,0);});
+})();
 </script>
 </body>
 </html>

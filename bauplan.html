@@ -187,6 +187,38 @@
   }
   @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
   #dashboard.show { display:block; animation:fadeIn 0.8s ease forwards; }
+
+  .flow-note {
+    font-style:italic; font-size:0.85rem; color:var(--cr); opacity:0.7;
+    line-height:1.6; text-align:center; max-width:440px; margin:0 auto 2rem;
+    padding:1rem; border:1px solid rgba(201,168,76,0.12); border-radius:4px;
+    background:rgba(61,26,110,0.2);
+  }
+  .order-chips { display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:center; align-items:center; margin-bottom:0.6rem; }
+  .order-chips .sol-chip { position:relative; }
+  .order-arrow { color:rgba(201,168,76,0.4); font-size:0.7rem; }
+  .verse-m { font-style:italic; font-size:0.85rem; color:var(--vg); opacity:0.6; text-align:center; line-height:1.7; margin-top:0.6rem; }
+  .keyword-big {
+    font-family:'Cinzel',serif; font-size:1.4rem; letter-spacing:0.35em;
+    color:var(--go); text-align:center; text-shadow:0 0 24px rgba(201,168,76,0.4);
+    margin:0.4rem 0 1rem;
+  }
+  .frag-table { display:flex; flex-direction:column; gap:0; }
+  .frag-line {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.45rem 0.2rem; border-bottom:1px solid rgba(201,168,76,0.08); gap:0.6rem;
+  }
+  .frag-line:last-child { border-bottom:none; }
+  .frag-line .fp { font-family:'Cinzel',serif; font-size:0.6rem; color:var(--vg); opacity:0.6; width:1.5rem; }
+  .frag-line .fn { font-style:italic; font-size:0.95rem; color:var(--cr); flex:1; }
+  .frag-line .fl {
+    font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.15em; color:var(--go);
+    background:rgba(201,168,76,0.1); padding:0.1rem 0.55rem; border-radius:2px;
+  }
+  .pgkey { display:grid; grid-template-columns:repeat(6,1fr); gap:0.5rem; }
+  .pgk-cell { display:flex; flex-direction:column; align-items:center; gap:0.15rem; }
+  .pgk { width:28px; height:28px; opacity:0.85; }
+  .pgk-cell span { font-family:'Cinzel',serif; font-size:0.55rem; color:var(--vg); opacity:0.7; }
 </style>
 </head>
 <body>
@@ -221,9 +253,17 @@
     <div class="dash-sub">Nur für den Meister des Abends</div>
   </div>
 
+  <div class="flow-note">
+    Ablauf pro Person: <b>Hälfte im Maurer-Alphabet entschlüsseln</b> → mit Partner
+    zum vollständigen Wort fügen → Ei öffnen → Gespräch &amp; Rätsel → die fünf Worte
+    <b>in der richtigen Reihenfolge</b> eintragen → eigenen <b>Splitter</b> erhalten →
+    alle zehn Splitter ergeben auf der <b>Schlussstein-Seite</b> das Wort, das erst
+    dann die Kamera freischaltet.
+  </div>
+
   <!-- Die fünf Lösungswörter -->
   <div class="solutions">
-    <div class="solutions-title">Die fünf Lösungswörter</div>
+    <div class="solutions-title">Die fünf Lösungswörter (Reihenfolge unten!)</div>
     <div class="solutions-grid">
       <span class="sol-chip">BOAS</span>
       <span class="sol-chip">LICHT</span>
@@ -331,6 +371,53 @@
     </div>
   </div>
 
+  <!-- Reihenfolge-Schloss -->
+  <div class="section-title">Das Reihenfolge-Schloss</div>
+  <div class="solutions">
+    <div class="solutions-title">Die fünf Worte müssen in dieser Ordnung eingegeben werden</div>
+    <div class="order-chips">
+      <span class="sol-chip">1 · SCHURZ</span><span class="order-arrow">→</span>
+      <span class="sol-chip">2 · STEIN</span><span class="order-arrow">→</span>
+      <span class="sol-chip">3 · OSTEN</span><span class="order-arrow">→</span>
+      <span class="sol-chip">4 · LICHT</span><span class="order-arrow">→</span>
+      <span class="sol-chip">5 · BOAS</span>
+    </div>
+    <p class="verse-m">
+      „Zuerst das erste Geschenk, um die Hüften gelegt (Schurz),<br>
+      dann das rohe Werk, das der Hammer noch prägt (Stein),<br>
+      der Blick zur Quelle, woher der Morgen zieht (Osten),<br>
+      was dort empfangen, wenn die Dunkelheit flieht (Licht),<br>
+      zuletzt die linke Säule, in Kraft erbaut (Boas)."
+    </p>
+  </div>
+
+  <!-- Schlussstein -->
+  <div class="section-title">Der Schlussstein — die zehn Splitter</div>
+  <div class="solutions">
+    <div class="solutions-title">Jede Seite gibt einen Buchstaben + Stelle frei</div>
+    <div class="keyword-big">P Y T H A G O R A S</div>
+    <div class="frag-table">
+      <div class="frag-line"><span class="fp">1</span><span class="fn">Sabrina Yvonne</span><span class="fl">P</span></div>
+      <div class="frag-line"><span class="fp">2</span><span class="fn">Constantin</span><span class="fl">Y</span></div>
+      <div class="frag-line"><span class="fp">3</span><span class="fn">Sabrina</span><span class="fl">T</span></div>
+      <div class="frag-line"><span class="fp">4</span><span class="fn">Arno</span><span class="fl">H</span></div>
+      <div class="frag-line"><span class="fp">5</span><span class="fn">Stefanie</span><span class="fl">A</span></div>
+      <div class="frag-line"><span class="fp">6</span><span class="fn">Sven</span><span class="fl">G</span></div>
+      <div class="frag-line"><span class="fp">7</span><span class="fn">Sandra</span><span class="fl">O</span></div>
+      <div class="frag-line"><span class="fp">8</span><span class="fn">Uwe</span><span class="fl">R</span></div>
+      <div class="frag-line"><span class="fp">9</span><span class="fn">Ursula</span><span class="fl">A</span></div>
+      <div class="frag-line"><span class="fp">10</span><span class="fn">Carsten</span><span class="fl">S</span></div>
+    </div>
+    <p class="verse-m" style="margin-top:1rem;">Hinweis auf der Seite: „Was die zehn Steine im Dreieck bilden, trägt seit der Antike denselben Namen." — Notausgang: dreimal auf das ✦ unten tippen füllt das Wort.</p>
+  </div>
+
+  <!-- Pigpen-Schlüssel -->
+  <div class="section-title">Maurer-Alphabet (Pigpen)</div>
+  <div class="riddles">
+    <div class="riddles-title">Schlüssel zum Entziffern der Hälften</div>
+    <div class="pgkey"><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>A</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>B</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>C</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>D</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/></svg><span>E</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>F</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/></svg><span>G</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/></svg><span>H</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/></svg><span>I</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>J</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>K</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>L</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>M</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>N</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>O</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>P</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Q</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>R</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/></svg><span>S</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/></svg><span>T</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/></svg><span>U</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/></svg><span>V</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/><circle cx="78" cy="50" r="6.5" fill="#c9a84c"/></svg><span>W</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/><circle cx="50" cy="78" r="6.5" fill="#c9a84c"/></svg><span>X</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/><circle cx="22" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Y</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/><circle cx="50" cy="22" r="6.5" fill="#c9a84c"/></svg><span>Z</span></div></div>
+  </div>
+
   <!-- Rätsel-Antworten -->
   <div class="section-title">Rätsel &amp; Antworten</div>
   <div class="riddles">
@@ -357,10 +444,12 @@
     </div>
   </div>
 
-  <!-- Kamera -->
+  <!-- Finale -->
   <div class="section-title">Finale</div>
   <div class="camera-link">
-    <a class="btn-cam" href="kamera.html">✦ &nbsp; Kamera-Seite öffnen</a>
+    <a class="btn-cam" href="schlussstein.html">✦ &nbsp; Schlussstein-Seite</a>
+    &nbsp;&nbsp;
+    <a class="btn-cam" href="kamera.html">✦ &nbsp; Kamera-Seite</a>
   </div>
 
   <div class="foot">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
