@@ -962,10 +962,9 @@ function sciSay(html, after) {
 function chatEnter() {
   // Video-Fallback
   const vid = document.getElementById("scivid");
-  vid.addEventListener("loadeddata", () => {
-    vid.style.display = ""; document.getElementById("sciavatar").style.display = "none";
-  }, { once:true });
-  vid.addEventListener("error", () => {}, { once:true });
+  const showVid = () => { vid.style.display = ""; document.getElementById("sciavatar").style.display = "none"; vid.play && vid.play().catch(()=>{}); };
+  if (vid.readyState >= 2) showVid();
+  else vid.addEventListener("loadeddata", showVid, { once:true });
 
   if (chatEntered) { chatRefresh(); return; }
   chatEntered = true;
@@ -1485,9 +1484,9 @@ function profSay(html, after) {
 }
 function prologEnter() {
   const vid = document.getElementById("provid");
-  vid.addEventListener("loadeddata", () => {
-    vid.style.display = ""; document.getElementById("proavatar").style.display = "none";
-  }, { once:true });
+  const showVid = () => { vid.style.display = ""; document.getElementById("proavatar").style.display = "none"; vid.play && vid.play().catch(()=>{}); };
+  if (vid.readyState >= 2) showVid();
+  else vid.addEventListener("loadeddata", showVid, { once:true });
   if (prologEntered) { prologRefresh(); return; }
   prologEntered = true;
   if (state.prologDone) {
