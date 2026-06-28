@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fdf6ee; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #e0b074;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #e0b074; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#5d4037; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#5d4037; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#e0b074; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #e0b074; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#5d4037; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#5d4037;
+       border-bottom:1.5px solid #e0b074; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#e0b074; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #e0b074; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#e0b074; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#5d4037; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 3 von 10</div>
+<div class="inner">
+<h1>Omas Stimmen-Schatzkiste: Der KI-Erinnerungs-Altar</h1>
+<div class="sub">Wo Familiengeschichten nie verstummen und Omas Lieblingsanekdoten auf Knopfdruck lebendig werden.</div>
+<div class="desc">Dieser Altar ist eine gemuetliche Erinnerungs-Ecke mit einem kleinen Tablet, auf dem ein liebevoller Sprach-Helfer wohnt, der mit Familiengeschichten, alten Fotos und vertrauten Stimmen gefuettert wurde. Tippt die Oma auf eine grosse Taste, erzaehlt ihr eine warme Stimme eine Anekdote von frueher, vom Hochzeitstag oder vom ersten Enkelkind. Alles bleibt sicher und privat zu Hause gespeichert, nichts wandert in eine ferne Wolke.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 120-220 EUR (Tablet gebraucht ca. 60-100 EUR, Mini-PC/Raspberry Pi ca. 50-80 EUR, Lautsprecher und grosse Taste ca. 20-40 EUR; Deko aus dem Haushalt fast geschenkt)</span>
+  <span class="chip">Schwierigkeit: Mittel</span>
+  <span class="chip">Zeit: Ein bis zwei gemuetliche Nachmittage (einer fuer das Geschichten-Sammeln, einer fuer den Aufbau)</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="24" font-family="Comic Sans MS, cursive" font-size="16" fill="#8b5a2b" text-anchor="middle">KI-Erinnerungs-Altar fuer Oma</text>
+  <rect x="40" y="220" width="320" height="20" rx="4" fill="#c8a06a"/>
+  <rect x="55" y="225" width="290" height="8" fill="#fff" opacity="0.5"/>
+  <text x="200" y="255" font-family="Comic Sans MS, cursive" font-size="10" fill="#8b5a2b" text-anchor="middle">Holzbrett mit Spitzendeckchen</text>
+  <rect x="120" y="90" width="160" height="115" rx="8" fill="#2e3a45"/>
+  <rect x="130" y="100" width="140" height="95" rx="4" fill="#eaf4ff"/>
+  <circle cx="200" cy="135" r="20" fill="#ffd27f" stroke="#c8a06a" stroke-width="2"/>
+  <text x="200" y="140" font-family="sans-serif" font-size="14" fill="#8b5a2b" text-anchor="middle">Oma</text>
+  <rect x="145" y="165" width="110" height="22" rx="11" fill="#7bb86f"/>
+  <text x="200" y="180" font-family="sans-serif" font-size="9" fill="#fff" text-anchor="middle">Erzaehl mir was!</text>
+  <rect x="190" y="205" width="20" height="15" fill="#444"/>
+  <line x1="180" y1="205" x2="220" y2="205" stroke="#444" stroke-width="2"/>
+  <rect x="300" y="150" width="70" height="55" rx="6" fill="#d9e8d2" stroke="#7bb86f" stroke-width="2"/>
+  <text x="335" y="172" font-family="sans-serif" font-size="9" fill="#4a7a3f" text-anchor="middle">Box mit</text>
+  <text x="335" y="184" font-family="sans-serif" font-size="9" fill="#4a7a3f" text-anchor="middle">Geschichten</text>
+  <text x="335" y="198" font-family="sans-serif" font-size="8" fill="#4a7a3f" text-anchor="middle">(offline)</text>
+  <line x1="280" y1="170" x2="300" y2="170" stroke="#888" stroke-width="2" stroke-dasharray="3,2"/>
+  <circle cx="65" cy="185" r="18" fill="#e26d5c"/>
+  <text x="65" y="189" font-family="sans-serif" font-size="9" fill="#fff" text-anchor="middle">TASTE</text>
+  <line x1="83" y1="185" x2="120" y2="180" stroke="#888" stroke-width="2" stroke-dasharray="3,2"/>
+  <rect x="40" y="150" width="40" height="50" rx="4" fill="#fff" stroke="#c8a06a" stroke-width="2"/>
+  <circle cx="60" cy="170" r="8" fill="#ffd27f"/>
+  <text x="60" y="210" font-family="sans-serif" font-size="8" fill="#8b5a2b" text-anchor="middle">Foto</text>
+  <rect x="295" y="200" width="14" height="20" rx="3" fill="#ffe08a" stroke="#e0a800" stroke-width="1"/>
+  <ellipse cx="302" cy="198" rx="4" ry="6" fill="#ffb347"/>
+  <text x="302" y="232" font-family="sans-serif" font-size="8" fill="#8b5a2b" text-anchor="middle">LED-Kerze</text>
+  <path d="M30 60 q10 -15 20 0" stroke="#7bb86f" stroke-width="2" fill="none"/>
+  <text x="90" y="62" font-family="Comic Sans MS, cursive" font-size="10" fill="#7bb86f" text-anchor="middle">Stimmen der Familie</text>
+  <path d="M155 70 q20 -20 40 0 q20 -20 40 0" stroke="#e26d5c" stroke-width="2" fill="none"/>
+</svg><div class="cap">Skizze: Omas Stimmen-Schatzkiste: Der KI-Erinnerungs-Altar</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Ein gebrauchtes oder guenstiges Tablet (10 Zoll, grosser Bildschirm) mit Tablet-Staender aus Holz</li><li>Eine kleine Box (Mini-PC oder Raspberry Pi) fuer die lokale, offline KI-Speicherung der Geschichten</li><li>Externer Lautsprecher und eine grosse, kindersichere Bedien-Taste (z.B. ein grosser Buzzer per USB)</li><li>Familienfotos, eingescannte Briefe und vor allem Audio-Aufnahmen von Familienstimmen</li><li>Open-Source-Sprachsoftware (lokal laufend, z.B. ein Offline-Sprachmodell mit Stimmen-Wiedergabe)</li><li>Holzbrett oder huebsches Tablett als Altar-Unterlage, Spitzendeckchen, LED-Kerze, ein Foto im Rahmen</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Geschichten sammeln: Setzt euch mit der Oma (oder unter euch) zusammen und nehmt 10-20 Familienanekdoten als Audio oder Text auf. Scannt dazu ein paar Lieblingsfotos ein.</li><li>Die Box einrichten: Installiert auf dem Mini-PC/Raspberry Pi die lokale Sprachsoftware und fuettert sie mit den Geschichten und Stimmproben. Alles bleibt offline, ohne Internet-Wolke.</li><li>Tablet verbinden: Das Tablet zeigt eine ganz einfache Oberflaeche mit einer riesigen Taste &#x27;Erzaehl mir was, Oma-Helfer&#x27; und ein paar grossen Foto-Knoepfen.</li><li>Altar herrichten: Stellt Tablet-Staender, LED-Kerze, ein gerahmtes Foto und das Spitzendeckchen liebevoll auf dem Holzbrett zusammen.</li><li>Gemeinsam testen: Drueckt die grosse Taste, hoert die erste Anekdote und passt Lautstaerke sowie Schriftgroesse fuer die Oma an.</li><li>Einweihen: Setzt euch mit Oma hin, lasst sie die Taste druecken und freut euch zusammen ueber die erste erzaehlte Erinnerung.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Speichert alle Stimmen, Fotos und Geschichten ausschliesslich lokal auf der Box zu Hause und schaltet das Internet fuer das Geraet ganz ab oder nutzt einen Offline-Modus. So bleiben die kostbaren Familienerinnerungen privat und koennen nicht in fremde Haende geraten. Macht zusaetzlich eine Sicherungskopie auf einem USB-Stick, den ihr im Schrank aufbewahrt.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Die Oma wird es lieben, weil sie auf einen einzigen grossen Knopf druecken kann und sofort eine vertraute Stimme hoert, die von frueher erzaehlt, auch wenn gerade niemand zu Besuch ist. Es ist, als saesse die ganze Familie bei ihr am Kuechentisch, und sie fuehlt sich nie mehr allein.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 3/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fff7ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #d9a566;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #d9a566; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#704214; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#704214; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#d9a566; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #d9a566; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#704214; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#704214;
+       border-bottom:1.5px solid #d9a566; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#d9a566; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #d9a566; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#d9a566; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#704214; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 4 von 10</div>
+<div class="inner">
+<h1>Omas Lichternest - der LED-Ambient-Kerzen-Altar</h1>
+<div class="sub">Ein warmes Flaemmchen, das nie ausgeht - sicher, gemuetlich und ganz nah am Herzen</div>
+<div class="desc">Dieser Altar stellt eine sanfte, flackernde Lichtstimmung in den Mittelpunkt - ganz ohne echtes Feuer. Flammenlose Smart-LED-Kerzen und warme Lichterketten zaubern auf Knopfdruck oder per Timer eine heimelige Atmosphaere, in der Oma sich geborgen fuehlt. Es ist liebevoll wie eine echte Kerzenecke, aber komplett brandsicher und so einfach zu bedienen wie eine TV-Fernbedienung.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 40-90 EUR</span>
+  <span class="chip">Schwierigkeit: Einfach</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fff7e6"/>
+  <text x="200" y="28" font-family="Comic Sans MS, sans-serif" font-size="18" fill="#a0522d" text-anchor="middle">Omas Lichternest</text>
+
+  <!-- Kommode / Tablett -->
+  <rect x="60" y="200" width="280" height="40" rx="6" fill="#deb887" stroke="#a0522d" stroke-width="2"/>
+  <rect x="70" y="195" width="260" height="12" rx="4" fill="#f5deb3" stroke="#a0522d" stroke-width="1.5"/>
+  <text x="200" y="232" font-family="sans-serif" font-size="11" fill="#7a4a1d" text-anchor="middle">Holztablett mit Spitzendeckchen</text>
+
+  <!-- Foto in der Mitte -->
+  <rect x="175" y="120" width="50" height="60" rx="3" fill="#fffaf0" stroke="#8b5a2b" stroke-width="3"/>
+  <circle cx="200" cy="143" r="9" fill="#ffd9b3" stroke="#8b5a2b" stroke-width="1"/>
+  <path d="M186 168 Q200 150 214 168" fill="#b0c4de"/>
+  <text x="200" y="113" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">Lieblingsfoto</text>
+
+  <!-- LED-Kerze gross hinten links -->
+  <rect x="100" y="150" width="22" height="50" rx="3" fill="#fdf3d0" stroke="#c9a227" stroke-width="1.5"/>
+  <ellipse cx="111" cy="148" rx="6" ry="11" fill="#ffcc33"/>
+  <ellipse cx="111" cy="150" rx="3" ry="6" fill="#fff2a8"/>
+
+  <!-- LED-Kerze mittel hinten rechts -->
+  <rect x="278" y="155" width="20" height="45" rx="3" fill="#fdf3d0" stroke="#c9a227" stroke-width="1.5"/>
+  <ellipse cx="288" cy="153" rx="5" ry="10" fill="#ffcc33"/>
+  <ellipse cx="288" cy="155" rx="2.5" ry="5" fill="#fff2a8"/>
+
+  <!-- LED-Kerze klein vorne links -->
+  <rect x="138" y="172" width="16" height="28" rx="3" fill="#fdf3d0" stroke="#c9a227" stroke-width="1.5"/>
+  <ellipse cx="146" cy="170" rx="4.5" ry="8" fill="#ffcc33"/>
+
+  <!-- LED-Kerze klein vorne rechts -->
+  <rect x="246" y="172" width="16" height="28" rx="3" fill="#fdf3d0" stroke="#c9a227" stroke-width="1.5"/>
+  <ellipse cx="254" cy="170" rx="4.5" ry="8" fill="#ffcc33"/>
+
+  <text x="111" y="218" font-family="sans-serif" font-size="9" fill="#7a4a1d" text-anchor="middle">flammenlose</text>
+  <text x="111" y="228" font-family="sans-serif" font-size="9" fill="#7a4a1d" text-anchor="middle">LED-Kerzen</text>
+
+  <!-- Lichterkette als gewellte Linie mit Lichtpunkten -->
+  <path d="M70 192 Q110 178 150 192 T230 192 T310 192 T340 188" fill="none" stroke="#d2b48c" stroke-width="1.5"/>
+  <circle cx="90" cy="186" r="3" fill="#ffd24d"/>
+  <circle cx="150" cy="192" r="3" fill="#ffd24d"/>
+  <circle cx="190" cy="186" r="3" fill="#ffd24d"/>
+  <circle cx="230" cy="192" r="3" fill="#ffd24d"/>
+  <circle cx="270" cy="186" r="3" fill="#ffd24d"/>
+  <circle cx="310" cy="192" r="3" fill="#ffd24d"/>
+  <text x="320" y="170" font-family="sans-serif" font-size="9" fill="#b8860b" text-anchor="middle">warme</text>
+  <text x="322" y="180" font-family="sans-serif" font-size="9" fill="#b8860b" text-anchor="middle">Lichterkette</text>
+
+  <!-- Fernbedienung -->
+  <rect x="300" y="250" width="44" height="40" rx="6" fill="#5b5b5b" stroke="#2f2f2f" stroke-width="2"/>
+  <circle cx="313" cy="263" r="5" fill="#7CFC00"/>
+  <circle cx="331" cy="263" r="5" fill="#ff6b6b"/>
+  <rect x="308" y="275" width="28" height="9" rx="2" fill="#9e9e9e"/>
+  <text x="322" y="248" font-family="sans-serif" font-size="9" fill="#333" text-anchor="middle">Fernbedienung + Timer</text>
+
+  <!-- Deko Tannenzweig -->
+  <path d="M70 195 l-12 -6 m12 6 l-10 2 m10 -2 l-8 -10" stroke="#2e8b57" stroke-width="2" fill="none"/>
+  <path d="M330 195 l12 -6 m-12 6 l10 2 m-10 -2 l8 -10" stroke="#2e8b57" stroke-width="2" fill="none"/>
+
+  <text x="200" y="288" font-family="Comic Sans MS, sans-serif" font-size="11" fill="#a0522d" text-anchor="middle">brandsicher - gemuetlich - liebevoll</text>
+</svg><div class="cap">Skizze: Omas Lichternest - der LED-Ambient-Kerzen-Altar</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>3-5 flammenlose LED-Echtwachskerzen (warmweiss, mit Flacker-Effekt) inkl. Fernbedienung</li><li>Warmweisse LED-Lichterkette mit Timer-Funktion (batteriebetrieben, z.B. 2-3 m)</li><li>Eine grosse Fernbedienung mit grossen Tasten oder ein einfacher Funk-Schalter</li><li>Ein huebsches Holztablett oder eine kleine Kommodenflaeche als Basis</li><li>Batterien (am besten wiederaufladbar) oder ein USB-Netzteil fuer Dauerbetrieb</li><li>Ein Spitzendeckchen, Tannenzweige oder Trockenblumen zum Schmuecken</li><li>Optional: gerahmtes Lieblingsfoto fuer die Mitte</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Eine gemuetliche Ecke aussuchen - z.B. auf der Kommode, gut sichtbar vom Lieblingssessel aus.</li><li>Das Holztablett mit dem Spitzendeckchen auslegen und die LED-Kerzen in unterschiedlichen Hoehen anordnen (hinten hoch, vorne niedrig).</li><li>Die warmweisse Lichterkette locker um die Kerzen und ein Foto drapieren - nicht spannen, sanft wellen lassen.</li><li>In allen LED-Kerzen und der Lichterkette frische Batterien einlegen bzw. das USB-Netzteil anschliessen und unauffaellig hinter der Kommode verstecken.</li><li>Fernbedienung anlernen: einmal ein-/ausschalten testen und den Timer auf Omas Rhythmus stellen (z.B. taeglich ab 17 Uhr fuer 6 Stunden an).</li><li>Mit Trockenblumen, Tannenzweigen und dem Lieblingsfoto liebevoll schmuecken - fertig ist Omas Lichternest.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Unbedingt flammenlose LED-Kerzen mit automatischer Timer-Abschaltung waehlen - so geht das Licht von selbst aus, falls Oma das Ausschalten mal vergisst. Keine offene Flamme bedeutet kein Brandrisiko, gerade wenn sie alleine wohnt oder mal einnickt. Kabel und Netzteil so verlegen, dass keine Stolperfalle entsteht.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Oma muss nichts kompliziert bedienen - ein Knopfdruck auf die grosse Fernbedienung, und ihr warmes Flaemmchen leuchtet. Durch den Timer wird es jeden Abend von selbst gemuetlich, ganz ohne Zutun. Das sanfte Flackern erinnert an die echten Kerzen von frueher und gibt ihr ein heimeliges, geborgenes Gefuehl - jeden Tag aufs Neue, voellig sorgenfrei.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 4/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

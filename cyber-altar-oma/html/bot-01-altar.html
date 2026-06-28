@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fff8f0; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #d7a86e;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #d7a86e; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#6d4c41; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#6d4c41; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#d7a86e; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #d7a86e; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#6d4c41; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#6d4c41;
+       border-bottom:1.5px solid #d7a86e; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#d7a86e; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #d7a86e; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#d7a86e; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#6d4c41; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 1 von 10</div>
+<div class="inner">
+<h1>Omas Leuchtendes Familien-Fenster: Der Digitalrahmen-Altar</h1>
+<div class="sub">Wo die ganze Familie jeden Tag bei Oma vorbeischaut - ganz von allein</div>
+<div class="desc">Im Herzen dieses kleinen Hausaltars steht ein WLAN-Digitalbilderrahmen, der ganz von selbst Familienfotos durchwechselt - vom Enkel-Geburtstag bis zum Sonntagsausflug. Eingebettet in ein warmes Arrangement aus Holz, weichem Stoff und einer kleinen Lichterkette wird daraus eine gemuetliche Erinnerungs-Ecke, an der Oma jeden Tag die Menschen sieht, die sie liebt. Das Schoenste: Die Familie kann aus der Ferne neue Bilder schicken, und sie tauchen wie von Zauberhand bei Oma auf.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 120-200 EUR (Rahmen 90-160 EUR, Deko und Zubehoer 30-40 EUR)</span>
+  <span class="chip">Schwierigkeit: Einfach</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="24" font-family="Comic Sans MS, cursive" font-size="16" fill="#7a4f2a" text-anchor="middle">Omas Familien-Fenster</text>
+
+  <!-- Kommode / Sockel -->
+  <rect x="60" y="230" width="280" height="40" rx="4" fill="#c89a6a" stroke="#8a5a2b" stroke-width="2"/>
+  <line x1="200" y1="230" x2="200" y2="270" stroke="#8a5a2b" stroke-width="1"/>
+  <circle cx="150" cy="250" r="3" fill="#5a3a1b"/>
+  <circle cx="250" cy="250" r="3" fill="#5a3a1b"/>
+  <text x="200" y="288" font-family="Comic Sans MS, cursive" font-size="11" fill="#7a4f2a" text-anchor="middle">Holz-Kommode als Buehne</text>
+
+  <!-- Stoffdeckchen -->
+  <path d="M70 230 Q200 218 330 230 L330 234 Q200 224 70 234 Z" fill="#e8b4c4" stroke="#c98aa0" stroke-width="1"/>
+  <text x="332" y="222" font-family="Comic Sans MS, cursive" font-size="10" fill="#b06a86" text-anchor="end">Spitzendeckchen</text>
+
+  <!-- Lichterkette um Rahmen -->
+  <path d="M120 90 Q200 70 280 90" fill="none" stroke="#f4c542" stroke-width="1.5" stroke-dasharray="2,4"/>
+  <circle cx="135" cy="83" r="3" fill="#ffd84d"/>
+  <circle cx="170" cy="76" r="3" fill="#ffd84d"/>
+  <circle cx="205" cy="73" r="3" fill="#ffd84d"/>
+  <circle cx="240" cy="76" r="3" fill="#ffd84d"/>
+  <circle cx="270" cy="83" r="3" fill="#ffd84d"/>
+  <text x="200" y="62" font-family="Comic Sans MS, cursive" font-size="10" fill="#d8a500" text-anchor="middle">warmweisse LED-Lichterkette</text>
+
+  <!-- Digitalrahmen (zentral) -->
+  <rect x="130" y="95" width="140" height="105" rx="6" fill="#5b3a1f" stroke="#3a2512" stroke-width="3"/>
+  <rect x="142" y="107" width="116" height="81" rx="2" fill="#bfe3f2"/>
+  <!-- Familienfoto-Andeutung -->
+  <circle cx="175" cy="150" r="12" fill="#ffd9a0"/>
+  <circle cx="205" cy="155" r="10" fill="#ffd9a0"/>
+  <rect x="160" y="162" width="60" height="22" rx="4" fill="#7bbf6a"/>
+  <text x="200" y="200" font-family="Comic Sans MS, cursive" font-size="11" fill="#f5e9d8" text-anchor="middle">WLAN-Digitalrahmen</text>
+
+  <!-- Wechsel-Pfeile (Fotos wechseln automatisch) -->
+  <path d="M278 130 q14 0 14 14 q0 14 -14 14" fill="none" stroke="#4a90c2" stroke-width="2"/>
+  <polygon points="278,154 272,150 280,146" fill="#4a90c2"/>
+  <text x="312" y="148" font-family="Comic Sans MS, cursive" font-size="9" fill="#4a90c2" text-anchor="middle">Fotos</text>
+  <text x="312" y="160" font-family="Comic Sans MS, cursive" font-size="9" fill="#4a90c2" text-anchor="middle">wechseln</text>
+
+  <!-- WLAN-Symbol -->
+  <path d="M95 110 q15 -15 30 0" fill="none" stroke="#4a90c2" stroke-width="2"/>
+  <path d="M101 117 q9 -9 18 0" fill="none" stroke="#4a90c2" stroke-width="2"/>
+  <circle cx="110" cy="124" r="2.5" fill="#4a90c2"/>
+  <text x="110" y="138" font-family="Comic Sans MS, cursive" font-size="9" fill="#4a90c2" text-anchor="middle">WLAN</text>
+
+  <!-- kleiner gerahmter Foto daneben -->
+  <rect x="285" y="195" width="40" height="35" rx="2" fill="#8a5a2b" stroke="#5a3a1b" stroke-width="2"/>
+  <rect x="290" y="200" width="30" height="25" fill="#ffe9c7"/>
+  <circle cx="305" cy="212" r="6" fill="#ffd9a0"/>
+
+  <!-- kleine Vase mit Blume -->
+  <path d="M78 210 q8 20 0 22 q-12 0 -4 -22 Z" fill="#9ac4e0" stroke="#6a9ec0" stroke-width="1"/>
+  <line x1="82" y1="210" x2="82" y2="190" stroke="#4a7a3a" stroke-width="1.5"/>
+  <circle cx="82" cy="188" r="5" fill="#e8728c"/>
+
+  <!-- Steckdosenleiste mit Schalter -->
+  <rect x="150" y="272" width="100" height="14" rx="3" fill="#444" stroke="#222" stroke-width="1"/>
+  <rect x="232" y="275" width="12" height="8" rx="2" fill="#7bbf6a"/>
+  <text x="200" y="300" font-family="Comic Sans MS, cursive" font-size="9" fill="#555" text-anchor="middle">1 grosser Schalter = an/aus</text>
+</svg><div class="cap">Skizze: Omas Leuchtendes Familien-Fenster: Der Digitalrahmen-Altar</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>WLAN-Digitalbilderrahmen mit App (z.B. Nixplay, Aura oder Pix-Star), 10-15 Zoll, mit Auto-Dimmer</li><li>Ein huebsches Holzbrett oder eine kleine Kommoden-Ablage als Sockel/Buehne</li><li>Weicher Stoff oder ein Spitzendeckchen (Omas Lieblingsfarbe) als Unterlage</li><li>Warmweisse Batterie-Lichterkette mit Timer (LED, kein heisser Draht)</li><li>Ein bis zwei kleine gerahmte Lieblingsfotos und eine kleine Vase oder Trockenblumen als Beiwerk</li><li>Kabel-Clips und ein kleines Mehrfach-Steckdosenleiste mit Schalter</li><li>Optional: kleiner WLAN-Stecker (Smart Plug), damit alles mit einem Klick an/aus geht</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Standort waehlen: Eine Ecke mit Steckdose in Reichweite und gutem WLAN-Empfang, in Augenhoehe vom Lieblingssessel aus - z.B. auf der Kommode im Wohnzimmer.</li><li>Buehne herrichten: Holzbrett auflegen, Stoffdeckchen darueber drapieren, sodass es warm und einladend wirkt.</li><li>Rahmen einrichten: Digitalrahmen mittig aufstellen, ueber die App mit dem WLAN verbinden und die Familie als &#x27;Foto-Sender&#x27; einladen (das macht ihr einmal fuer Oma, sie muss nichts tun).</li><li>Erste Fotos laden: 30-50 Lieblingsbilder hochladen, Diashow auf langsam (z.B. ein Bild pro Minute) und Auto-Dimmer fuer die Nacht aktivieren.</li><li>Schmuecken: Lichterkette sanft um den Rahmen legen, kleine Vase und ein, zwei klassische Fotorahmen daneben - fertig ist die gemuetliche Ecke.</li><li>Oma einweisen: Zeigt ihr den einen Knopf zum An-/Ausschalten und erklaert liebevoll, dass die Bilder ganz von allein kommen - mehr muss sie nie tun.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Verwendet ausschliesslich LED-Lichterketten mit Timer und legt alle Kabel mit Clips fest an die Rueckseite, damit nichts zur Stolperfalle wird. Eine Steckdosenleiste mit einem grossen, gut sichtbaren Schalter macht das Aus- und Anschalten fuer Oma kinderleicht und sicher - kein Hantieren mit mehreren Steckern.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Oma muss kein Smartphone bedienen und nichts lernen - die Bilder ihrer Liebsten kommen ganz von selbst zu ihr. Jeder neue Schnappschuss vom Enkelkind erscheint wie ein kleines Geschenk, und sie hat das Gefuehl, die Familie ist jeden Tag ein Stueckchen bei ihr im Zimmer. Genau diese sanfte Naehe ohne Technik-Stress ist es, die ihr Herz waermt.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 1/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

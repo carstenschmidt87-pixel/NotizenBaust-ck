@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fbf4ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #cf9f6b;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #cf9f6b; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#6a4f3b; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#6a4f3b; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#cf9f6b; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #cf9f6b; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#6a4f3b; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#6a4f3b;
+       border-bottom:1.5px solid #cf9f6b; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#cf9f6b; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #cf9f6b; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#cf9f6b; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#6a4f3b; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 10 von 10</div>
+<div class="inner">
+<h1>Omas Retro-Tablet Nostalgie-Altar</h1>
+<div class="sub">Eine Truhe voller Lieblingslieder, alter Hoerspiele und Schwarzweiss-Erinnerungen - mit nur einem grossen Knopfdruck.</div>
+<div class="desc">Dieser Altar verwandelt ein altes, ausrangiertes Tablet in eine liebevolle Jukebox und Bilderkiste fuer die Oma. Auf Knopfdruck spielen die Schlager und Volksmusik ihrer Jugend, alte Radio-Hoerspiele und im Hintergrund laufen die Schwarzweiss-Fotos von frueher als sanfte Diashow. Alles ist extra gross und einfach gestaltet, damit Oma es ganz alleine bedienen kann - ohne Brille, ohne Frust, nur mit einem Laecheln.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 60-180 EUR (deutlich guenstiger, wenn ein altes Tablet schon vorhanden ist)</span>
+  <span class="chip">Schwierigkeit: Einfach</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag (plus etwas Zeit zum Fotos sammeln)</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6e3"/>
+  <text x="200" y="25" font-family="Comic Sans MS, cursive" font-size="18" fill="#b5651d" text-anchor="middle">Omas Retro-Tablet Altar</text>
+  <rect x="40" y="230" width="320" height="30" fill="#d9b382" stroke="#8b5a2b" stroke-width="2"/>
+  <text x="200" y="251" font-family="cursive" font-size="11" fill="#5a3a1a" text-anchor="middle">Kommode mit Deckchen</text>
+  <line x1="150" y1="230" x2="170" y2="170" stroke="#8b5a2b" stroke-width="4"/>
+  <line x1="250" y1="230" x2="230" y2="170" stroke="#8b5a2b" stroke-width="4"/>
+  <text x="115" y="200" font-family="cursive" font-size="9" fill="#8b5a2b">Staender</text>
+  <rect x="150" y="70" width="120" height="100" rx="8" fill="#2b2b2b" stroke="#000000" stroke-width="3"/>
+  <rect x="158" y="78" width="104" height="84" rx="3" fill="#bfe3ff"/>
+  <rect x="166" y="86" width="40" height="30" rx="4" fill="#7cc36b"/>
+  <text x="186" y="105" font-family="cursive" font-size="9" fill="#1a3a1a" text-anchor="middle">MUSIK</text>
+  <rect x="214" y="86" width="40" height="30" rx="4" fill="#f0a35e"/>
+  <text x="234" y="105" font-family="cursive" font-size="8" fill="#3a2a1a" text-anchor="middle">HOERSPIEL</text>
+  <rect x="166" y="124" width="88" height="30" rx="4" fill="#d98cc0"/>
+  <text x="210" y="143" font-family="cursive" font-size="9" fill="#3a1a3a" text-anchor="middle">FOTOS S/W</text>
+  <text x="210" y="185" font-family="cursive" font-size="9" fill="#444" text-anchor="middle">grosse, einfache Knoepfe</text>
+  <ellipse cx="330" cy="200" rx="30" ry="22" fill="#9aa7b0" stroke="#555" stroke-width="2"/>
+  <circle cx="330" cy="200" r="12" fill="#444"/>
+  <path d="M345 190 q12 10 0 20" stroke="#b5651d" stroke-width="2" fill="none"/>
+  <path d="M350 185 q18 15 0 30" stroke="#b5651d" stroke-width="2" fill="none"/>
+  <text x="330" y="235" font-family="cursive" font-size="9" fill="#444" text-anchor="middle">Lautsprecher</text>
+  <rect x="55" y="120" width="55" height="65" fill="#ffffff" stroke="#777" stroke-width="2"/>
+  <circle cx="82" cy="145" r="12" fill="#cccccc"/>
+  <rect x="65" y="160" width="35" height="18" fill="#aaaaaa"/>
+  <text x="82" y="200" font-family="cursive" font-size="9" fill="#444" text-anchor="middle">altes Foto</text>
+  <ellipse cx="300" cy="245" rx="9" ry="6" fill="#ffd27f"/>
+  <rect x="296" y="245" width="8" height="14" fill="#e8e0c0"/>
+  <path d="M300 230 q4 8 0 14 q-4 -6 0 -14" fill="#ffae42"/>
+  <text x="300" y="272" font-family="cursive" font-size="8" fill="#444" text-anchor="middle">LED-Kerze</text>
+  <line x1="120" y1="78" x2="138" y2="92" stroke="#cc4444" stroke-width="2"/>
+  <text x="60" y="78" font-family="cursive" font-size="9" fill="#cc4444">altes Tablet</text>
+</svg><div class="cap">Skizze: Omas Retro-Tablet Nostalgie-Altar</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Ein altes Tablet (auch ein gebrauchtes Modell reicht voellig)</li><li>Ein stabiler Holz- oder Tischstaender fuer das Tablet (schraeg, gut sichtbar)</li><li>Ein kleiner Bluetooth-Lautsprecher fuer warmen, lauten Klang</li><li>Eine einfache Foto-/Musik-App mit Grossanzeige (z.B. eine Kiosk- oder Diashow-App) oder ein eingerichteter Startbildschirm mit grossen Symbolen</li><li>USB-Ladekabel mit fester Steckdose, damit nie der Akku leer ist</li><li>Gerahmte echte Schwarzweiss-Fotos und ein gehaekeltes Deckchen fuer das Drumherum</li><li>Eine kleine LED-Kerze fuer gemuetliches Licht</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Das alte Tablet aufladen, einen einfachen Startbildschirm einrichten und alle stoerenden Apps ausblenden, sodass nur 3 grosse Knoepfe bleiben: Musik, Hoerspiele, Fotos.</li><li>Omas Lieblingsschlager, Volksmusik und alte Radio-Hoerspiele in einer Playlist sammeln (von CD, aus dem Internet oder von der Familie) und auf das Tablet laden.</li><li>Die schoensten alten Schwarzweiss-Fotos einscannen und als automatische Diashow einrichten, die im Ruhezustand sanft laeuft.</li><li>Tablet in den Staender stellen, Ladekabel fest verlegen und den Bluetooth-Lautsprecher verbinden und auf angenehme Lautstaerke einstellen.</li><li>Die Ecke gemuetlich herrichten: Deckchen, gerahmte Fotos und LED-Kerze rundherum als kleinen Altar arrangieren.</li><li>Mit Oma zusammen alles einmal in Ruhe ausprobieren und die drei grossen Knoepfe gemeinsam einueben.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Das Ladekabel mit Kabelclips fest an der Tischkante verlegen, damit niemand stolpert, und eine Steckerleiste mit Ein-/Ausschalter verwenden - so kann nichts ueberhitzen und Oma kann abends alles mit einem Klick ausschalten.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Wenn die ersten Takte ihres Lieblingsschlagers von frueher erklingen und gleichzeitig ein Foto von ihrer Hochzeit ueber den Bildschirm wandert, wird Oma sofort anfangen mitzusummen und Geschichten zu erzaehlen. Genau dafuer ist dieser Altar gemacht - er holt die schoensten Erinnerungen mit einem einzigen, grossen Knopfdruck zurueck.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 10/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

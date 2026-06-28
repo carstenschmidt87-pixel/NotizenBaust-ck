@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fff7ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #d9a566;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #d9a566; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#704214; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#704214; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#d9a566; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #d9a566; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#704214; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#704214;
+       border-bottom:1.5px solid #d9a566; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#d9a566; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #d9a566; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#d9a566; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#704214; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 9 von 10</div>
+<div class="inner">
+<h1>Omas lebendiges Garten-Lichtlein: Der Smart-Garten-Altar</h1>
+<div class="sub">Wo echte Pflanzen wachsen, ein Foto laechelt und die Technik leise mitgiesst</div>
+<div class="desc">Dieser Altar ist eine kleine, lebendige Ecke, in der echte Pflanzen wachsen, die sich dank Feuchtigkeitssensor und automatischer Bewaesserung quasi selbst versorgen. Ein warmes LED-Pflanzenlicht laesst das Gruen auch im dunklen Zimmer leuchten, und mittendrin steht ein geliebtes Foto. So verbindet sich echtes Leben mit sanfter Technik - die Oma muss sich um nichts kuemmern und hat trotzdem jeden Tag etwas Wachsendes vor Augen.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 70-130 EUR</span>
+  <span class="chip">Schwierigkeit: Mittel</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf8f0"/>
+  <text x="200" y="24" font-family="Comic Sans MS, cursive" font-size="16" fill="#5a7d3c" text-anchor="middle">Omas lebendiger Garten-Altar</text>
+
+  <!-- LED Pflanzenlicht -->
+  <line x1="60" y1="60" x2="340" y2="60" stroke="#cc9a3c" stroke-width="6" stroke-linecap="round"/>
+  <line x1="200" y1="60" x2="200" y2="42" stroke="#999" stroke-width="2"/>
+  <path d="M90 66 L90 90 M130 66 L130 90 M170 66 L170 90 M210 66 L210 90 M250 66 L250 90 M290 66 L290 90 M310 66 L310 90" stroke="#ffd66b" stroke-width="3" stroke-linecap="round"/>
+  <text x="200" y="80" font-family="Comic Sans MS, cursive" font-size="11" fill="#b8860b" text-anchor="middle">LED-Pflanzenlicht (warmweiss)</text>
+
+  <!-- Holztablett Basis -->
+  <rect x="50" y="210" width="300" height="40" rx="6" fill="#c99a6b" stroke="#8a6238" stroke-width="2"/>
+  <text x="200" y="234" font-family="Comic Sans MS, cursive" font-size="11" fill="#5a3a1a" text-anchor="middle">Holztablett</text>
+
+  <!-- Foto in der Mitte -->
+  <rect x="170" y="120" width="60" height="80" rx="3" fill="#fffdf5" stroke="#8a6238" stroke-width="3"/>
+  <circle cx="200" cy="150" r="11" fill="#f0c8a0"/>
+  <path d="M183 185 Q200 160 217 185 Z" fill="#9ab8d8"/>
+  <text x="200" y="208" font-family="Comic Sans MS, cursive" font-size="9" fill="#7a5a3a" text-anchor="middle">Lieblingsfoto</text>
+
+  <!-- Pflanze links -->
+  <rect x="80" y="180" width="40" height="30" rx="4" fill="#d98b5f" stroke="#9a5a2f" stroke-width="2"/>
+  <path d="M100 180 Q90 150 80 160 M100 180 Q100 145 100 140 M100 180 Q110 150 122 158" stroke="#4f8a3c" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="80" cy="158" r="7" fill="#6cb04a"/>
+  <circle cx="100" cy="138" r="7" fill="#6cb04a"/>
+  <circle cx="122" cy="156" r="7" fill="#6cb04a"/>
+
+  <!-- Pflanze rechts -->
+  <rect x="280" y="180" width="40" height="30" rx="4" fill="#d98b5f" stroke="#9a5a2f" stroke-width="2"/>
+  <path d="M300 180 L295 145 M300 180 L300 140 M300 180 L305 148" stroke="#3f7a34" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Feuchtigkeitssensor -->
+  <line x1="110" y1="195" x2="110" y2="205" stroke="#444" stroke-width="2"/>
+  <rect x="104" y="186" width="12" height="9" rx="2" fill="#4aa3c4"/>
+  <text x="150" y="172" font-family="Comic Sans MS, cursive" font-size="9" fill="#2a6a8a" text-anchor="middle">Feuchte-Sensor</text>
+  <line x1="118" y1="180" x2="148" y2="166" stroke="#2a6a8a" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- Wassertank + Pumpe -->
+  <rect x="330" y="225" width="55" height="55" rx="4" fill="#bfe3f0" stroke="#4aa3c4" stroke-width="2"/>
+  <rect x="330" y="250" width="55" height="30" rx="4" fill="#7ec8e3" stroke="#4aa3c4" stroke-width="2"/>
+  <text x="357" y="275" font-family="Comic Sans MS, cursive" font-size="9" fill="#1a5a7a" text-anchor="middle">Wasser</text>
+  <path d="M337 240 Q200 230 100 205" stroke="#4aa3c4" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
+  <text x="357" y="222" font-family="Comic Sans MS, cursive" font-size="9" fill="#1a5a7a" text-anchor="middle">Pumpe</text>
+
+  <!-- Steckdosenleiste -->
+  <rect x="15" y="255" width="70" height="18" rx="3" fill="#eee" stroke="#888" stroke-width="1.5"/>
+  <circle cx="30" cy="264" r="3" fill="#bbb"/>
+  <circle cx="45" cy="264" r="3" fill="#bbb"/>
+  <circle cx="60" cy="264" r="3" fill="#bbb"/>
+  <rect x="70" y="258" width="10" height="12" rx="2" fill="#7ec87e"/>
+  <text x="50" y="289" font-family="Comic Sans MS, cursive" font-size="8" fill="#555" text-anchor="middle">Leiste m. Schalter</text>
+</svg><div class="cap">Skizze: Omas lebendiges Garten-Lichtlein: Der Smart-Garten-Altar</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Kleines Holztablett oder Holzkiste als Basis (ca. 40x25 cm)</li><li>2-3 pflegeleichte Pflanzen (z.B. Efeutute, Gruenlilie, Bogenhanf)</li><li>Set: Bodenfeuchtigkeitssensor mit kleiner Pumpe und Wassertank (fertiges Auto-Bewaesserungs-Set)</li><li>LED-Pflanzenlicht in warmweiss mit USB-Stecker und Zeitschaltuhr</li><li>Gerahmtes Lieblingsfoto der Oma</li><li>Steckdosenleiste mit Ein/Aus-Schalter, Moos und Deko-Steine</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Holztablett an einen festen Platz stellen (Steckdose in der Naehe, nicht in praller Sonne) und das Foto hinten mittig aufstellen.</li><li>Pflanzen in huebsche Toepfe setzen und vorne bzw. seitlich um das Foto herum gruppieren, Zwischenraeume mit Moos und Steinen verschoenern.</li><li>Feuchtigkeitssensor in die Erde des groessten Topfes stecken, Pumpe in den Wassertank legen und den duennen Schlauch zu den Pflanzen fuehren.</li><li>LED-Pflanzenlicht oben oder seitlich befestigen, sodass es sanft auf das Gruen und das Foto scheint.</li><li>Alle Stecker in die Steckdosenleiste, Zeitschaltuhr fuer das Licht auf ca. 8 Stunden taeglich einstellen.</li><li>Einmal testen: Sensor und Bewaesserung pruefen, Tank fuellen - fertig ist die lebendige Erinnerungsecke.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Wasser und Strom gehoeren getrennt: Wassertank und Pumpe immer unterhalb der Steckdosenleiste platzieren, alle Stecker hochgelegt, und nur geprueftes Niedervolt-/USB-Zubehoer verwenden. So kann nichts ueberlaufen und an einen Stecker geraten.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Die Oma muss nie mehr Angst haben, dass die Pflanzen vertrocknen - die Technik giesst leise mit. Sie hat jeden Tag etwas Lebendiges vor Augen, das im warmen Licht leuchtet, und mittendrin laechelt ihr Lieblingsfoto. Nur ab und zu den Wassertank nachfuellen, und das uebernimmt liebend gern ein Enkelkind beim Besuch.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 9/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

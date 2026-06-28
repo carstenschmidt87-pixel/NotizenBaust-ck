@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fbf3ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #c98a5e;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #c98a5e; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#4e342e; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#4e342e; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#c98a5e; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #c98a5e; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#4e342e; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#4e342e;
+       border-bottom:1.5px solid #c98a5e; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#c98a5e; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #c98a5e; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#c98a5e; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#4e342e; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 7 von 10</div>
+<div class="inner">
+<h1>Omas Foto-Diashow-Altar mit Raspberry Pi und Bewegungsmelder</h1>
+<div class="sub">Wenn Oma vorbeigeht, erwachen die Erinnerungen ganz von allein</div>
+<div class="desc">Dieser Cyber-Altar ist eine gemuetliche Erinnerungs-Ecke mit einem kleinen Bildschirm, der von einem Raspberry Pi gesteuert wird. Ein sanfter Bewegungsmelder bemerkt, wenn Oma vorbeigeht oder sich in ihren Sessel setzt, und startet dann ganz leise eine Diashow mit den schoensten Familienfotos. So sind die Liebsten immer bei ihr, ohne dass sie auch nur einen Knopf druecken muss.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 90-160 EUR (am meisten kostet der Bildschirm; den Pi und Melder gibt es guenstig)</span>
+  <span class="chip">Schwierigkeit: Mittel</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag bis ein Wochenend-Bastelnachmittag</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="22" font-family="Georgia, serif" font-size="16" fill="#8a5a3b" text-anchor="middle">Omas Foto-Diashow-Altar</text>
+
+  <rect x="30" y="240" width="340" height="40" rx="6" fill="#c8a06a"/>
+  <text x="200" y="266" font-family="Georgia, serif" font-size="11" fill="#5b3a1e" text-anchor="middle">kleine Altar-Konsole mit Spitzendeckchen</text>
+
+  <rect x="110" y="60" width="180" height="140" rx="8" fill="#3b3b3b"/>
+  <rect x="122" y="72" width="156" height="116" rx="4" fill="#bfe3f5"/>
+  <circle cx="160" cy="110" r="16" fill="#ffe08a"/>
+  <polygon points="135,170 175,120 210,170" fill="#9ed29e"/>
+  <polygon points="195,170 230,130 265,170" fill="#7fb87f"/>
+  <text x="200" y="150" font-family="Georgia, serif" font-size="9" fill="#34506b" text-anchor="middle">Familien-Diashow</text>
+
+  <rect x="300" y="100" width="70" height="50" rx="6" fill="#7aa6c2"/>
+  <rect x="312" y="112" width="12" height="12" fill="#4a7088"/>
+  <rect x="332" y="112" width="12" height="12" fill="#4a7088"/>
+  <text x="335" y="166" font-family="Georgia, serif" font-size="9" fill="#34506b" text-anchor="middle">Raspberry Pi</text>
+
+  <circle cx="200" cy="222" r="11" fill="#e8b04b"/>
+  <circle cx="200" cy="222" r="5" fill="#a8761f"/>
+  <line x1="200" y1="222" x2="160" y2="245" stroke="#e8b04b" stroke-width="2" stroke-dasharray="4,3"/>
+  <line x1="200" y1="222" x2="240" y2="245" stroke="#e8b04b" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="200" y="240" font-family="Georgia, serif" font-size="8" fill="#7a5512" text-anchor="middle">Bewegungsmelder</text>
+
+  <line x1="290" y1="130" x2="300" y2="130" stroke="#888" stroke-width="2"/>
+  <line x1="300" y1="150" x2="210" y2="218" stroke="#888" stroke-width="2"/>
+
+  <line x1="40" y1="180" x2="58" y2="180" stroke="#d98aa0" stroke-width="3"/>
+  <line x1="49" y1="171" x2="49" y2="189" stroke="#d98aa0" stroke-width="3"/>
+  <ellipse cx="60" cy="230" rx="10" ry="16" fill="#d6b78a"/>
+  <text x="62" y="200" font-family="Georgia, serif" font-size="8" fill="#8a5a3b" text-anchor="middle">Deko</text>
+
+  <text x="200" y="294" font-family="Georgia, serif" font-size="9" fill="#8a5a3b" text-anchor="middle">Oma geht vorbei -&gt; Bewegungsmelder weckt sanft die Erinnerungen</text>
+</svg><div class="cap">Skizze: Omas Foto-Diashow-Altar mit Raspberry Pi und Bewegungsmelder</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Raspberry Pi (Modell 4 oder Pi 3, reicht voellig) mit Netzteil und microSD-Karte</li><li>Kleiner Bildschirm oder Bilderrahmen-Monitor (10-15 Zoll) mit HDMI-Anschluss</li><li>PIR-Bewegungsmelder (HC-SR501, ein paar Euro)</li><li>Drei einfache Steckkabel (Jumper-Kabel female-female)</li><li>Ein huebscher Holzrahmen oder eine kleine Konsole als Altar-Untergrund</li><li>Familienfotos digital auf einem USB-Stick oder direkt auf der SD-Karte</li><li>Deko nach Omas Geschmack: Spitzendeckchen, Trockenblumen, ein LED-Teelicht</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Raspberry Pi vorbereiten: Raspberry Pi OS auf die SD-Karte spielen (mit dem Raspberry Pi Imager am PC, ganz ohne Fachwissen) und an den Bildschirm anschliessen.</li><li>Lieblingsfotos sammeln und in einen Ordner namens &#x27;Bilder&#x27; auf den Pi kopieren. Tipp: querformatige Fotos sehen am schoensten aus.</li><li>Bewegungsmelder mit drei Kabeln an den Pi stecken: Plus an 5V, Minus an GND, Signal an Pin GPIO 17. Die Belegung steht in jeder Anleitung.</li><li>Ein kleines fertiges Diashow-Skript einrichten (z.B. mit dem Programm &#x27;feh&#x27;), das bei einem Signal vom Bewegungsmelder startet und nach ein paar Minuten Ruhe sanft wieder ausgeht.</li><li>Alles huebsch in den Altar einbauen: Bildschirm in den Holzrahmen, Pi und Kabel dahinter verstecken, Bewegungsmelder unauffaellig nach vorne richten.</li><li>Mit Oma gemeinsam testen, die Uebergangszeit gemuetlich einstellen und die Ecke mit Deckchen und Teelicht liebevoll schmuecken.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Alle Kabel und das Netzteil sicher hinter dem Rahmen verstauen und mit Kabelclips fixieren, damit Oma nicht stolpert. Eine Steckerleiste mit Ausschalter in Griffhoehe gibt ihr das gute Gefuehl, alles selbst beruhigen zu koennen.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Oma muss gar nichts bedienen, keine Knoepfe, keine Technik-Angst. Sie geht einfach vorbei, und wie von Zauberhand laecheln ihr die Enkelkinder, Hochzeitsfotos und alten Urlaubsbilder entgegen. Das fuehlt sich an wie ein liebevoller Gruss der ganzen Familie, jeden Tag aufs Neue.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 7/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

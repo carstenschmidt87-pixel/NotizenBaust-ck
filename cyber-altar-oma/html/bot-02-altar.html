@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fbf3ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #c98a5e;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #c98a5e; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#4e342e; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#4e342e; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#c98a5e; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #c98a5e; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#4e342e; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#4e342e;
+       border-bottom:1.5px solid #c98a5e; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#c98a5e; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #c98a5e; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#c98a5e; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#4e342e; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 2 von 10</div>
+<div class="inner">
+<h1>Omas Andachts-Ecke mit sprechendem Helferlein</h1>
+<div class="sub">Ein Wort genuegt - und Musik, Gebet und Wohlfuehlen ziehen ein</div>
+<div class="desc">Dieser Cyber-Altar ist eine gemuetliche Erinnerungs-Ecke mit einem kleinen Smart Speaker als Herzstueck, der auf Zuruf Lieblingsmusik, Gebete, Hoerbuecher oder das Wetter vorliest. Oma muss nichts tippen oder lesen - sie spricht einfach laut, und ihr neues Helferlein antwortet freundlich. So bleibt der Altar ein Ort der Ruhe, der sich aber jederzeit mit einem Lied oder einem Abendgebet fuellen laesst.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 60-150 EUR (Speaker ab ca. 40 EUR, plus Deko und ggf. Musik-Abo)</span>
+  <span class="chip">Schwierigkeit: Einfach</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag (Einrichtung ca. 1-2 Stunden, Rest ist Schmuecken und Ueben)</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="24" font-family="Comic Sans MS, cursive" font-size="16" fill="#7a5230" text-anchor="middle">Omas Andachts-Ecke</text>
+
+  <!-- Kommode / Altar -->
+  <rect x="70" y="190" width="260" height="80" rx="6" fill="#d9b38c" stroke="#7a5230" stroke-width="2"/>
+  <line x1="200" y1="190" x2="200" y2="270" stroke="#7a5230" stroke-width="1.5"/>
+  <circle cx="150" cy="230" r="3" fill="#7a5230"/>
+  <circle cx="250" cy="230" r="3" fill="#7a5230"/>
+
+  <!-- Deckchen -->
+  <rect x="80" y="180" width="240" height="16" rx="8" fill="#fff" stroke="#e0c4a0" stroke-width="1.5"/>
+  <text x="330" y="186" font-family="Comic Sans MS, cursive" font-size="9" fill="#a9845c">Deckchen</text>
+
+  <!-- Foto links -->
+  <rect x="92" y="135" width="44" height="50" rx="3" fill="#fffaf2" stroke="#7a5230" stroke-width="2"/>
+  <circle cx="114" cy="155" r="9" fill="#f3d2b3"/>
+  <rect x="102" y="166" width="24" height="12" fill="#bcd4e6"/>
+  <text x="114" y="128" font-family="Comic Sans MS, cursive" font-size="9" fill="#a9845c" text-anchor="middle">Familie</text>
+
+  <!-- LED-Kerze -->
+  <rect x="150" y="150" width="14" height="34" rx="3" fill="#fff3d6" stroke="#caa86f" stroke-width="1.5"/>
+  <ellipse cx="157" cy="146" rx="5" ry="8" fill="#ffd24d"/>
+  <text x="157" y="138" font-family="Comic Sans MS, cursive" font-size="8" fill="#c79a3a" text-anchor="middle">LED</text>
+
+  <!-- Smart Speaker (Herzstueck) -->
+  <ellipse cx="225" cy="183" rx="34" ry="9" fill="#c9c9d6"/>
+  <rect x="191" y="135" width="68" height="50" rx="16" fill="#6c7a89" stroke="#3f4a55" stroke-width="2"/>
+  <circle cx="225" cy="160" r="14" fill="#4a5560"/>
+  <circle cx="225" cy="160" r="6" fill="#7ed0ff"/>
+  <path d="M205 178 q20 14 40 0" stroke="#7ed0ff" stroke-width="2.5" fill="none"/>
+  <text x="225" y="128" font-family="Comic Sans MS, cursive" font-size="9" fill="#3f4a55" text-anchor="middle">Sprach-Helferlein</text>
+
+  <!-- Sprechblase -->
+  <rect x="270" y="95" width="118" height="58" rx="10" fill="#eaf7ea" stroke="#6fa86f" stroke-width="1.5"/>
+  <polygon points="270,135 258,150 285,142" fill="#eaf7ea" stroke="#6fa86f" stroke-width="1.5"/>
+  <text x="279" y="113" font-family="Comic Sans MS, cursive" font-size="9" fill="#3f6b3f">"Spiel mein</text>
+  <text x="279" y="127" font-family="Comic Sans MS, cursive" font-size="9" fill="#3f6b3f"> Lieblingslied"</text>
+  <text x="279" y="143" font-family="Comic Sans MS, cursive" font-size="8" fill="#7a9a7a">Musik, Gebet, Wetter</text>
+
+  <!-- Foto rechts -->
+  <rect x="270" y="148" width="40" height="36" rx="3" fill="#fffaf2" stroke="#7a5230" stroke-width="2"/>
+  <path d="M276 178 l9 -16 l8 12 l6 -8 l5 12 z" fill="#bcd9b0"/>
+
+  <!-- Befehlskarte -->
+  <rect x="44" y="215" width="44" height="30" rx="3" fill="#fff8e1" stroke="#caa86f" stroke-width="1.5" transform="rotate(-8 66 230)"/>
+  <line x1="50" y1="224" x2="80" y2="220" stroke="#caa86f" stroke-width="1"/>
+  <line x1="50" y1="230" x2="80" y2="226" stroke="#caa86f" stroke-width="1"/>
+  <line x1="50" y1="236" x2="74" y2="233" stroke="#caa86f" stroke-width="1"/>
+  <text x="40" y="258" font-family="Comic Sans MS, cursive" font-size="8" fill="#a9845c">Befehls-Karte</text>
+
+  <!-- Steckdose / Kabel -->
+  <path d="M259 165 q60 10 78 60" stroke="#9a9a9a" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+  <rect x="332" y="222" width="20" height="16" rx="2" fill="#dddddd" stroke="#999" stroke-width="1.5"/>
+  <text x="342" y="252" font-family="Comic Sans MS, cursive" font-size="8" fill="#999" text-anchor="middle">Strom</text>
+
+  <text x="200" y="290" font-family="Comic Sans MS, cursive" font-size="10" fill="#7a5230" text-anchor="middle">Ein Wort genuegt - und die Stube singt</text>
+</svg><div class="cap">Skizze: Omas Andachts-Ecke mit sprechendem Helferlein</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Smart Speaker (z.B. Amazon Echo oder Google Nest Mini, ca. handtellergross)</li><li>WLAN im Haus (oder ein guenstiger WLAN-Verstaerker fuer die Ecke)</li><li>Eine kleine Kommode, ein Beistelltisch oder Regalbrett als Altar-Flaeche</li><li>Spitzendeckchen oder ein schoenes Tuch als Unterlage</li><li>Gerahmte Familienfotos und ein, zwei Kerzen (am besten LED-Kerzen)</li><li>Eine grosse, laminierte Karte mit den wichtigsten Sprachbefehlen</li><li>Optional: ein Musik-Abo (Amazon Music / Spotify) fuer die Lieblingslieder</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Ein gemuetliches Plaetzchen waehlen - in Reichweite einer Steckdose und mit gutem WLAN-Empfang, z.B. neben Omas Lieblingssessel.</li><li>Den Smart Speaker einmalig mit dem Handy der Familie einrichten (WLAN verbinden, Konto anlegen) und einen einfachen Namen wie &#x27;Alexa&#x27; oder &#x27;Hey Google&#x27; behalten.</li><li>Lieblingsmusik, Lieblingssender, Gebete und ein paar Hoerbuecher als Favoriten hinterlegen, damit ein kurzer Satz genuegt.</li><li>Den Altar liebevoll schmuecken: Deckchen auflegen, Fotos und LED-Kerzen aufstellen, den Speaker gut sichtbar und gut hoerbar platzieren.</li><li>Eine grosse Befehlskarte schreiben und laminieren (z.B. &#x27;Alexa, spiel meine Lieblingsmusik&#x27; / &#x27;Alexa, lies das Abendgebet&#x27;).</li><li>Gemeinsam mit Oma in Ruhe ueben - ein paar Mal zusammen lachen, ausprobieren und die Lautstaerke angenehm einstellen.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Den Speaker fest und kippsicher hinstellen, das Kabel mit einem Clip an der Moebelkante entlangfuehren, damit niemand stolpert - und LED-Kerzen statt echter Flammen nehmen, falls Oma mal einschlummert.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Oma muss nichts mehr suchen, anschalten oder lesen - sie sagt einfach &#x27;spiel mein Lieblingslied&#x27; und schon ist die Stube voller vertrauter Melodien. Das Geraet antwortet hoeflich und geduldig, wiederholt sich gerne und schimpft nie. So fuehlt sich der Altar an wie ein freundlicher Gesellschafter, der immer ein Lied oder ein Gebet bereithaelt.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 2/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

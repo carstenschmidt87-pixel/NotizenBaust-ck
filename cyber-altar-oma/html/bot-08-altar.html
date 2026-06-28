@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fdf6ee; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #e0b074;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #e0b074; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#5d4037; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#5d4037; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#e0b074; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #e0b074; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#5d4037; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#5d4037;
+       border-bottom:1.5px solid #e0b074; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#e0b074; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #e0b074; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#e0b074; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#5d4037; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 8 von 10</div>
+<div class="inner">
+<h1>Omas Hologramm-Altar - Schwebende Erinnerungen aus der Acryl-Pyramide</h1>
+<div class="sub">Wo die liebsten Gesichter wieder zum Leben schweben - sanft, leise und immer da</div>
+<div class="desc">Dieser Altar verwandelt ein altes Tablet in eine kleine Buehne fuer schwebende Erinnerungen. Eine durchsichtige Acryl-Pyramide spiegelt Fotos und kurze Videos so, dass sie wie ein zartes Hologramm ueber dem Bildschirm zu schweben scheinen. Fuer die Oma ist es, als kaemen liebe Menschen, eine bluehende Blume oder eine flackernde Kerze fuer einen Moment ganz nah zu Besuch - ohne Knoepfchen, ohne Stress, einfach zum Anschauen und Lächeln.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 20-60 EUR, wenn ein altes Tablet schon da ist (sonst gebraucht ca. 80-120 EUR mehr)</span>
+  <span class="chip">Schwierigkeit: Einfach bis Mittel</span>
+  <span class="chip">Zeit: Ein gemuetlicher Bastelnachmittag (ca. 2-3 Stunden)</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="26" font-family="Comic Sans MS, cursive" font-size="18" fill="#8a5a2b" text-anchor="middle">Omas Hologramm-Altar</text>
+
+  <!-- Sockel / Tablett -->
+  <rect x="70" y="225" width="260" height="30" rx="6" fill="#c8a06a" stroke="#8a5a2b" stroke-width="2"/>
+  <text x="200" y="246" font-family="cursive" font-size="11" fill="#5a3a14" text-anchor="middle">huebscher Sockel / Tablett</text>
+
+  <!-- Tablet -->
+  <rect x="110" y="195" width="180" height="34" rx="5" fill="#2b2b2b" stroke="#000000" stroke-width="2"/>
+  <rect x="120" y="200" width="160" height="24" rx="2" fill="#3a3a3a"/>
+  <text x="200" y="217" font-family="cursive" font-size="10" fill="#ffd27f" text-anchor="middle">Tablet (Display nach oben)</text>
+
+  <!-- Pyramide (Acryl) -->
+  <polygon points="160,200 240,200 215,135 185,135" fill="#bfe3f0" fill-opacity="0.45" stroke="#4a9fc0" stroke-width="2"/>
+  <line x1="200" y1="200" x2="200" y2="135" stroke="#4a9fc0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="305" y="165" font-family="cursive" font-size="11" fill="#2c7a99" text-anchor="middle">Acryl-Pyramide</text>
+  <line x1="245" y1="167" x2="222" y2="167" stroke="#2c7a99" stroke-width="1"/>
+
+  <!-- Schwebendes Hologramm -->
+  <circle cx="200" cy="100" r="26" fill="#ffe9a8" stroke="#e0a93b" stroke-width="2"/>
+  <circle cx="191" cy="96" r="3" fill="#6b4a1a"/>
+  <circle cx="209" cy="96" r="3" fill="#6b4a1a"/>
+  <path d="M189 107 Q200 116 211 107" stroke="#6b4a1a" stroke-width="2" fill="none"/>
+  <text x="200" y="58" font-family="cursive" font-size="11" fill="#b5762a" text-anchor="middle">schwebendes Hologramm</text>
+  <line x1="200" y1="64" x2="200" y2="73" stroke="#b5762a" stroke-width="1"/>
+
+  <!-- kleine Funkeln -->
+  <text x="155" y="95" font-family="cursive" font-size="14" fill="#e0a93b">*</text>
+  <text x="245" y="110" font-family="cursive" font-size="14" fill="#e0a93b">*</text>
+  <text x="238" y="78" font-family="cursive" font-size="11" fill="#e0a93b">*</text>
+
+  <!-- Lichterkette -->
+  <circle cx="80" cy="215" r="4" fill="#ff7b54"/>
+  <circle cx="100" cy="220" r="4" fill="#ffd27f"/>
+  <circle cx="320" cy="215" r="4" fill="#ff7b54"/>
+  <circle cx="300" cy="220" r="4" fill="#ffd27f"/>
+  <text x="200" y="285" font-family="cursive" font-size="11" fill="#8a5a2b" text-anchor="middle">im dunklen Raum am schoensten</text>
+</svg><div class="cap">Skizze: Omas Hologramm-Altar - Schwebende Erinnerungen aus der Acryl-Pyramide</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>Aeltere oder guenstiges Tablet (mind. 8 Zoll, Helligkeit gut aufdrehbar)</li><li>Transparente Acryl-/Plexiglas-Folie (ca. 0,3-0,5 mm) oder eine fertige Pyramide aus dem Internet</li><li>Schere oder Cuttermesser, Lineal und durchsichtiges Klebeband</li><li>Schablone fuer den Pyramidenstumpf (Vorlage ausdrucken)</li><li>Holzkiste, huebsches Tablett oder Spitzendeckchen als gemuetlicher Sockel</li><li>Familienfotos und kurze Videos auf schwarzem Hintergrund (Hologramm-App oder vorbereitete Datei)</li><li>Optional: kleine LED-Lichterkette und ein gerahmtes Lieblingsfoto fuer drumherum</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Die Schablone fuer den Pyramidenstumpf ausdrucken (vier gleiche Trapeze) und auf die Acrylfolie uebertragen, dann ausschneiden.</li><li>Die vier Trapeze an den Kanten mit durchsichtigem Klebeband zu einer kleinen, oben offenen Pyramide zusammenfuegen - die schmale Seite zeigt nach unten.</li><li>Das Tablet flach auf den Sockel legen, Display nach oben, und auf maximale Helligkeit stellen.</li><li>Ein Hologramm-Video (vier gespiegelte Bildchen auf schwarzem Grund) abspielen und die Pyramide kopfueber genau in die Mitte stellen.</li><li>Im abgedunkelten Raum schauen, ob das Bild schoen schwebt, und die Pyramide leicht ausrichten bis es passt.</li><li>Drumherum gemuetlich dekorieren - Lichterkette, Foto, ein Deckchen - und der Oma in Ruhe zeigen, wie man auf &#x27;Play&#x27; tippt.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Das Tablet immer mit dem Original-Netzteil laden und das Kabel so verlegen, dass die Oma nicht stolpert - am besten mit ein wenig Klebeband am Tischrand fixieren. Kein offenes Feld, keine echte Kerze: das Flackern kommt als Video, das ist warm anzusehen und brandsicher.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Die Oma muss gar nichts koennen ausser Schauen und Staunen. Ein einziger grosser &#x27;Play&#x27;-Knopf genuegt, und schon schwebt das laechelnde Gesicht des Enkels oder eine bluehende Rose vor ihr in der Luft. Es ist still, sanft und ein bisschen zauberhaft - genau das Richtige fuer ruhige Momente am Nachmittag, wenn man sich an die schoenen Zeiten erinnern moechte.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 8/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

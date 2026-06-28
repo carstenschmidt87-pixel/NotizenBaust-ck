@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fff8f0; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #d7a86e;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #d7a86e; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#6d4c41; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#6d4c41; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#d7a86e; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #d7a86e; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#6d4c41; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#6d4c41;
+       border-bottom:1.5px solid #d7a86e; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#d7a86e; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #d7a86e; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#d7a86e; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#6d4c41; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 6 von 10</div>
+<div class="inner">
+<h1>E-Ink Tagesspruch-Altar: Ein liebevolles Morgengruss-Display fuer Omas Lieblingsecke</h1>
+<div class="sub">Jeden Morgen ein warmes Wort - automatisch, leise und ganz ohne Strom-Hektik</div>
+<div class="desc">Dieser kleine Altar zeigt der Oma jeden Morgen auf einem augenschonenden E-Ink-Display (das aussieht wie echtes Papier) einen frischen Bibelvers, ein kurzes Gedicht oder einen liebevollen Gruss von der Familie. Das Schoene: E-Ink leuchtet nicht und flackert nicht, sondern ist ruhig und gut lesbar wie eine gedruckte Karte. So beginnt jeder Tag mit einem freundlichen Wort - und die Familie kann aus der Ferne neue Gruesse hinterlegen, ganz ohne dass Oma etwas bedienen muss.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 90-160 EUR (E-Ink-Display ist der groesste Posten; Rahmen und Mini-Computer guenstig)</span>
+  <span class="chip">Schwierigkeit: Mittel</span>
+  <span class="chip">Zeit: Ein gemuetlicher Bastel-Nachmittag (ca. 3-4 Stunden), plus etwas Vorbereitung der Sprueche</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="28" font-family="Comic Sans MS, cursive" font-size="18" fill="#8a5a44" text-anchor="middle">E-Ink Tagesspruch-Altar</text>
+
+  <!-- Tischflaeche -->
+  <rect x="40" y="245" width="320" height="14" fill="#d9b38c" stroke="#a9784f" stroke-width="2"/>
+  <line x1="60" y1="259" x2="60" y2="285" stroke="#a9784f" stroke-width="3"/>
+  <line x1="340" y1="259" x2="340" y2="285" stroke="#a9784f" stroke-width="3"/>
+
+  <!-- Holzrahmen / Gehaeuse -->
+  <rect x="120" y="70" width="160" height="170" rx="8" fill="#c98a4b" stroke="#8a5a2b" stroke-width="4"/>
+
+  <!-- E-Ink Display -->
+  <rect x="135" y="85" width="130" height="125" fill="#fcfcf7" stroke="#555555" stroke-width="2"/>
+  <text x="200" y="110" font-family="Georgia, serif" font-size="11" fill="#333333" text-anchor="middle">Guten Morgen,</text>
+  <text x="200" y="126" font-family="Georgia, serif" font-size="11" fill="#333333" text-anchor="middle">liebe Oma!</text>
+  <line x1="150" y1="138" x2="250" y2="138" stroke="#cccccc" stroke-width="1"/>
+  <text x="200" y="158" font-family="Georgia, serif" font-size="9" fill="#444444" text-anchor="middle">"Der Herr ist mein</text>
+  <text x="200" y="170" font-family="Georgia, serif" font-size="9" fill="#444444" text-anchor="middle">Hirte..." Ps 23</text>
+  <text x="200" y="194" font-family="Georgia, serif" font-size="9" fill="#a05a5a" text-anchor="middle">- deine Enkel</text>
+
+  <!-- Standfuss -->
+  <rect x="185" y="240" width="30" height="8" fill="#8a5a2b"/>
+
+  <!-- WLAN Symbol -->
+  <circle cx="320" cy="95" r="3" fill="#4a90d9"/>
+  <path d="M310 90 A14 14 0 0 1 330 90" fill="none" stroke="#4a90d9" stroke-width="2"/>
+  <path d="M305 84 A22 22 0 0 1 335 84" fill="none" stroke="#4a90d9" stroke-width="2"/>
+  <text x="320" y="120" font-family="Comic Sans MS, cursive" font-size="9" fill="#4a90d9" text-anchor="middle">WLAN</text>
+
+  <!-- Mini-Computer Hinweis -->
+  <rect x="60" y="150" width="40" height="26" rx="3" fill="#7fae6b" stroke="#4f7a3c" stroke-width="2"/>
+  <text x="80" y="167" font-family="Comic Sans MS, cursive" font-size="7" fill="#ffffff" text-anchor="middle">Mini-PC</text>
+  <line x1="100" y1="163" x2="120" y2="150" stroke="#888888" stroke-width="2" stroke-dasharray="3,2"/>
+  <text x="80" y="192" font-family="Comic Sans MS, cursive" font-size="8" fill="#4f7a3c" text-anchor="middle">(versteckt)</text>
+
+  <!-- Spruch wechselt taeglich -->
+  <text x="200" y="285" font-family="Comic Sans MS, cursive" font-size="11" fill="#8a5a44" text-anchor="middle">Jeden Morgen ein neuer Gruss</text>
+
+  <!-- kleine Herzen -->
+  <path d="M300 200 q-6 -8 -12 0 q6 8 12 14 q6 -6 12 -14 q-6 -8 -12 0 z" fill="#e07a8a"/>
+</svg><div class="cap">Skizze: E-Ink Tagesspruch-Altar: Ein liebevolles Morgengruss-Display fuer Omas Lieblingsecke</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>E-Ink-Display (z.B. 7,5 Zoll, schwarz-weiss oder mit etwas Rot, gut ablesbar)</li><li>Kleiner Mini-Computer dahinter (z.B. ein Raspberry Pi Zero) oder ein fertiges WLAN-E-Ink-Set</li><li>Stabiler Holz- oder Foto-Bilderrahmen als gemuetliches Gehaeuse</li><li>Netzteil oder eingebauter Akku fuer wochenlangen Betrieb</li><li>WLAN im Haus der Oma (fuer automatische taegliche Updates)</li><li>Sammlung von Versen, Gedichten und Familienfotos zum Hinterlegen</li><li>Optional: kleine Stehleiste oder Wandhalterung fuer den Lieblingsplatz</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Lieblingsplatz aussuchen: Wo trinkt Oma morgens Kaffee? Dort kommt der Altar hin, in Augenhoehe und gut erreichbar.</li><li>Display ins gemuetliche Gehaeuse setzen: E-Ink-Display in den Holzrahmen einbauen, Mini-Computer sauber dahinter verstecken, Kabel ordentlich wegfuehren.</li><li>WLAN einrichten und mit dem Familien-Spruch-Speicher verbinden (z.B. eine einfache Liste in der Cloud), damit jeden Morgen automatisch ein neuer Spruch erscheint.</li><li>Spruch-Sammlung fuellen: Bibelverse, kurze Gedichte, Geburtstagsgruesse und liebe Worte der Enkel eintragen - gerne fuer viele Wochen im Voraus.</li><li>Automatischen Morgen-Wechsel einstellen (z.B. taeglich um 6 Uhr), damit Oma den frischen Gruss schon beim ersten Kaffee sieht.</li><li>Gemeinsam einweihen: Mit Oma davorsetzen, den ersten Gruss vorlesen und ihr zeigen, dass sie gar nichts tun muss - es passiert von ganz allein.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Kabel und Netzteil komplett im Gehaeuse verstecken und mit Kabelbindern sichern, damit nichts herunterhaengt - so gibt es keine Stolperfalle. Den Stecker an eine gut erreichbare, aber nicht im Laufweg liegende Steckdose anschliessen.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Oma muss absolut nichts knipsen, laden oder bedienen - jeden Morgen erscheint wie von Zauberhand ein neues, liebes Wort. Und wenn die Enkel heimlich zum Geburtstag oder einfach so einen Gruss hinterlegen, strahlt sie beim Morgenkaffee, als haette ihr jemand persoenlich ein Briefchen hingelegt.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 6/10 &middot; mit Liebe erstellt</div>
+</div></body></html>

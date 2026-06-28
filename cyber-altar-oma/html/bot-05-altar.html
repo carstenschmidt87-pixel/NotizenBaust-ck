@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body { font-family: 'Georgia','DejaVu Serif',serif; color:#2e2a26; }
+.page { width:210mm; height:297mm; padding:14mm 14mm 14mm; position:relative;
+        background:#fbf4ec; overflow:hidden; }
+.inner { transform-origin: top left; }
+.frame { position:absolute; inset:6mm; border:2.5px solid #cf9f6b;
+          border-radius:10px; pointer-events:none; }
+.frame::after { content:""; position:absolute; inset:4px; border:1px solid #cf9f6b; border-radius:8px; opacity:.5; }
+.botnr { position:absolute; top:9mm; right:12mm; font-size:11px; letter-spacing:2px;
+          color:#6a4f3b; opacity:.7; text-transform:uppercase; }
+h1 { font-size:30px; margin:0 0 2px; color:#6a4f3b; line-height:1.1; }
+.sub { font-style:italic; font-size:15px; color:#cf9f6b; margin:0 0 14px; }
+.desc { font-size:13.5px; line-height:1.5; margin:0 0 14px; }
+.sketch { width:100%; background:#fffdfa; border:1.5px solid #cf9f6b; border-radius:8px;
+           padding:8px; margin:0 0 14px; }
+.sketch svg { width:100%; height:auto; max-height:78mm; display:block; }
+.cap { text-align:center; font-size:10.5px; font-style:italic; color:#6a4f3b; opacity:.7; margin-top:4px; }
+.cols { display:flex; gap:16px; }
+.col { flex:1; }
+h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#6a4f3b;
+       border-bottom:1.5px solid #cf9f6b; padding-bottom:3px; margin:0 0 6px; }
+ul { margin:0 0 12px; padding-left:18px; }
+li { font-size:12px; line-height:1.45; margin-bottom:3px; }
+.meta { display:flex; gap:10px; margin:2px 0 12px; flex-wrap:wrap; }
+.chip { background:#cf9f6b; color:#fff; font-size:10.5px; padding:3px 9px; border-radius:20px; font-family:sans-serif; }
+.box { background:#fffdfa; border-left:4px solid #cf9f6b; border-radius:4px; padding:8px 11px; margin-bottom:8px; }
+.box .lbl { font-size:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; color:#cf9f6b; }
+.box .txt { font-size:12px; line-height:1.4; margin-top:2px; }
+.foot { position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center;
+         font-size:10px; color:#6a4f3b; opacity:.55; font-family:sans-serif; }
+</style></head>
+<body><div class="page">
+<div class="frame"></div>
+<div class="botnr">Bot 5 von 10</div>
+<div class="inner">
+<h1>QR-Code-Erinnerungs-Altar fuer Oma</h1>
+<div class="sub">Ein Foto beruehren mit dem Handy - und die Stimmen der Liebsten sind ploetzlich da</div>
+<div class="desc">Dieser Altar ist eine gemuetliche Erinnerungs-Ecke mit gerahmten Familienfotos, neben denen jeweils ein kleiner QR-Code klebt. Haelt die Oma ihr Handy davor, startet wie von Zauberhand ein Video, ein Lied oder eine liebe Sprachnachricht der Familie. So sind die Liebsten immer nur einen kleinen Scan entfernt - ganz ohne komplizierte Technik, einfach Foto anschauen und zuhoeren.</div>
+<div class="meta">
+  <span class="chip">Kosten: ca. 40-90 EUR (je nach Rahmen und Deko, die Technik selbst ist kostenlos)</span>
+  <span class="chip">Schwierigkeit: Einfach</span>
+  <span class="chip">Zeit: Ein gemuetlicher Nachmittag (plus etwas Zeit zum Sammeln der Videos vorab)</span>
+</div>
+<div class="sketch"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="0" y="0" width="400" height="300" fill="#fdf6ec"/>
+  <text x="200" y="24" font-family="Comic Sans MS, cursive" font-size="16" fill="#a0522d" text-anchor="middle">Omas QR-Erinnerungs-Altar</text>
+
+  <!-- Regal / Basis -->
+  <rect x="30" y="210" width="340" height="18" rx="3" fill="#c8a06a" stroke="#8b6b3e" stroke-width="2"/>
+  <rect x="40" y="228" width="320" height="40" fill="#dcbb88" stroke="#8b6b3e" stroke-width="2"/>
+  <text x="200" y="253" font-family="cursive" font-size="11" fill="#5a3d1e" text-anchor="middle">gemuetliches Sideboard</text>
+
+  <!-- Rahmen 1 mit Foto -->
+  <rect x="55" y="90" width="80" height="100" rx="4" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>
+  <circle cx="95" cy="125" r="16" fill="#f4c7a1"/>
+  <rect x="75" y="145" width="40" height="30" rx="6" fill="#9bbf8a"/>
+  <text x="95" y="205" font-family="cursive" font-size="9" fill="#5a3d1e" text-anchor="middle">Foto: Enkel Max</text>
+  <!-- QR 1 -->
+  <rect x="138" y="120" width="34" height="34" fill="#fff" stroke="#333" stroke-width="2"/>
+  <rect x="142" y="124" width="8" height="8" fill="#333"/>
+  <rect x="160" y="124" width="8" height="8" fill="#333"/>
+  <rect x="142" y="142" width="8" height="8" fill="#333"/>
+  <rect x="152" y="134" width="6" height="6" fill="#333"/>
+  <rect x="160" y="144" width="6" height="6" fill="#333"/>
+  <text x="155" y="166" font-family="cursive" font-size="7" fill="#a0522d" text-anchor="middle">scannen!</text>
+
+  <!-- Rahmen 2 mit Foto -->
+  <rect x="220" y="80" width="85" height="105" rx="4" fill="#fff" stroke="#8b5a2b" stroke-width="4"/>
+  <circle cx="248" cy="115" r="14" fill="#f4c7a1"/>
+  <circle cx="278" cy="115" r="14" fill="#f4c7a1"/>
+  <rect x="232" y="135" width="62" height="32" rx="6" fill="#b08cc4"/>
+  <text x="262" y="200" font-family="cursive" font-size="9" fill="#5a3d1e" text-anchor="middle">Foto: ganze Familie</text>
+  <!-- QR 2 -->
+  <rect x="312" y="115" width="34" height="34" fill="#fff" stroke="#333" stroke-width="2"/>
+  <rect x="316" y="119" width="8" height="8" fill="#333"/>
+  <rect x="334" y="119" width="8" height="8" fill="#333"/>
+  <rect x="316" y="137" width="8" height="8" fill="#333"/>
+  <rect x="326" y="129" width="6" height="6" fill="#333"/>
+  <rect x="334" y="139" width="6" height="6" fill="#333"/>
+
+  <!-- Handy, das scannt -->
+  <rect x="150" y="225" width="40" height="60" rx="6" fill="#2f3b52" stroke="#1d2638" stroke-width="2"/>
+  <rect x="155" y="232" width="30" height="42" rx="2" fill="#cfe8ff"/>
+  <rect x="163" y="240" width="14" height="14" fill="#fff" stroke="#333"/>
+  <text x="170" y="298" font-family="cursive" font-size="9" fill="#5a3d1e" text-anchor="middle">Handy davorhalten</text>
+
+  <!-- Tonwellen / Stimme kommt raus -->
+  <path d="M196 240 q10 -8 20 0" stroke="#e08a3c" stroke-width="2" fill="none"/>
+  <path d="M196 250 q14 -10 28 0" stroke="#e08a3c" stroke-width="2" fill="none"/>
+  <text x="245" y="245" font-family="cursive" font-size="9" fill="#e08a3c">Stimme der Familie!</text>
+
+  <!-- Lichterkette -->
+  <circle cx="60" cy="80" r="4" fill="#ffd54a"/>
+  <circle cx="120" cy="72" r="4" fill="#ffd54a"/>
+  <circle cx="200" cy="68" r="4" fill="#ffd54a"/>
+  <circle cx="290" cy="70" r="4" fill="#ffd54a"/>
+  <circle cx="350" cy="80" r="4" fill="#ffd54a"/>
+  <path d="M60 80 Q120 60 200 68 Q290 60 350 80" stroke="#d9b24a" stroke-width="1.5" fill="none"/>
+</svg><div class="cap">Skizze: QR-Code-Erinnerungs-Altar fuer Oma</div></div>
+<div class="cols">
+  <div class="col"><h2>Materialien</h2><ul><li>3-5 schoene Bilderrahmen mit Lieblingsfotos der Familie</li><li>Selbstklebende Etiketten oder kleine gerahmte Kaertchen fuer die QR-Codes</li><li>Ein kostenloser QR-Code-Generator (z.B. qrcode-monkey.com oder die Webseite des Foto-Drucks)</li><li>Hochgeladene Videos/Sprachnachrichten (YouTube als &#x27;nicht gelistet&#x27;, Google Drive oder WhatsApp-Sprachmemos)</li><li>Ein kleines Regal, Sideboard oder eine huebsche Holzkiste als Altar-Basis</li><li>Warme Lichterkette oder ein LED-Teelicht fuer Gemuetlichkeit</li><li>Drucker oder ein Druck im Drogeriemarkt fuer die QR-Codes</li></ul></div>
+  <div class="col"><h2>Aufbau in Schritten</h2><ul><li>Sammelt in der Familie kurze Videos, Lieder oder Sprachnachrichten und ladet jede Aufnahme einzeln hoch (z.B. als nicht gelistetes YouTube-Video oder Google-Drive-Link).</li><li>Erzeugt fuer jeden Link mit einem kostenlosen QR-Code-Generator einen QR-Code und druckt ihn als kleines Kaertchen aus (etwa briefmarken- bis streichholzschachtelgross).</li><li>Rahmt die passenden Fotos ein und klebt oder stellt den jeweiligen QR-Code direkt daneben, mit einer liebevollen Beschriftung wie &#x27;Hier singt Enkel Max&#x27;.</li><li>Richtet die Ecke gemuetlich her: Rahmen aufstellen, Lichterkette drumherum, vielleicht eine Blume oder ein Spitzendeckchen dazu.</li><li>Probiert mit der Oma gemeinsam jeden QR-Code einmal aus, damit sie sieht, wie einfach das Scannen geht.</li><li>Legt eine kleine bebilderte Anleitung dazu (&#x27;Handy-Kamera draufhalten, auf den Link tippen&#x27;) und haengt sie gut sichtbar auf.</li></ul></div>
+</div>
+<div class="box"><div class="lbl">Sicherheits-Tipp</div><div class="txt">Stellt die Videos auf &#x27;nicht gelistet&#x27; oder &#x27;privat mit Link&#x27;, damit nur die Familie sie sehen kann, und vermeidet ploetzliche Stolperfallen: Lichterkette mit Batterie statt Kabel quer durchs Zimmer, und das LED-Teelicht statt einer echten Kerze, damit nichts heiss wird oder umfaellt.</div></div>
+<div class="box"><div class="lbl">Warum die Oma es lieben wird</div><div class="txt">Die Oma muss sich nichts merken und nichts installieren - sie haelt einfach das Handy vor ein Foto und ploetzlich hoert sie das Lachen der Enkel oder ein liebes &#x27;Hallo Omi, wir denken an dich&#x27;. Dieses kleine Wunder, dass aus einem Bild eine Stimme wird, ruehrt fast jede Oma zu Traenen und sie wird es immer wieder ausprobieren wollen.</div></div>
+</div>
+<div class="foot">Cyber-Altar fuer die Oma &middot; Beratungs-Bot 5/10 &middot; mit Liebe erstellt</div>
+</div></body></html>
