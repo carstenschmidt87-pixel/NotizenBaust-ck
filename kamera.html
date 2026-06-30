@@ -147,8 +147,22 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
   @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 </style>
+<style>
+  /* ===== Zier-Bilder (zz) ===== */
+  .zz-corner{position:fixed;width:30vw;max-width:160px;opacity:.55;z-index:-1;pointer-events:none}
+  .zz-corner.tl{top:0;left:0}
+  .zz-corner.br{bottom:0;right:0;transform:rotate(180deg)}
+  .zz-hero{display:block;width:min(82%,310px);margin:.2rem auto 1.5rem;border-radius:10px;border:1px solid rgba(201,168,76,.28);box-shadow:0 10px 34px rgba(0,0,0,.55)}
+  .zz-hero-sm{display:block;width:min(60%,190px);margin:.4rem auto 1rem;border-radius:10px;border:1px solid rgba(201,168,76,.28);box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  .zz-front{display:block;width:min(86%,330px);height:116px;object-fit:cover;object-position:center 45%;margin:.2rem auto 1.4rem;border-radius:8px;border:1px solid rgba(201,168,76,.22);box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  .zz-banner{display:block;width:100%;max-width:520px;margin:.2rem auto 1rem;border-radius:8px;border:1px solid rgba(201,168,76,.22);box-shadow:0 8px 26px rgba(0,0,0,.45)}
+  .zz-div{display:block;width:min(78%,340px);margin:1rem auto;opacity:.92;pointer-events:none}
+  #permScreen{background:linear-gradient(rgba(26,10,46,.80),rgba(26,10,46,.88)),url('gewoelbe.jpg') center/cover no-repeat !important}
+  #finaleScreen{background:linear-gradient(rgba(26,10,46,.55),rgba(26,10,46,.80)),url('finale.jpg') center/cover no-repeat !important}
+</style>
 </head>
 <body>
+<img class="zz-corner tl" src="ecke.png" alt=""><img class="zz-corner br" src="ecke.png" alt="">
 <canvas id="fxCanvas"></canvas>
 
 <!-- Permission -->

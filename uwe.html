@@ -265,12 +265,26 @@
   }
   .order-hint.show { display:block; animation:fadeUp 0.5s ease; }
 </style>
+<style>
+  /* ===== Zier-Bilder (zz) ===== */
+  .zz-corner{position:fixed;width:30vw;max-width:160px;opacity:.55;z-index:-1;pointer-events:none}
+  .zz-corner.tl{top:0;left:0}
+  .zz-corner.br{bottom:0;right:0;transform:rotate(180deg)}
+  .zz-hero{display:block;width:min(82%,310px);margin:.2rem auto 1.5rem;border-radius:10px;border:1px solid rgba(201,168,76,.28);box-shadow:0 10px 34px rgba(0,0,0,.55)}
+  .zz-hero-sm{display:block;width:min(60%,190px);margin:.4rem auto 1rem;border-radius:10px;border:1px solid rgba(201,168,76,.28);box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  .zz-front{display:block;width:min(86%,330px);height:116px;object-fit:cover;object-position:center 45%;margin:.2rem auto 1.4rem;border-radius:8px;border:1px solid rgba(201,168,76,.22);box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  .zz-banner{display:block;width:100%;max-width:520px;margin:.2rem auto 1rem;border-radius:8px;border:1px solid rgba(201,168,76,.22);box-shadow:0 8px 26px rgba(0,0,0,.45)}
+  .zz-div{display:block;width:min(78%,340px);margin:1rem auto;opacity:.92;pointer-events:none}
+  body{background:#1a0a2e url('bg.jpg') center center/cover no-repeat fixed !important}
+</style>
 </head>
 <body>
+<img class="zz-corner tl" src="ecke.png" alt=""><img class="zz-corner br" src="ecke.png" alt="">
 <canvas id="fxCanvas"></canvas>
 
 
 <div id="ph1" class="screen">
+  <img class="zz-front" src="ei.jpg" alt="">
   <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
   <div class="name">Bruder Uwe</div>
   <div class="rule"></div>
