@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schwester Sabrina Yvonne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --vd:#1a0a2e; --vm:#3d1a6e; --vg:#b06ad4;
+    --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+  }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--vd); font-family:'Cormorant Garamond',serif;
+    min-height:100dvh; color:var(--cr); position:relative; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 60% 80% at 50% 30%,rgba(61,26,110,0.9) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  body::after {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.4; pointer-events:none; z-index:0;
+  }
+  #fxCanvas { position:fixed; inset:0; pointer-events:none; z-index:100; opacity:0; }
+  .screen {
+    position:relative; z-index:1; display:flex; flex-direction:column;
+    align-items:center; padding:2.5rem 1.5rem; min-height:100dvh; width:100%;
+  }
+  .hidden { display:none !important; }
+  .orn { margin-bottom:1.8rem; }
+  .orn svg { width:44px; opacity:0.5; }
+  .name {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    font-weight:400; letter-spacing:0.22em; color:var(--gl);
+    text-align:center; text-transform:uppercase; margin-bottom:0.5rem;
+  }
+  .rule {
+    width:50px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--go),transparent);
+    margin:0 auto 1.8rem;
+  }
+  /* Codeword / half display */
+  .secret-box { text-align:center; margin-bottom:2rem; width:100%; max-width:300px; }
+  .secret-label {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    color:var(--vg); text-transform:uppercase; opacity:0.7; margin-bottom:0.5rem;
+  }
+  .secret-word {
+    font-family:'Cinzel',serif; font-size:clamp(1.8rem,9vw,2.8rem);
+    letter-spacing:0.4em; color:var(--go);
+    text-shadow:0 0 30px rgba(201,168,76,0.5),0 0 60px rgba(201,168,76,0.2);
+    margin-bottom:0.7rem;
+  }
+  .secret-hint {
+    font-style:italic; font-weight:300; font-size:clamp(0.9rem,3.5vw,1.05rem);
+    color:var(--cr); opacity:0.7; line-height:1.6;
+  }
+  /* Egg */
+  .egg-wrap {
+    position:relative; margin-bottom:1.5rem;
+    animation:float 5s ease-in-out infinite 1s; transition:filter 0.5s ease;
+  }
+  .egg-wrap.glowing {
+    filter:drop-shadow(0 0 12px rgba(201,168,76,0.6))
+           drop-shadow(0 0 30px rgba(201,168,76,0.3));
+  }
+  .egg-wrap.cracking {
+    animation:shake 0.11s ease-in-out infinite !important;
+    filter:drop-shadow(0 0 20px rgba(255,220,120,0.95))
+           drop-shadow(0 0 50px rgba(255,180,50,0.6)) !important;
+  }
+  .egg-wrap.opened { animation:eggBurst 0.55s ease forwards !important; }
+  .egg { width:100px; height:128px; }
+  .crack { stroke-dasharray:100; stroke-dashoffset:100; }
+  .egg-wrap.cracking .crack       { animation:drawCrack 0.35s ease forwards; }
+  .egg-wrap.cracking .crack-2     { animation-delay:0.12s; }
+  .egg-wrap.cracking .crack-3     { animation-delay:0.22s; }
+  .egg-inner-light {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:60px; height:80px;
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    background:radial-gradient(ellipse,rgba(255,240,160,0.95) 0%,rgba(255,180,50,0.6) 40%,transparent 70%);
+    opacity:0; pointer-events:none; filter:blur(8px);
+  }
+  .egg-wrap.cracking .egg-inner-light { animation:innerGlow 0.8s ease forwards; }
+  /* Input */
+  .inp-area {
+    display:flex; flex-direction:column; align-items:center;
+    gap:0.8rem; width:100%; max-width:260px;
+  }
+  .inp-label {
+    font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.3em;
+    color:var(--vg); text-transform:uppercase; opacity:0.7;
+  }
+  .inp {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.25); border-radius:2px;
+    color:var(--gl); font-family:'Cinzel',serif; font-size:1.1rem;
+    letter-spacing:0.3em; text-align:center; text-transform:uppercase;
+    width:100%; padding:0.7rem 1rem; outline:none;
+    transition:border-color 0.3s,box-shadow 0.3s; -webkit-appearance:none;
+  }
+  .inp::placeholder { color:rgba(201,168,76,0.2); letter-spacing:0.2em; }
+  .inp:focus { border-color:rgba(201,168,76,0.6); box-shadow:0 0 12px rgba(201,168,76,0.12); }
+  .inp.wrong { animation:inputShake 0.4s ease; border-color:rgba(255,100,100,0.5); }
+  .inp.solved { border-color:rgba(201,168,76,0.5); pointer-events:none; }
+  .btn {
+    background:transparent; border:1px solid rgba(201,168,76,0.3); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
+    padding:0.6rem 1.8rem; text-transform:uppercase;
+    cursor:pointer; transition:all 0.3s; border-radius:1px;
+  }
+  .btn:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .btn:active { transform:scale(0.97); }
+  .btn-sm { font-size:0.6rem; padding:0.5rem 1.3rem; }
+  /* Phase 2 content */
+  .eyebrow {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.35em;
+    color:var(--go); text-transform:uppercase; opacity:0.7;
+    text-align:center; margin-bottom:1rem;
+  }
+  .disc-q {
+    font-style:italic; font-weight:300; font-size:clamp(1.15rem,4.5vw,1.35rem);
+    line-height:1.7; color:var(--cr); text-align:center;
+    max-width:300px; margin-bottom:0.5rem;
+  }
+  .disc-sub {
+    font-size:0.85rem; color:var(--vg); opacity:0.55;
+    letter-spacing:0.1em; text-align:center; margin-bottom:2.5rem;
+  }
+  .divider {
+    width:100%; max-width:320px; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent);
+    margin:0 auto 2.5rem;
+  }
+  .riddle-q {
+    font-style:italic; font-weight:300; font-size:clamp(1rem,4vw,1.2rem);
+    line-height:1.65; color:var(--cr); text-align:center;
+    max-width:280px; margin-bottom:1.2rem; opacity:0.85;
+  }
+  .riddle-wrap {
+    display:flex; flex-direction:column; align-items:center;
+    gap:0.7rem; width:100%; max-width:240px; margin-bottom:1rem;
+  }
+  .loesung {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.3em; color:var(--go); text-align:center;
+    margin-bottom:2.5rem; text-shadow:0 0 20px rgba(201,168,76,0.4);
+    opacity:0; transition:opacity 0.8s ease;
+  }
+  .loesung.show { opacity:1; }
+  .loesung small {
+    display:block; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.6; margin-bottom:0.3rem;
+  }
+  .five-wrap {
+    width:100%; max-width:260px; display:flex; flex-direction:column;
+    gap:0.6rem; margin-bottom:2rem;
+  }
+  .ff {
+    background:rgba(255,255,255,0.02); border:1px solid rgba(201,168,76,0.12); border-radius:2px;
+    color:var(--gl); font-family:'Cinzel',serif; font-size:0.9rem;
+    letter-spacing:0.25em; text-align:center; text-transform:uppercase;
+    width:100%; padding:0.55rem 0.8rem; outline:none;
+    transition:border-color 0.3s; -webkit-appearance:none;
+  }
+  .ff:focus { border-color:rgba(201,168,76,0.35); }
+  .ff.filled { border-color:rgba(201,168,76,0.4); color:var(--go); }
+  .foot {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.35; text-align:center; margin-top:1rem;
+  }
+  /* Phase 3 */
+  #ph3 { justify-content:center; }
+  .inter {
+    font-style:italic; font-weight:300; font-size:clamp(1.2rem,5vw,1.5rem);
+    line-height:2; color:var(--cr); text-align:center; margin-bottom:3rem;
+    opacity:0; animation:fadeUp 1.5s ease forwards 0.3s;
+  }
+  .btn-cam {
+    background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+    padding:0.9rem 2.2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px;
+    opacity:0; animation:fadeUp 1.2s ease forwards 1.2s;
+  }
+  .btn-cam:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
+  @keyframes pulse { 0%,100%{opacity:0.5;} 50%{opacity:0.9;} }
+  @keyframes shake {
+    0%,100%{transform:translate(0,0) rotate(0deg);} 20%{transform:translate(-3px,-1px) rotate(-1.5deg);}
+    40%{transform:translate(3px,1px) rotate(1.5deg);} 60%{transform:translate(-2px,1px) rotate(-0.8deg);}
+    80%{transform:translate(2px,-1px) rotate(0.8deg);}
+  }
+  @keyframes inputShake {
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);}
+  }
+  @keyframes drawCrack { to{stroke-dashoffset:0;} }
+  @keyframes innerGlow {
+    0%{opacity:0;transform:translate(-50%,-50%) scale(0.5);}
+    50%{opacity:1;transform:translate(-50%,-50%) scale(1.2);}
+    100%{opacity:0.9;transform:translate(-50%,-50%) scale(1);}
+  }
+  @keyframes eggBurst {
+    0%{opacity:1;transform:scale(1);filter:brightness(3) blur(0px);}
+    50%{opacity:0.5;transform:scale(1.5);filter:brightness(6) blur(3px);}
+    100%{opacity:0;transform:scale(0.1);filter:brightness(10) blur(15px);}
+  }
+
+  /* ── Pigpen ── */
+  .secret-sub {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.25em;
+    color:var(--vg); text-transform:uppercase; opacity:0.55; margin-bottom:0.9rem;
+  }
+  .pigpen-row {
+    display:flex; gap:0.5rem; justify-content:center; align-items:center;
+    flex-wrap:wrap; margin-bottom:0.9rem;
+  }
+  .pg {
+    width:clamp(38px,11vw,52px); height:clamp(38px,11vw,52px);
+    filter:drop-shadow(0 0 10px rgba(201,168,76,0.35));
+  }
+  /* ── Vers / Reihenfolge ── */
+  .verse {
+    font-style:italic; font-weight:300; font-size:clamp(0.85rem,3.4vw,1rem);
+    line-height:1.85; color:var(--cr); opacity:0.78; text-align:center;
+    max-width:300px; margin:0 auto 1.4rem;
+  }
+  .five-wrap.wrong { animation:inputShake 0.4s ease; }
+  .five-wrap.locked .ff { border-color:rgba(201,168,76,0.4); color:var(--go); }
+  .check-btn { margin:0 auto 2rem; display:block; }
+  /* ── Splitter ── */
+  .frag-reveal { display:none; flex-direction:column; align-items:center; width:100%; }
+  .frag-reveal.show { display:flex; animation:fadeUp 0.8s ease; }
+  .frag-glyph {
+    width:84px; height:84px; border:1px solid rgba(201,168,76,0.4);
+    border-radius:6px; display:flex; align-items:center; justify-content:center;
+    margin:0.6rem 0; background:rgba(201,168,76,0.06);
+    box-shadow:0 0 30px rgba(201,168,76,0.25);
+  }
+  .frag-letter {
+    font-family:'Cinzel',serif; font-size:2.6rem; color:var(--go);
+    text-shadow:0 0 24px rgba(201,168,76,0.6);
+  }
+  .frag-pos {
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em;
+    color:var(--vg); text-transform:uppercase; opacity:0.8;
+  }
+  .frag-note {
+    font-style:italic; font-size:0.85rem; color:var(--cr); opacity:0.65;
+    line-height:1.6; text-align:center; max-width:260px; margin:1rem 0 1.6rem;
+  }
+
+  .order-hint {
+    display:none; font-style:italic; font-size:0.85rem; color:var(--vg);
+    opacity:0.8; text-align:center; max-width:280px;
+    margin:-0.4rem auto 1.4rem; line-height:1.55;
+  }
+  .order-hint.show { display:block; animation:fadeUp 0.5s ease; }
+</style>
+</head>
+<body>
+<canvas id="fxCanvas"></canvas>
+
+<div id="ph1" class="screen">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="name">Schwester Sabrina Yvonne</div>
+  <div class="rule"></div>
+  <div class="secret-box">
+    <div class="secret-label">Deine Hälfte</div>
+    <div class="secret-sub">Maurer-Alphabet — entschlüssle deine Hälfte</div>
+    <div class="pigpen-row"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/></svg></div>
+  </div>
+  <div class="egg-wrap" id="eggWrap">
+    <div class="egg-inner-light"></div>
+    <svg class="egg" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="eB" cx="38%" cy="35%" r="65%"><stop offset="0%" stop-color="#f5ede0"/><stop offset="40%" stop-color="#e8d5b0"/><stop offset="75%" stop-color="#c4a87a"/><stop offset="100%" stop-color="#8a6a45"/></radialGradient><radialGradient id="eG" cx="32%" cy="28%" r="40%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"/><stop offset="100%" stop-color="#b06ad4" stop-opacity="0"/></radialGradient><radialGradient id="eS" cx="50%" cy="90%" r="50%"><stop offset="0%" stop-color="#1a0a2e" stop-opacity="0.35"/><stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/></radialGradient><filter id="sp"><feTurbulence type="turbulence" baseFrequency="0.65 0.45" numOctaves="3" seed="7" result="noise"/><feColorMatrix type="saturate" values="0" in="noise" result="gray"/><feComponentTransfer in="gray" result="thresh"><feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 1 1"/></feComponentTransfer><feBlend in="SourceGraphic" in2="thresh" mode="multiply"/></filter><filter id="cG"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><clipPath id="eC"><ellipse cx="55" cy="72" rx="38" ry="50"/></clipPath></defs><ellipse cx="55" cy="72" rx="38" ry="50" fill="url(#eB)"/><ellipse cx="55" cy="72" rx="38" ry="50" fill="#5c3a1e" opacity="0.18" filter="url(#sp)" clip-path="url(#eC)"/><g clip-path="url(#eC)" opacity="0.55"><ellipse cx="42" cy="55" rx="5" ry="2.5" fill="#3a2510" transform="rotate(-20 42 55)"/><ellipse cx="67" cy="48" rx="4" ry="2" fill="#3a2510" transform="rotate(15 67 48)"/><ellipse cx="55" cy="62" rx="3.5" ry="1.8" fill="#3a2510" transform="rotate(-5 55 62)"/><ellipse cx="38" cy="70" rx="4.5" ry="2" fill="#3a2510" transform="rotate(25 38 70)"/><ellipse cx="70" cy="65" rx="3" ry="1.5" fill="#3a2510" transform="rotate(-10 70 65)"/><ellipse cx="50" cy="78" rx="4" ry="2" fill="#3a2510" transform="rotate(8 50 78)"/><ellipse cx="65" cy="80" rx="3.5" ry="1.6" fill="#3a2510" transform="rotate(-15 65 80)"/><ellipse cx="44" cy="88" rx="3" ry="1.4" fill="#3a2510" transform="rotate(12 44 88)"/><ellipse cx="60" cy="92" rx="4" ry="1.8" fill="#3a2510" transform="rotate(-8 60 92)"/><ellipse cx="35" cy="82" rx="3.5" ry="1.5" fill="#3a2510" transform="rotate(30 35 82)"/><ellipse cx="72" cy="88" rx="3" ry="1.3" fill="#3a2510" transform="rotate(-20 72 88)"/><ellipse cx="55" cy="98" rx="3.5" ry="1.5" fill="#3a2510" transform="rotate(5 55 98)"/></g><ellipse cx="55" cy="72" rx="38" ry="50" fill="url(#eG)"/><ellipse cx="55" cy="72" rx="38" ry="50" fill="url(#eS)"/><g clip-path="url(#eC)" filter="url(#cG)"><path class="crack" d="M55 38 L51 52 L57 62 L48 80" stroke="#ffe8a0" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="crack crack-2" d="M51 52 L43 57 L46 65" stroke="#ffe8a0" stroke-width="0.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="crack crack-3" d="M57 62 L64 59 L66 68" stroke="#ffe8a0" stroke-width="0.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g><ellipse cx="55" cy="72" rx="38" ry="50" fill="none" stroke="rgba(176,106,212,0.1)" stroke-width="3"/></svg>
+  </div>
+  <div class="inp-area" style="margin-top:1.5rem;">
+    <span class="inp-label">Das vollständige Wort</span>
+    <input class="inp" id="codeInp" type="text" maxlength="12"
+      placeholder="· · · · · ·" autocomplete="off" autocorrect="off"
+      autocapitalize="characters" spellcheck="false"/>
+    <button class="btn" id="codeBtn">Öffnen</button>
+  </div>
+</div>
+
+<div id="ph2" class="screen hidden">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="name">Schwester Sabrina Yvonne</div>
+  <div class="rule"></div>
+  <div class="eyebrow">Die Frage für euch beide</div>
+  <p class="disc-q">Der Lehrling tritt zwischen zwei Säulen.<br>Zwischen welchen zwei Polen<br>stehst du gerade in deinem Leben?</p>
+  <p class="disc-sub">Sprecht miteinander.</p>
+  <div class="divider"></div>
+  <div class="eyebrow">Das Rätsel</div>
+  <p class="riddle-q">Ich bin die linke Säule des Tempels.<br>Wie lautet mein Name?</p>
+  <div class="riddle-wrap">
+    <input class="inp" id="riddleInp" type="text" maxlength="10"
+      placeholder="· · · · ·" autocomplete="off" autocorrect="off"
+      autocapitalize="characters" spellcheck="false"/>
+    <button class="btn btn-sm" id="riddleBtn">Prüfen</button>
+  </div>
+  <div class="loesung" id="loesung">
+    <small>Das Wort eures Paares</small>
+    BOAS
+  </div>
+  <div class="divider"></div>
+  <div class="eyebrow">Die fünf Worte — in der rechten Ordnung</div>
+  <p class="verse">
+    Zuerst das erste Geschenk, um die Hüften gelegt,<br>
+    dann das rohe Werk, das der Hammer noch prägt,<br>
+    der Blick zur Quelle, woher der Morgen zieht,<br>
+    was dort empfangen, wenn die Dunkelheit flieht,<br>
+    zuletzt die linke Säule, in Kraft erbaut.
+  </p>
+  <div class="five-wrap" id="fiveWrap">
+    <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
+    <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
+    <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
+    <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
+    <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
+  </div>
+  <button class="btn btn-sm check-btn" id="checkBtn">Ordnung prüfen</button>
+  <div class="order-hint" id="orderHint"></div>
+  <div class="frag-reveal" id="fragReveal">
+    <div class="eyebrow">Dein Splitter des Schlusssteins</div>
+    <div class="frag-glyph"><span class="frag-letter" id="fragLetterP2">?</span></div>
+    <div class="frag-pos">Stelle <span id="fragPosP2">?</span> von zehn</div>
+    <p class="frag-note">Merkt euch Buchstabe und Stelle.<br>Alle zehn zusammen vollenden den Schlussstein.</p>
+    <button class="btn btn-sm" id="toPh3Btn">Weiter</button>
+  </div>
+  <div class="foot">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
+</div>
+
+<div id="ph3" class="screen hidden">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="eyebrow">Der Schlussstein</div>
+  <p class="inter">
+    Zehn Splitter,<br>ein verborgenes Wort.<br>
+    Tragt sie zusammen.
+  </p>
+  <div class="frag-glyph"><span class="frag-letter" id="fragLetterP3">?</span></div>
+  <div class="frag-pos" style="margin-bottom:2.2rem;">Dein Splitter — Stelle <span id="fragPosP3">?</span></div>
+  <button class="btn-cam" id="camBtn">✦ &nbsp; Zum Schlussstein</button>
+</div>
+
+<script>
+const ANSWER   = 'BOAS';
+const COMBINED = 'JAKIN';  // empty string = tap-to-open
+const SOLUTIONS = ['BOAS','LICHT','STEIN','SCHURZ','OSTEN'];
+const CAMERA_URL = 'schlussstein.html';
+const FRAG_LETTER='P';
+const FRAG_POS=1;
+
+const ph1 = document.getElementById('ph1');
+const ph2 = document.getElementById('ph2');
+const ph3 = document.getElementById('ph3');
+const eggWrap = document.getElementById('eggWrap');
+const riddleInp = document.getElementById('riddleInp');
+const riddleBtn = document.getElementById('riddleBtn');
+const loesung   = document.getElementById('loesung');
+const fiveWrap  = document.getElementById('fiveWrap');
+const ffs       = document.querySelectorAll('.ff');
+const fxCanvas  = document.getElementById('fxCanvas');
+const fxCtx     = fxCanvas.getContext('2d');
+
+function resizeFx(){fxCanvas.width=window.innerWidth;fxCanvas.height=window.innerHeight;}
+resizeFx();window.addEventListener('resize',resizeFx);
+
+class Ray{
+  constructor(i,n,cx,cy){
+    this.cx=cx;this.cy=cy;
+    this.angle=(i/n)*Math.PI*2+(Math.random()-0.5)*0.25;
+    this.maxLen=window.innerWidth*0.42+Math.random()*window.innerWidth*0.18;
+    this.width=1.2+Math.random()*4;this.delay=Math.random()*0.15;
+    this.speed=0.5+Math.random()*0.35;this.gold=Math.random()>0.35;
+  }
+  draw(t){
+    const tA=Math.max(0,t-this.delay);if(!tA)return;
+    const p=Math.min(1,tA*this.speed),ease=1-Math.pow(1-p,3);
+    const fade=p<0.5?p/0.5:1-(p-0.5)/0.5;
+    const x2=this.cx+Math.cos(this.angle)*ease*this.maxLen;
+    const y2=this.cy+Math.sin(this.angle)*ease*this.maxLen;
+    const g=fxCtx.createLinearGradient(this.cx,this.cy,x2,y2);
+    if(this.gold){g.addColorStop(0,`rgba(255,242,160,${fade*0.95})`);g.addColorStop(0.35,`rgba(255,200,70,${fade*0.7})`);g.addColorStop(1,'rgba(201,168,76,0)');}
+    else{g.addColorStop(0,`rgba(255,255,255,${fade*0.9})`);g.addColorStop(0.35,`rgba(210,160,255,${fade*0.6})`);g.addColorStop(1,'rgba(176,106,212,0)');}
+    fxCtx.save();fxCtx.shadowBlur=22;fxCtx.shadowColor=this.gold?`rgba(255,200,80,${fade*0.55})`:`rgba(200,140,255,${fade*0.45})`;
+    fxCtx.beginPath();fxCtx.moveTo(this.cx,this.cy);fxCtx.lineTo(x2,y2);
+    fxCtx.strokeStyle=g;fxCtx.lineWidth=this.width*(1-p*0.35);fxCtx.lineCap='round';fxCtx.stroke();fxCtx.restore();
+  }
+}
+class Ring{
+  constructor(cx,cy,d,c){this.cx=cx;this.cy=cy;this.d=d;this.c=c;this.mR=Math.min(fxCanvas.width,fxCanvas.height)*0.52;}
+  draw(t){
+    const tA=Math.max(0,t-this.d);if(!tA)return;
+    const p=Math.min(1,tA*0.85),ease=1-Math.pow(1-p,2);
+    const r=ease*this.mR,al=(1-p)*0.9;
+    fxCtx.save();fxCtx.shadowBlur=24;fxCtx.shadowColor=`rgba(${this.c},${al*0.6})`;
+    fxCtx.beginPath();fxCtx.arc(this.cx,this.cy,Math.max(1,r),0,Math.PI*2);
+    fxCtx.strokeStyle=`rgba(${this.c},${al})`;fxCtx.lineWidth=(1-p)*3+0.4;fxCtx.stroke();fxCtx.restore();
+  }
+}
+
+function runFX(cx,cy){
+  fxCanvas.style.opacity='1';
+  const rays=[...Array(28)].map((_,i)=>new Ray(i,28,cx,cy));
+  const rings=[
+    new Ring(cx,cy,0,'255,240,160'),new Ring(cx,cy,0.1,'255,210,80'),
+    new Ring(cx,cy,0.22,'201,168,76'),new Ring(cx,cy,0.36,'255,200,120'),
+    new Ring(cx,cy,0.5,'176,106,212'),new Ring(cx,cy,0.66,'255,255,200'),
+  ];
+  let start=null,done=false;
+  function frame(ts){
+    if(done)return;if(!start)start=ts;
+    const t=(ts-start)/1000;
+    fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+    let fl=0;if(t<0.07)fl=t/0.07;else if(t<0.28)fl=1-(t-0.07)/0.21;
+    if(fl>0){
+      const fg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,fxCanvas.width*0.65);
+      fg.addColorStop(0,`rgba(255,248,210,${fl*0.98})`);fg.addColorStop(0.25,`rgba(255,220,100,${fl*0.7})`);fg.addColorStop(1,`rgba(80,20,140,${fl*0.12})`);
+      fxCtx.fillStyle=fg;fxCtx.fillRect(0,0,fxCanvas.width,fxCanvas.height);
+    }
+    rays.forEach(r=>r.draw(t));rings.forEach(r=>r.draw(t));
+    if(t<1.1){
+      const cAl=Math.max(0,1-t/1.1)*0.75,cR=25+t*25;
+      const cg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,cR);
+      cg.addColorStop(0,`rgba(255,252,210,${cAl})`);cg.addColorStop(0.5,`rgba(255,200,80,${cAl*0.5})`);cg.addColorStop(1,'rgba(201,168,76,0)');
+      fxCtx.beginPath();fxCtx.arc(cx,cy,cR,0,Math.PI*2);fxCtx.fillStyle=cg;fxCtx.fill();
+    }
+    if(t>1.15){
+      const fp=Math.min(1,(t-1.15)/0.65);
+      fxCanvas.style.opacity=String(1-fp);
+      if(fp>=1){done=true;fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);fxCanvas.style.opacity='0';return;}
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function playSound(){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  const ac=new AC();if(ac.state==='suspended')ac.resume();
+  const now=ac.currentTime,master=ac.createGain();
+  master.gain.setValueAtTime(0.75,now);master.connect(ac.destination);
+  const r=ac.createOscillator(),rG=ac.createGain(),rF=ac.createBiquadFilter();
+  r.type='sawtooth';r.frequency.setValueAtTime(38,now);r.frequency.exponentialRampToValueAtTime(72,now+0.9);
+  rF.type='lowpass';rF.frequency.value=140;rG.gain.setValueAtTime(0,now);rG.gain.linearRampToValueAtTime(0.35,now+0.08);rG.gain.linearRampToValueAtTime(0,now+1.5);
+  r.connect(rF);rF.connect(rG);rG.connect(master);r.start(now);r.stop(now+1.6);
+  const wb=ac.createBuffer(1,ac.sampleRate*1.8,ac.sampleRate),wd=wb.getChannelData(0);
+  for(let i=0;i<wd.length;i++)wd[i]=Math.random()*2-1;
+  const ws=ac.createBufferSource();ws.buffer=wb;
+  const wf=ac.createBiquadFilter();wf.type='bandpass';wf.frequency.setValueAtTime(150,now+0.85);wf.frequency.exponentialRampToValueAtTime(5500,now+1.35);wf.Q.value=0.7;
+  const wG=ac.createGain();wG.gain.setValueAtTime(0,now+0.85);wG.gain.linearRampToValueAtTime(0.65,now+1.0);wG.gain.exponentialRampToValueAtTime(0.001,now+1.9);
+  ws.connect(wf);wf.connect(wG);wG.connect(master);ws.start(now+0.85);ws.stop(now+2.0);
+  const bs=now+1.05;
+  [[264,0.28,3.8],[396,0.22,3.2],[528,0.5,4.5],[792,0.18,3.0],[1056,0.1,2.2]].forEach(([f,a,d],i)=>{
+    const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0,bs+i*0.04);g.gain.linearRampToValueAtTime(a,bs+i*0.04+0.025);g.gain.exponentialRampToValueAtTime(0.001,bs+i*0.04+d);
+    o.connect(g);g.connect(master);o.start(bs+i*0.04);o.stop(bs+i*0.04+d+0.1);
+  });
+  master.gain.setValueAtTime(0.75,bs+3.5);master.gain.linearRampToValueAtTime(0,bs+5.5);
+}
+
+function openEgg(){
+  playSound();
+  eggWrap.classList.add('glowing');
+  setTimeout(()=>{
+    eggWrap.classList.remove('glowing');eggWrap.classList.add('cracking');
+    setTimeout(()=>{
+      const rect=eggWrap.getBoundingClientRect();
+      runFX(rect.left+rect.width/2,rect.top+rect.height/2);
+      eggWrap.classList.add('opened');
+      setTimeout(()=>{ph1.classList.add('hidden');ph2.classList.remove('hidden');window.scrollTo(0,0);},500);
+    },900);
+  },600);
+}
+
+// Phase 1 unlock logic
+const codeInp = document.getElementById('codeInp');
+const codeBtn = document.getElementById('codeBtn');
+
+if(COMBINED === ''){
+  // keeper: tap egg directly
+  eggWrap.style.cursor='pointer';
+  eggWrap.addEventListener('click',openEgg);
+  eggWrap.addEventListener('touchstart',e=>{e.preventDefault();openEgg();},{passive:false});
+} else {
+  // half-code: need combined word
+  if(codeInp){
+    codeBtn.addEventListener('click',()=>{
+      if(codeInp.value.trim().toUpperCase()===COMBINED){openEgg();}
+      else{codeInp.classList.add('wrong');setTimeout(()=>codeInp.classList.remove('wrong'),500);codeInp.value='';}
+    });
+    codeInp.addEventListener('keydown',e=>{if(e.key==='Enter')codeBtn.click();});
+    codeInp.addEventListener('input',()=>{
+      if(codeInp.value.trim().length>0)eggWrap.classList.add('glowing');
+      else eggWrap.classList.remove('glowing');
+    });
+  }
+}
+
+// Riddle
+riddleBtn.addEventListener('click',()=>{
+  if(riddleInp.value.trim().toUpperCase()===ANSWER){
+    riddleInp.classList.add('solved');riddleBtn.style.display='none';loesung.classList.add('show');
+  } else {
+    riddleInp.classList.add('wrong');setTimeout(()=>riddleInp.classList.remove('wrong'),500);riddleInp.value='';
+  }
+});
+riddleInp.addEventListener('keydown',e=>{if(e.key==='Enter')riddleBtn.click();});
+
+// Five fields
+ffs.forEach(f=>{
+  f.addEventListener('input',()=>{f.classList.toggle('filled',f.value.trim().length>0);});
+  f.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkFive();}});
+});
+const ORDER=['SCHURZ','STEIN','OSTEN','LICHT','BOAS'];
+let _tries=0;
+function checkFive(){
+  const vals=[...ffs].map(f=>f.value.trim().toUpperCase());
+  const hint=document.getElementById('orderHint');
+  if(vals.some(v=>v.length===0)){
+    fiveWrap.classList.add('wrong');setTimeout(()=>fiveWrap.classList.remove('wrong'),450);return;
+  }
+  const ok=ORDER.every((w,i)=>vals[i]===w);
+  if(ok){
+    ffs.forEach(f=>{f.classList.add('filled');f.readOnly=true;});
+    fiveWrap.classList.add('locked');
+    document.getElementById('checkBtn').style.display='none';
+    if(hint)hint.classList.remove('show');
+    const fr=document.getElementById('fragReveal');fr.classList.add('show');
+    setTimeout(()=>fr.scrollIntoView({behavior:'smooth',block:'center'}),250);
+  } else {
+    _tries++;
+    fiveWrap.classList.add('wrong');setTimeout(()=>fiveWrap.classList.remove('wrong'),450);
+    if(hint&&_tries>=2){
+      const sameSet=[...vals].sort().join('|')===[...ORDER].sort().join('|');
+      hint.textContent=sameSet
+        ? 'Die fünf Worte stimmen — prüft nur ihre Reihenfolge.'
+        : 'Ein Wort passt noch nicht.';
+      hint.classList.add('show');
+    }
+  }
+}
+document.getElementById('camBtn').addEventListener('click',()=>{window.location.href=CAMERA_URL;});
+
+// ── Splitter ──
+['fragLetterP2','fragLetterP3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='P';});
+['fragPosP2','fragPosP3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='1';});
+(function(){
+  const c=document.getElementById('checkBtn');if(c)c.addEventListener('click',checkFive);
+  const b=document.getElementById('toPh3Btn');
+  if(b)b.addEventListener('click',()=>{ph2.classList.add('hidden');ph3.classList.remove('hidden');window.scrollTo(0,0);});
+})();
+</script>
+</body>
+</html>

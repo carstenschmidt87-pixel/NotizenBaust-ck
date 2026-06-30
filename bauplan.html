@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meister</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --vd:#1a0a2e; --vm:#3d1a6e; --vg:#b06ad4;
+    --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+  }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--vd); font-family:'Cormorant Garamond',serif;
+    min-height:100dvh; color:var(--cr); position:relative; overflow-x:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 60% 80% at 50% 30%,rgba(61,26,110,0.9) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── Login ── */
+  #loginScreen {
+    position:fixed; inset:0; z-index:10;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:2rem; gap:2rem; text-align:center;
+  }
+  #loginScreen svg { width:52px; opacity:0.5; }
+  #loginScreen h1 {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase;
+  }
+  .inp {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.25); border-radius:2px;
+    color:var(--gl); font-family:'Cinzel',serif; font-size:1.1rem;
+    letter-spacing:0.3em; text-align:center; text-transform:uppercase;
+    width:100%; max-width:260px; padding:0.7rem 1rem; outline:none;
+    transition:border-color 0.3s; -webkit-appearance:none;
+  }
+  .inp::placeholder { color:rgba(201,168,76,0.2); }
+  .inp:focus { border-color:rgba(201,168,76,0.6); }
+  .inp.wrong { animation:shake 0.4s ease; border-color:rgba(255,100,100,0.5); }
+  .btn {
+    background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+    padding:0.7rem 2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px; width:100%; max-width:260px;
+  }
+  .btn:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .btn:active { transform:scale(0.97); }
+
+  /* ── Dashboard ── */
+  #dashboard {
+    display:none; position:relative; z-index:1;
+    max-width:520px; margin:0 auto; padding:2rem 1.2rem 3rem;
+  }
+
+  .dash-header { text-align:center; margin-bottom:2.5rem; }
+  .dash-header svg { width:44px; opacity:0.5; margin-bottom:1.2rem; }
+  .dash-title {
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase; margin-bottom:0.4rem;
+  }
+  .dash-sub {
+    font-style:italic; font-size:0.9rem; color:var(--vg); opacity:0.7;
+  }
+
+  /* Solution words summary */
+  .solutions {
+    background:rgba(61,26,110,0.3); border:1px solid rgba(201,168,76,0.15);
+    border-radius:4px; padding:1.2rem; margin-bottom:2rem;
+  }
+  .solutions-title {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.8;
+    margin-bottom:0.8rem; text-align:center;
+  }
+  .solutions-grid {
+    display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center;
+  }
+  .sol-chip {
+    font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em;
+    color:var(--go); border:1px solid rgba(201,168,76,0.3);
+    padding:0.3rem 0.8rem; border-radius:2px;
+    background:rgba(201,168,76,0.06);
+  }
+
+  /* Pair cards */
+  .pair-card {
+    border:1px solid rgba(201,168,76,0.12); border-radius:4px;
+    margin-bottom:1rem; overflow:hidden;
+  }
+  .pair-header {
+    background:rgba(61,26,110,0.4); padding:0.6rem 1rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .pair-label {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.25em;
+    color:var(--go); text-transform:uppercase; opacity:0.7;
+  }
+  .pair-combined {
+    font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.2em;
+    color:var(--gl);
+  }
+  .pair-loesung {
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em;
+    color:var(--go); background:rgba(201,168,76,0.1);
+    padding:0.15rem 0.5rem; border-radius:2px;
+  }
+
+  .person-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.7rem 1rem; border-top:1px solid rgba(201,168,76,0.08);
+    gap:0.5rem;
+  }
+  .person-name {
+    font-style:italic; font-size:clamp(0.9rem,3.5vw,1.05rem);
+    color:var(--cr); flex:1; min-width:0;
+  }
+  .person-half {
+    font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.2em;
+    color:var(--vg); white-space:nowrap;
+  }
+  .person-link {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.2em;
+    color:rgba(201,168,76,0.5); text-decoration:none; text-transform:uppercase;
+    border:1px solid rgba(201,168,76,0.2); padding:0.25rem 0.6rem; border-radius:2px;
+    transition:all 0.2s; white-space:nowrap;
+  }
+  .person-link:hover { color:var(--go); border-color:rgba(201,168,76,0.5); }
+
+  /* Riddle answers section */
+  .riddles {
+    background:rgba(61,26,110,0.2); border:1px solid rgba(201,168,76,0.1);
+    border-radius:4px; padding:1.2rem; margin-bottom:2rem;
+  }
+  .riddles-title {
+    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.8;
+    margin-bottom:1rem; text-align:center;
+  }
+  .riddle-row {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:0.6rem 0; border-bottom:1px solid rgba(201,168,76,0.08); gap:1rem;
+  }
+  .riddle-row:last-child { border-bottom:none; }
+  .riddle-q-text {
+    font-style:italic; font-size:0.9rem; color:var(--cr); opacity:0.8;
+    line-height:1.5; flex:1;
+  }
+  .riddle-a-text {
+    font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.15em;
+    color:var(--go); white-space:nowrap; padding-top:0.15rem;
+  }
+
+  /* Camera link */
+  .camera-link {
+    text-align:center; margin-top:1.5rem;
+  }
+  .btn-cam {
+    background:transparent; border:1px solid rgba(201,168,76,0.35); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
+    padding:0.8rem 2rem; text-transform:uppercase; cursor:pointer;
+    transition:all 0.3s; border-radius:1px; text-decoration:none; display:inline-block;
+  }
+  .btn-cam:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+
+  .foot {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.3; text-align:center; margin-top:2.5rem;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.7;
+    margin:1.8rem 0 0.8rem; text-align:center;
+  }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);}
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+  #dashboard.show { display:block; animation:fadeIn 0.8s ease forwards; }
+
+  .flow-note {
+    font-style:italic; font-size:0.85rem; color:var(--cr); opacity:0.7;
+    line-height:1.6; text-align:center; max-width:440px; margin:0 auto 2rem;
+    padding:1rem; border:1px solid rgba(201,168,76,0.12); border-radius:4px;
+    background:rgba(61,26,110,0.2);
+  }
+  .order-chips { display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:center; align-items:center; margin-bottom:0.6rem; }
+  .order-chips .sol-chip { position:relative; }
+  .order-arrow { color:rgba(201,168,76,0.4); font-size:0.7rem; }
+  .verse-m { font-style:italic; font-size:0.85rem; color:var(--vg); opacity:0.6; text-align:center; line-height:1.7; margin-top:0.6rem; }
+  .keyword-big {
+    font-family:'Cinzel',serif; font-size:1.4rem; letter-spacing:0.35em;
+    color:var(--go); text-align:center; text-shadow:0 0 24px rgba(201,168,76,0.4);
+    margin:0.4rem 0 1rem;
+  }
+  .frag-table { display:flex; flex-direction:column; gap:0; }
+  .frag-line {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.45rem 0.2rem; border-bottom:1px solid rgba(201,168,76,0.08); gap:0.6rem;
+  }
+  .frag-line:last-child { border-bottom:none; }
+  .frag-line .fp { font-family:'Cinzel',serif; font-size:0.6rem; color:var(--vg); opacity:0.6; width:1.5rem; }
+  .frag-line .fn { font-style:italic; font-size:0.95rem; color:var(--cr); flex:1; }
+  .frag-line .fl {
+    font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.15em; color:var(--go);
+    background:rgba(201,168,76,0.1); padding:0.1rem 0.55rem; border-radius:2px;
+  }
+  .pgkey { display:grid; grid-template-columns:repeat(6,1fr); gap:0.5rem; }
+  .pgk-cell { display:flex; flex-direction:column; align-items:center; gap:0.15rem; }
+  .pgk { width:28px; height:28px; opacity:0.85; }
+  .pgk-cell span { font-family:'Cinzel',serif; font-size:0.55rem; color:var(--vg); opacity:0.7; }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text>
+  </svg>
+  <h1>Meister</h1>
+  <input class="inp" id="pwInput" type="password" placeholder="· · · · · ·"
+    autocomplete="off" spellcheck="false"/>
+  <button class="btn" id="pwBtn">Eintreten</button>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+
+  <div class="dash-header">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text>
+    </svg>
+    <div class="dash-title">Gesellenstück — Übersicht</div>
+    <div class="dash-sub">Nur für den Meister des Abends</div>
+  </div>
+
+  <div class="flow-note">
+    Ablauf pro Person: <b>Hälfte im Maurer-Alphabet entschlüsseln</b> → mit Partner
+    zum vollständigen Wort fügen → Ei öffnen → Gespräch &amp; Rätsel → die fünf Worte
+    <b>in der richtigen Reihenfolge</b> eintragen → eigenen <b>Splitter</b> erhalten →
+    alle zehn Splitter ergeben auf der <b>Schlussstein-Seite</b> das Wort, das erst
+    dann die Kamera freischaltet. Zuletzt führt die Kamera zum <b>Orakel im Osten</b>,
+    mit dem die Schwestern ein letztes Wort lösen.
+  </div>
+
+  <!-- Die fünf Lösungswörter -->
+  <div class="solutions">
+    <div class="solutions-title">Die fünf Lösungswörter (Reihenfolge unten!)</div>
+    <div class="solutions-grid">
+      <span class="sol-chip">BOAS</span>
+      <span class="sol-chip">LICHT</span>
+      <span class="sol-chip">STEIN</span>
+      <span class="sol-chip">SCHURZ</span>
+      <span class="sol-chip">OSTEN</span>
+    </div>
+  </div>
+
+  <!-- Die fünf Paare -->
+  <div class="section-title">Die fünf Paare</div>
+
+  <!-- Paar 1 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 1</span>
+      <span class="pair-combined">JAKIN</span>
+      <span class="pair-loesung">BOAS</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sabrina Yvonne</span>
+      <span class="person-half">JA —</span>
+      <a class="person-link" href="sabrina-yvonne.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Constantin</span>
+      <span class="person-half">— KIN</span>
+      <a class="person-link" href="constantin.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 2 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 2</span>
+      <span class="pair-combined">TEMPEL</span>
+      <span class="pair-loesung">LICHT</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sabrina</span>
+      <span class="person-half">TEM —</span>
+      <a class="person-link" href="sabrina.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Arno</span>
+      <span class="person-half">— PEL</span>
+      <a class="person-link" href="arno.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 3 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 3</span>
+      <span class="pair-combined">WINKEL</span>
+      <span class="pair-loesung">STEIN</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Stefanie</span>
+      <span class="person-half">WINK —</span>
+      <a class="person-link" href="stefanie.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Sven</span>
+      <span class="person-half">— EL</span>
+      <a class="person-link" href="sven.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 4 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 4</span>
+      <span class="pair-combined">ZIRKEL</span>
+      <span class="pair-loesung">SCHURZ</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Sandra</span>
+      <span class="person-half">ZIRK —</span>
+      <a class="person-link" href="sandra.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Uwe</span>
+      <span class="person-half">— EL</span>
+      <a class="person-link" href="uwe.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Paar 5 -->
+  <div class="pair-card">
+    <div class="pair-header">
+      <span class="pair-label">Paar 5</span>
+      <span class="pair-combined">LEHRLING</span>
+      <span class="pair-loesung">OSTEN</span>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Schwester Ursula</span>
+      <span class="person-half">LEHR —</span>
+      <a class="person-link" href="ursula.html">Seite</a>
+    </div>
+    <div class="person-row">
+      <span class="person-name">Bruder Carsten</span>
+      <span class="person-half">— LING</span>
+      <a class="person-link" href="carsten.html">Seite</a>
+    </div>
+  </div>
+
+  <!-- Reihenfolge-Schloss -->
+  <div class="section-title">Das Reihenfolge-Schloss</div>
+  <div class="solutions">
+    <div class="solutions-title">Die fünf Worte müssen in dieser Ordnung eingegeben werden</div>
+    <div class="order-chips">
+      <span class="sol-chip">1 · SCHURZ</span><span class="order-arrow">→</span>
+      <span class="sol-chip">2 · STEIN</span><span class="order-arrow">→</span>
+      <span class="sol-chip">3 · OSTEN</span><span class="order-arrow">→</span>
+      <span class="sol-chip">4 · LICHT</span><span class="order-arrow">→</span>
+      <span class="sol-chip">5 · BOAS</span>
+    </div>
+    <p class="verse-m">
+      „Zuerst das erste Geschenk, um die Hüften gelegt (Schurz),<br>
+      dann das rohe Werk, das der Hammer noch prägt (Stein),<br>
+      der Blick zur Quelle, woher der Morgen zieht (Osten),<br>
+      was dort empfangen, wenn die Dunkelheit flieht (Licht),<br>
+      zuletzt die linke Säule, in Kraft erbaut (Boas)."
+    </p>
+  </div>
+
+  <!-- Schlussstein -->
+  <div class="section-title">Der Schlussstein — die zehn Splitter</div>
+  <div class="solutions">
+    <div class="solutions-title">Jede Seite gibt einen Buchstaben + Stelle frei</div>
+    <div class="keyword-big">P Y T H A G O R A S</div>
+    <div class="frag-table">
+      <div class="frag-line"><span class="fp">1</span><span class="fn">Sabrina Yvonne</span><span class="fl">P</span></div>
+      <div class="frag-line"><span class="fp">2</span><span class="fn">Constantin</span><span class="fl">Y</span></div>
+      <div class="frag-line"><span class="fp">3</span><span class="fn">Sabrina</span><span class="fl">T</span></div>
+      <div class="frag-line"><span class="fp">4</span><span class="fn">Arno</span><span class="fl">H</span></div>
+      <div class="frag-line"><span class="fp">5</span><span class="fn">Stefanie</span><span class="fl">A</span></div>
+      <div class="frag-line"><span class="fp">6</span><span class="fn">Sven</span><span class="fl">G</span></div>
+      <div class="frag-line"><span class="fp">7</span><span class="fn">Sandra</span><span class="fl">O</span></div>
+      <div class="frag-line"><span class="fp">8</span><span class="fn">Uwe</span><span class="fl">R</span></div>
+      <div class="frag-line"><span class="fp">9</span><span class="fn">Ursula</span><span class="fl">A</span></div>
+      <div class="frag-line"><span class="fp">10</span><span class="fn">Carsten</span><span class="fl">S</span></div>
+    </div>
+    <p class="verse-m" style="margin-top:1rem;">Hinweis auf der Seite: „Was die zehn Steine im Dreieck bilden, trägt seit der Antike denselben Namen." — Notausgang: dreimal auf das ✦ unten tippen füllt das Wort.</p>
+  </div>
+
+  <!-- Pigpen-Schlüssel -->
+  <div class="section-title">Maurer-Alphabet (Pigpen)</div>
+  <div class="riddles">
+    <div class="riddles-title">Schlüssel zum Entziffern der Hälften</div>
+    <div class="pgkey"><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>A</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>B</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>C</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/></svg><span>D</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/></svg><span>E</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/></svg><span>F</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/></svg><span>G</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/></svg><span>H</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/></svg><span>I</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>J</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>K</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>L</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>M</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>N</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>O</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>P</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><path d="M82 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Q</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><span>R</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/></svg><span>S</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/></svg><span>T</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/></svg><span>U</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/></svg><span>V</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L18 82"/><circle cx="78" cy="50" r="6.5" fill="#c9a84c"/></svg><span>W</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 18 M50 50 L82 18"/><circle cx="50" cy="78" r="6.5" fill="#c9a84c"/></svg><span>X</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L82 18 M50 50 L82 82"/><circle cx="22" cy="50" r="6.5" fill="#c9a84c"/></svg><span>Y</span></div><div class="pgk-cell"><svg class="pgk" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M50 50 L18 82 M50 50 L82 82"/><circle cx="50" cy="22" r="6.5" fill="#c9a84c"/></svg><span>Z</span></div></div>
+  </div>
+
+  <!-- Rätsel-Antworten -->
+  <div class="section-title">Rätsel &amp; Antworten</div>
+  <div class="riddles">
+    <div class="riddles-title">Falls jemand Hilfe braucht</div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Ich bin die linke Säule des Tempels. Wie lautet mein Name?</span>
+      <span class="riddle-a-text">BOAS</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Was empfängt der Lehrling, wenn er aus der Dunkelheit tritt?</span>
+      <span class="riddle-a-text">LICHT</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Der Lehrling trägt ihn roh mit sich. Was ist er?</span>
+      <span class="riddle-a-text">STEIN</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Das erste Geschenk der Loge. Was trägt der Lehrling um seine Hüften?</span>
+      <span class="riddle-a-text">SCHURZ</span>
+    </div>
+    <div class="riddle-row">
+      <span class="riddle-q-text">Wohin richtet der Lehrling seinen Blick im Tempel?</span>
+      <span class="riddle-a-text">OSTEN</span>
+    </div>
+  </div>
+
+  <!-- Orakel -->
+  <div class="section-title">Das Orakel — Schlussrätsel</div>
+  <div class="solutions">
+    <div class="solutions-title">Lösungswort der Schwestern</div>
+    <div class="keyword-big">WEISHEIT</div>
+    <p class="verse-m">
+      Das Orakel fragt nach der <b>ersten der drei Säulen</b> der Loge
+      (Weisheit · Stärke · Schönheit). Es spricht nur im Rätsel-Kontext, gibt
+      gestaffelte Hinweise und nennt das Wort nie selbst. Notausgang: dreimal auf
+      das ✦ am unteren Rand tippen — dann flüstert ein Bruder das Wort.
+      (Wort &amp; Hinweise oben im Code der Seite austauschbar.)
+    </p>
+  </div>
+
+  <!-- Finale -->
+  <div class="section-title">Finale</div>
+  <div class="camera-link">
+    <a class="btn-cam" href="schlussstein.html">✦ &nbsp; Schlussstein</a>
+    &nbsp;&nbsp;
+    <a class="btn-cam" href="kamera.html">✦ &nbsp; Kamera</a>
+    &nbsp;&nbsp;
+    <a class="btn-cam" href="orakel.html">✦ &nbsp; Orakel</a>
+  </div>
+
+  <div class="foot">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
+</div>
+
+<script>
+// ── Password ──────────────────────────────
+// Ändere dieses Wort um das Passwort anzupassen:
+const PASSWORD = 'MEISTER';
+
+const pwInput = document.getElementById('pwInput');
+const pwBtn   = document.getElementById('pwBtn');
+const login   = document.getElementById('loginScreen');
+const dash    = document.getElementById('dashboard');
+
+function tryLogin() {
+  if (pwInput.value.trim().toUpperCase() === PASSWORD) {
+    login.style.display = 'none';
+    dash.classList.add('show');
+  } else {
+    pwInput.classList.add('wrong');
+    setTimeout(() => pwInput.classList.remove('wrong'), 500);
+    pwInput.value = '';
+    pwInput.focus();
+  }
+}
+
+pwBtn.addEventListener('click', tryLogin);
+pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+</script>
+</body>
+</html>

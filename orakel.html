@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Orakel im Osten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --vd:#1a0a2e; --vm:#3d1a6e; --vg:#b06ad4;
+    --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+  }
+  html, body { height:100%; }
+  body {
+    background:var(--vd); font-family:'Cormorant Garamond',serif;
+    color:var(--cr); position:relative; overflow:hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:radial-gradient(ellipse 60% 80% at 50% 25%,rgba(61,26,110,0.9) 0%,transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  body::after {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.4; pointer-events:none; z-index:0;
+  }
+  #fxCanvas { position:fixed; inset:0; pointer-events:none; z-index:200; opacity:0; }
+
+  #stage {
+    position:relative; z-index:1; display:flex; flex-direction:column;
+    height:100dvh; max-width:560px; margin:0 auto; padding:1rem 1rem 0.6rem;
+  }
+  .head { text-align:center; padding:0.6rem 0 0.7rem; flex:0 0 auto; }
+  .head svg { width:38px; opacity:0.55; margin-bottom:0.5rem; }
+  .head .name {
+    font-family:'Cinzel',serif; font-size:clamp(0.85rem,4.2vw,1.1rem);
+    letter-spacing:0.22em; color:var(--gl); text-transform:uppercase;
+  }
+  .head .prog {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.3em;
+    color:var(--vg); opacity:0.6; text-transform:uppercase; margin-top:0.5rem;
+  }
+  .head .rule {
+    width:48px; height:1px; margin:0.55rem auto 0;
+    background:linear-gradient(90deg,transparent,var(--go),transparent);
+  }
+
+  #log {
+    flex:1 1 auto; overflow-y:auto; display:flex; flex-direction:column;
+    gap:0.9rem; padding:0.6rem 0.2rem 1rem; -webkit-overflow-scrolling:touch;
+  }
+  .msg { max-width:84%; line-height:1.6; font-size:clamp(0.95rem,3.6vw,1.1rem); animation:rise 0.5s ease; }
+  .msg.oracle {
+    align-self:flex-start; font-style:italic; color:var(--gl);
+    border-left:2px solid rgba(201,168,76,0.4); padding:0.1rem 0 0.1rem 0.9rem;
+  }
+  .msg.cipher {
+    align-self:flex-start; font-family:'Cinzel',serif; letter-spacing:0.25em;
+    color:var(--go); font-size:clamp(1.1rem,5vw,1.5rem);
+    text-shadow:0 0 18px rgba(201,168,76,0.35); padding:0.3rem 0 0.3rem 0.9rem;
+    border-left:2px solid rgba(201,168,76,0.4);
+  }
+  .msg.user {
+    align-self:flex-end; color:var(--cr); opacity:0.85;
+    background:rgba(61,26,110,0.45); border:1px solid rgba(201,168,76,0.12);
+    border-radius:10px 10px 2px 10px; padding:0.5rem 0.85rem;
+    font-size:clamp(0.9rem,3.4vw,1.02rem);
+  }
+  .msg.think { align-self:flex-start; color:var(--vg); opacity:0.6; font-style:italic; letter-spacing:0.2em; }
+  .whisper { align-self:center; font-size:0.8rem; color:rgba(201,168,76,0.55); font-style:italic; }
+
+  .bar {
+    flex:0 0 auto; display:flex; gap:0.5rem; align-items:center;
+    padding:0.6rem 0.2rem calc(0.6rem + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(201,168,76,0.12);
+  }
+  #inp {
+    flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.25);
+    border-radius:22px; color:var(--gl); font-family:'Cormorant Garamond',serif;
+    font-size:1.05rem; padding:0.65rem 1.1rem; outline:none; transition:border-color 0.25s;
+    -webkit-appearance:none;
+  }
+  #inp::placeholder { color:rgba(201,168,76,0.3); font-style:italic; }
+  #inp:focus { border-color:rgba(201,168,76,0.6); }
+  #send {
+    flex:0 0 auto; width:46px; height:46px; border-radius:50%;
+    background:transparent; border:1px solid rgba(201,168,76,0.4); color:var(--go);
+    font-size:1.1rem; cursor:pointer; transition:all 0.25s;
+  }
+  #send:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  #send:active { transform:scale(0.94); }
+
+  .seal {
+    position:fixed; bottom:4px; left:50%; transform:translateX(-50%); z-index:3;
+    background:transparent; border:none; cursor:pointer; padding:0.3rem 0.8rem;
+    font-size:0.5rem; color:rgba(201,168,76,0.12); letter-spacing:0.2em;
+  }
+  .seal:hover { color:rgba(201,168,76,0.3); }
+
+  #finale {
+    position:fixed; inset:0; z-index:150; display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:2rem; text-align:center; background:var(--vd); overflow-y:auto;
+  }
+  #finale.show { display:flex; }
+  .fin-orn { opacity:0; animation:rise 1.2s ease forwards 0.3s; margin-bottom:2rem; }
+  .fin-orn svg { width:52px; opacity:0.6; }
+  .fin-title {
+    opacity:0; animation:rise 1.2s ease forwards 0.6s;
+    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase; margin-bottom:0.6rem;
+  }
+  .fin-rule {
+    opacity:0; animation:fade 1s ease forwards 0.9s; width:60px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--go),transparent); margin:0 auto 2rem;
+  }
+  .fin-text {
+    opacity:0; animation:rise 1.4s ease forwards 1.1s;
+    font-style:italic; font-weight:300; font-size:clamp(1.05rem,4.3vw,1.3rem);
+    line-height:1.8; color:var(--cr); max-width:360px;
+  }
+  .fin-word {
+    opacity:0; animation:rise 1.2s ease forwards 1.8s;
+    font-family:'Cinzel',serif; font-size:clamp(0.95rem,4.4vw,1.4rem); letter-spacing:0.18em;
+    color:var(--go); text-shadow:0 0 26px rgba(201,168,76,0.5); margin:1.6rem 0;
+  }
+  .fin-sub {
+    opacity:0; animation:rise 1.2s ease forwards 2.6s;
+    margin-top:1.6rem; font-family:'Cinzel',serif; font-size:0.55rem;
+    letter-spacing:0.3em; color:var(--vg); opacity:0.5;
+  }
+  @keyframes rise { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes fade { from{opacity:0;} to{opacity:1;} }
+</style>
+</head>
+<body>
+<canvas id="fxCanvas"></canvas>
+
+<div id="stage">
+  <div class="head">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
+    <div class="name">Das Orakel im Osten</div>
+    <div class="prog" id="prog">Erste Säule</div>
+    <div class="rule"></div>
+  </div>
+  <div id="log"></div>
+  <div class="bar">
+    <input id="inp" type="text" placeholder="Sprich zum Orakel…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <button id="send" aria-label="Senden">➤</button>
+  </div>
+</div>
+
+<button class="seal" id="seal">✦</button>
+
+<div id="finale">
+  <div class="fin-orn">
+    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
+  </div>
+  <div class="fin-title">Die drei Säulen stehen</div>
+  <div class="fin-rule"></div>
+  <p class="fin-text">Drei Säulen tragen nun euren Tempel.</p>
+  <div class="fin-word">WEISHEIT · STÄRKE · SCHÖNHEIT</div>
+  <p class="fin-text" style="animation-delay:2.1s;">Weisheit, ihn zu führen.<br>Stärke, ihn zu tragen.<br>Schönheit, ihn zu vollenden.<br><br>Geht in Frieden, Schwestern.</p>
+  <div class="fin-sub">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   ORAKEL — drei Rätsel, drei Arten. Alles hier ist anpassbar.
+   Jedes Rätsel:
+     answer   : Lösungswort (Anzeige im Finale/Notausgang)
+     accepts  : akzeptierte Eingaben (klein, ohne Umlaute: ä→a, ö→o, ü→u, ß→ss)
+     prog     : kleine Fortschrittsanzeige oben
+     opening  : Text, mit dem das Orakel das Rätsel stellt
+     openCls  : 'oracle' (normal) oder 'cipher' (für Code/Anagramm hervorgehoben)
+     openLine2: optionaler zweiter (hervorgehobener) Block, z.B. der Code
+     rules    : [{keys:[...], responses:[...]}]  — themenbezogene Hinweise
+     nudges   : {early:[...], mid:[...], late:[...]} — gestaffelt, wenn kein Stichwort trifft
+     solveLine: Antwort des Orakels beim Lösen (darf das Wort nennen)
+   WICHTIG: Ausser in solveLine darf KEIN Text das eigene Lösungswort enthalten.
+   ══════════════════════════════════════════════════════════ */
+const RIDDLES = [
+  { /* 1 — BENENNEN */
+    answer:'WEISHEIT', accepts:['weisheit'], prog:'Erste Säule',
+    openCls:'oracle',
+    opening:'Ihr habt das Werk vollendet und das Licht des Ostens entzündet. Doch das Licht trägt einen Namen — die erste der drei Säulen, die jeden Tempel tragen. Der Lehrling kennt sie nicht; die Gesellin beginnt, sie zu ahnen. Fragt mich, Schwestern — doch nennen müsst ihr mich selbst. Wie heiße ich?',
+    rules:[
+      {keys:['saule','pfeiler','erste','drei'],responses:[
+        'Drei Säulen tragen die Loge: eine führt, eine trägt, eine schmückt. Ich bin die, die vorangeht.',
+        'Die erste Säule geht dem Bau voraus. Ihre Schwestern sind die Kraft und die Anmut.']},
+      {keys:['starke','kraft','stark','macht'],responses:['Die Kraft trägt das Gewölbe — doch sie führt es nicht. Ich gehe ihr voraus.']},
+      {keys:['schonheit','schon','anmut','schmuck','zierde'],responses:['Die Schönheit vollendet das Werk — doch sie beginnt es nicht. Ich bin der Anfang.']},
+      {keys:['licht','osten','morgen','sonne','dunkel'],responses:['Das Licht aus dem Osten enthüllt, was war. Was in euch erwacht, wenn es euch trifft — das ist mein Wesen. Eine Tugend, kein Ding.']},
+      {keys:['meister','stuhl','aufseher','beamte'],responses:['Der Meister vom Stuhl sitzt im Osten und vertritt mich. Doch ich bin keine Person — ich bin die Gabe, die ihn dorthin setzt.']},
+      {keys:['tugend','gabe','geist','erkenntnis','verstand','klug','wissen'],responses:['Ja — eine Tugend des Geistes. Die erste und höchste der drei. Nicht die Kraft, nicht die Anmut: die, die beide lenkt und das Rechte erkennt.']},
+      {keys:['stein','rauh','roh','werkzeug','zirkel','winkel','hammer','kelle'],responses:['Die Werkzeuge formen den Stein, doch sie wählen nicht, was geformt wird. Das tut die Gabe, nach der ihr sucht.']},
+      {keys:['name','heisst','heisse','wer bist','wie nennt'],responses:['Mein Name ist die Antwort, die ihr sucht. Nennt die erste Säule der Loge — und ihr habt mich genannt.']},
+      {keys:['boas','jachin','tempel','schurz','lehrling','pythagoras','zehn'],responses:['Den Weg dorthin habt ihr schon beschritten. Fragt nun nicht nach dem Weg, sondern nach dem Ziel: der ersten Säule.']},
+    ],
+    nudges:{
+      early:['Sprecht weiter, Schwestern. Denkt an die Säulen, die jeden Tempel tragen.','Was sucht der Lehrling, das die Gesellin zu finden beginnt? Nicht Gold, nicht Macht.'],
+      mid:['Drei Säulen: die erste führt den Bau. Eine Tugend, die der Verstand erst spät begreift.','Nicht die Kraft, nicht die Anmut. Eine dritte Schwester führt sie beide.'],
+      late:['Hört genau: Die erste Säule der Loge ist eine Tugend des Geistes — die Fähigkeit, recht zu erkennen und recht zu wählen. Sprecht ihren Namen.']
+    },
+    solveLine:'Ja — Weisheit, die erste Säule. Doch ein Tempel ruht nicht auf einer Säule allein. Hört die zweite…'
+  },
+  { /* 2 — ZAHLEN-CODE */
+    answer:'STÄRKE', accepts:['starke','staerke'], prog:'Zweite Säule',
+    openCls:'oracle',
+    opening:'Die erste Säule habt ihr genannt. Die zweite spreche ich euch in Zahlen — jede Zahl ein Buchstabe, wie er im Alphabet steht. A ist eins, B ist zwei. Fügt sie zusammen und nennt die zweite Säule.',
+    openLine2:'19 · 20 · 1 · 18 · 11 · 5',
+    rules:[
+      {keys:['zahl','zahlen','buchstabe','code','alphabet','rechnen','position','19','20','eins','zwei'],responses:[
+        'Zählt im Alphabet: A=1, B=2, C=3 … Welcher Buchstabe ist der neunzehnte? Mit ihm beginnt das Wort.',
+        'Sechs Zahlen, sechs Buchstaben. Setzt jede in ihren Buchstaben um — und ihr lest die zweite Säule.']},
+      {keys:['saule','zweite','tragt','tragen','mitte','mittlere'],responses:['Die zweite Säule trägt, was die erste lenkt. Sie steht in der Mitte der drei.']},
+      {keys:['weisheit','schonheit','erste','dritte','anmut','schmuck'],responses:['Nicht die erste, die ihr schon nanntet. Nicht die dritte, die noch kommt. Die mittlere — die, die trägt.']},
+    ],
+    nudges:{
+      early:['Lest die Zahlen als Buchstaben des Alphabets.','Die zweite der drei Säulen, in Zahlen verborgen.'],
+      mid:['A=1, B=2, C=3 … rechnet jede Zahl in ihren Buchstaben um und sprecht das Wort.'],
+      late:['Die Zahlen neunzehn, zwanzig, eins, achtzehn, elf, fünf ergeben Buchstabe für Buchstabe die zweite Säule der Loge. Lest sie und nennt sie.']
+    },
+    solveLine:'Ja — die tragende Säule. Zwei stehen nun. Eine fehlt noch — die, die das Werk schmückt…'
+  },
+  { /* 3 — ANAGRAMM */
+    answer:'SCHÖNHEIT', accepts:['schonheit','schoenheit'], prog:'Dritte Säule',
+    openCls:'oracle',
+    opening:'Zwei Säulen tragen schon. Die dritte gebe ich euch zerfallen — neun Steine in falscher Ordnung. Fügt sie neu und nennt die Säule, die das Werk vollendet.',
+    openLine2:'N · E · I · H · C · S · H · Ö · T',
+    rules:[
+      {keys:['ordnen','ordne','buchstabe','wort','stein','steine','setzen','anagramm','vertauscht','durcheinander','neun'],responses:[
+        'Neun Steine, neun Buchstaben — in falscher Ordnung. Fügt sie neu, und ein Wort der Vollendung erscheint.',
+        'Sie beginnt mit dem Laut, mit dem auch „Schurz" beginnt. Den Rest ordnet selbst.']},
+      {keys:['saule','dritte','schmuck','schmuckt','vollendet','anmut','zierde','letzte','kront'],responses:['Ja — sie schmückt und vollendet. Weisheit führt, Stärke trägt, und diese krönt das Werk.']},
+      {keys:['weisheit','starke','erste','zweite'],responses:['Die ersten beiden Säulen stehen schon. Diese ist die dritte und letzte.']},
+    ],
+    nudges:{
+      early:['Ordnet die neun Steine zu einem Wort.','Ein Wort, das den Tempel schmückt — die dritte Säule.'],
+      mid:['Es beginnt mit S und endet mit T. Neun Buchstaben der Vollendung.'],
+      late:['Weisheit, Stärke und als dritte die Schwester, die schmückt — neun Buchstaben. Sprecht sie ganz aus.']
+    },
+    solveLine:'Ja — Schönheit. Die drei Säulen stehen.'
+  },
+];
+
+// Abschweifungen / Meta-Fragen → das Orakel kennt nur den Tempel.
+const META_KEYS = ['ki','kuenstliche','ai','roboter','computer','programm','chatgpt','claude','gpt','api',
+  'internet','google','wetter','uhrzeit','datum','handy','app','code geheim','bist du echt','echt','mensch'];
+const META = [
+  'Ich kenne nur diesen Tempel und das Wort, das ihr sucht. Von der Welt jenseits dieser Mauern weiß ich nichts.',
+  'Solche Dinge liegen außerhalb des Lichts, das ich hüte. Wendet euch wieder der Säule zu.',
+  'Ich bin eine Stimme dieses Abends, nichts weiter. Kehrt zum Rätsel zurück.'];
+
+/* ══════════════════════════════════════════════════════════ */
+const log = document.getElementById('log');
+const inp = document.getElementById('inp');
+const send = document.getElementById('send');
+const prog = document.getElementById('prog');
+let ri = 0, turns = 0, finished = false;
+const ruleIdx = {};
+
+function norm(s){
+  return s.toLowerCase()
+    .replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss')
+    .replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function pick(arr,key){
+  if(key===undefined) return arr[Math.floor(Math.random()*arr.length)];
+  const i = ruleIdx[key]||0; ruleIdx[key]=(i+1)%arr.length; return arr[i];
+}
+function addMsg(text,cls){
+  const d=document.createElement('div'); d.className='msg '+(cls||'oracle'); d.textContent=text;
+  log.appendChild(d); log.scrollTop=log.scrollHeight; return d;
+}
+function oracleSays(text,cls){
+  const t=document.createElement('div'); t.className='msg think'; t.textContent='⋯';
+  log.appendChild(t); log.scrollTop=log.scrollHeight;
+  setTimeout(()=>{ t.remove(); addMsg(text,cls||'oracle'); },680+Math.random()*520);
+}
+function presentRiddle(){
+  const R=RIDDLES[ri]; prog.textContent=R.prog||('Rätsel '+(ri+1));
+  oracleSays(R.opening, R.openCls);
+  if(R.openLine2){ setTimeout(()=>addMsg(R.openLine2,'cipher'), 1500); }
+}
+
+function respond(raw){
+  const m=norm(raw); const R=RIDDLES[ri];
+  if(R.accepts.some(a=>m.includes(a))) return solveRiddle();
+  turns++;
+  if(META_KEYS.some(k=>m.includes(norm(k)))) return oracleSays(pick(META,'meta'));
+  for(let r=0;r<R.rules.length;r++){
+    if(R.rules[r].keys.some(k=>m.includes(k))) return oracleSays(pick(R.rules[r].responses,'r'+ri+'_'+r));
+  }
+  if(turns<3) return oracleSays(pick(R.nudges.early,'ne'+ri));
+  if(turns<6) return oracleSays(pick(R.nudges.mid,'nm'+ri));
+  return oracleSays(pick(R.nudges.late,'nl'+ri));
+}
+
+function submit(){
+  const v=inp.value.trim(); if(!v||finished) return;
+  unlockAudio(); addMsg(v,'user'); inp.value=''; respond(v);
+}
+send.addEventListener('click',submit);
+inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
+
+function solveRiddle(){
+  const R=RIDDLES[ri];
+  addMsg(R.solveLine,'oracle');
+  if(ri < RIDDLES.length-1){
+    ri++; turns=0;
+    setTimeout(presentRiddle, 1500);
+  } else {
+    finishAll();
+  }
+}
+
+function finishAll(){
+  if(finished) return; finished=true;
+  inp.disabled=true; send.disabled=true; prog.textContent='Vollendet';
+  playFinaleSound();
+  runFX(window.innerWidth/2, window.innerHeight*0.4);
+  setTimeout(()=>document.getElementById('finale').classList.add('show'),1200);
+}
+
+// Notausgang für den Meister: dreimal auf das ✦ tippen → ein Bruder flüstert
+// das Lösungswort des AKTUELLEN Rätsels.
+let sc=0;
+document.getElementById('seal').addEventListener('click',()=>{
+  if(finished) return; sc++;
+  if(sc>=3){ sc=0;
+    const w=document.createElement('div'); w.className='whisper';
+    w.textContent='(Ein Bruder flüstert: das Wort ist „'+RIDDLES[ri].answer+'".)';
+    log.appendChild(w); log.scrollTop=log.scrollHeight;
+  }
+});
+
+window.addEventListener('load',()=>{ setTimeout(presentRiddle,500); inp.focus(); });
+
+/* ════ FX & Klang (wie auf den anderen Seiten) ════ */
+const fxCanvas=document.getElementById('fxCanvas'), fxCtx=fxCanvas.getContext('2d');
+function resizeFx(){fxCanvas.width=window.innerWidth;fxCanvas.height=window.innerHeight;}
+resizeFx();window.addEventListener('resize',resizeFx);
+class Ray{constructor(i,n,cx,cy){this.cx=cx;this.cy=cy;this.angle=(i/n)*Math.PI*2+(Math.random()-0.5)*0.22;this.maxLen=Math.max(innerWidth,innerHeight)*0.75+Math.random()*200;this.width=1.4+Math.random()*4.5;this.delay=Math.random()*0.18;this.speed=0.45+Math.random()*0.32;this.gold=Math.random()>0.32;}
+  draw(t){const tA=Math.max(0,t-this.delay);if(!tA)return;const p=Math.min(1,tA*this.speed),ease=1-Math.pow(1-p,3);const fade=p<0.45?p/0.45:1-(p-0.45)/0.55;const x2=this.cx+Math.cos(this.angle)*ease*this.maxLen,y2=this.cy+Math.sin(this.angle)*ease*this.maxLen;const g=fxCtx.createLinearGradient(this.cx,this.cy,x2,y2);if(this.gold){g.addColorStop(0,`rgba(255,242,160,${fade*0.95})`);g.addColorStop(0.3,`rgba(255,200,70,${fade*0.7})`);g.addColorStop(1,'rgba(201,168,76,0)');}else{g.addColorStop(0,`rgba(255,255,255,${fade*0.9})`);g.addColorStop(0.3,`rgba(210,160,255,${fade*0.6})`);g.addColorStop(1,'rgba(176,106,212,0)');}fxCtx.save();fxCtx.shadowBlur=24;fxCtx.shadowColor=this.gold?`rgba(255,200,80,${fade*0.5})`:`rgba(200,140,255,${fade*0.4})`;fxCtx.beginPath();fxCtx.moveTo(this.cx,this.cy);fxCtx.lineTo(x2,y2);fxCtx.strokeStyle=g;fxCtx.lineWidth=this.width*(1-p*0.3);fxCtx.lineCap='round';fxCtx.stroke();fxCtx.restore();}}
+class Ring{constructor(cx,cy,d,c){this.cx=cx;this.cy=cy;this.d=d;this.c=c;}
+  draw(t){const tA=Math.max(0,t-this.d);if(!tA)return;const p=Math.min(1,tA*0.72),maxR=Math.max(fxCanvas.width,fxCanvas.height)*0.68;const r=(1-Math.pow(1-p,2))*maxR,al=(1-p)*0.85;fxCtx.save();fxCtx.shadowBlur=28;fxCtx.shadowColor=`rgba(${this.c},${al*0.6})`;fxCtx.beginPath();fxCtx.arc(this.cx,this.cy,Math.max(1,r),0,Math.PI*2);fxCtx.strokeStyle=`rgba(${this.c},${al})`;fxCtx.lineWidth=(1-p)*4+0.5;fxCtx.stroke();fxCtx.restore();}}
+function runFX(cx,cy){fxCanvas.style.opacity='1';const rays=[...Array(34)].map((_,i)=>new Ray(i,34,cx,cy));const rings=[new Ring(cx,cy,0,'255,240,160'),new Ring(cx,cy,0.1,'255,210,80'),new Ring(cx,cy,0.22,'201,168,76'),new Ring(cx,cy,0.36,'255,200,120'),new Ring(cx,cy,0.52,'176,106,212'),new Ring(cx,cy,0.7,'255,255,200')];let start=null,fin=false;function frame(ts){if(fin)return;if(!start)start=ts;const t=(ts-start)/1000;fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);let fl=0;if(t<0.08)fl=t/0.08;else if(t<0.3)fl=1-(t-0.08)/0.22;if(fl>0){const fg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,fxCanvas.width*0.65);fg.addColorStop(0,`rgba(255,248,210,${fl*0.96})`);fg.addColorStop(0.28,`rgba(255,220,100,${fl*0.68})`);fg.addColorStop(1,`rgba(80,20,140,${fl*0.1})`);fxCtx.fillStyle=fg;fxCtx.fillRect(0,0,fxCanvas.width,fxCanvas.height);}rays.forEach(r=>r.draw(t));rings.forEach(r=>r.draw(t));if(t<1.3){const cAl=Math.max(0,1-t/1.3)*0.78,cR=30+t*28;const cg=fxCtx.createRadialGradient(cx,cy,0,cx,cy,cR);cg.addColorStop(0,`rgba(255,252,210,${cAl})`);cg.addColorStop(0.5,`rgba(255,200,80,${cAl*0.5})`);cg.addColorStop(1,'rgba(201,168,76,0)');fxCtx.beginPath();fxCtx.arc(cx,cy,cR,0,Math.PI*2);fxCtx.fillStyle=cg;fxCtx.fill();}if(t>1.3){const fp=Math.min(1,(t-1.3)/0.8);fxCanvas.style.opacity=String(1-fp);if(fp>=1){fin=true;fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);fxCanvas.style.opacity='0';return;}}requestAnimationFrame(frame);}requestAnimationFrame(frame);}
+function playFinaleSound(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=new AC();if(ac.state==='suspended')ac.resume();const now=ac.currentTime,master=ac.createGain();master.gain.setValueAtTime(0.7,now);master.connect(ac.destination);const freqs=[198,264,396,528,639,792,1056],amps=[0.2,0.25,0.35,0.5,0.2,0.16,0.1],dec=[6,7,8,9,7,6,5];freqs.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,now+i*0.06);g.gain.linearRampToValueAtTime(amps[i],now+i*0.06+0.04);g.gain.exponentialRampToValueAtTime(0.001,now+i*0.06+dec[i]);o.connect(g);g.connect(master);o.start(now+i*0.06);o.stop(now+i*0.06+dec[i]+0.1);});const bass=ac.createOscillator(),bg=ac.createGain();bass.type='sine';bass.frequency.value=99;bg.gain.setValueAtTime(0,now);bg.gain.linearRampToValueAtTime(0.3,now+0.08);bg.gain.exponentialRampToValueAtTime(0.001,now+5);bass.connect(bg);bg.connect(master);bass.start(now);bass.stop(now+5.1);master.gain.setValueAtTime(0.7,now+6);master.gain.linearRampToValueAtTime(0,now+9);}
+let audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=new AC(),buf=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=buf;src.connect(ac.destination);src.start(0);setTimeout(()=>ac.close(),100);audioUnlocked=true;}
+</script>
+</body>
+</html>
