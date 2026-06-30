@@ -155,21 +155,21 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Legt die zehn Steine als die drei <b>Seiten</b> eines Dreiecks —<br>die Mitte bleibt leer. Haltet die Kamera darüber.</p>
+  <p>Stellt die zehn Dosen im Dreieck auf die <b>weiße Decke</b><br>und haltet die Kamera über alle zehn.</p>
   <button class="btn-gold" id="openCamBtn">Kamera öffnen</button>
 </div>
 
 <!-- Camera -->
 <div id="camScreen">
   <div class="cam-top">
-    <div class="cam-title">Die drei Seiten der Zehn</div>
-    <div class="cam-hint" id="camHint">Tippe auf einen violetten Stempel<br>um die Farbe einzulernen</div>
+    <div class="cam-title">Die zehn Dosen</div>
+    <div class="cam-hint" id="camHint">Tippe auf eine Dose<br>um ihre Farbe einzulernen</div>
   </div>
 
   <div class="video-wrap" id="videoWrap">
     <video id="video" playsinline autoplay muted></video>
     <canvas id="overlay"></canvas>
-    <div id="calibPulse">Tippe auf einen<br>violetten Stempel</div>
+    <div id="calibPulse">Tippe auf<br>eine Dose</div>
   </div>
 
   <div class="cam-bottom">
@@ -203,7 +203,7 @@ const CELL       = 8;
 const PROC_W     = 320;
 const PROC_H     = 240;
 const MIN_PIX    = 3;
-const MIN_CELLS  = 4;
+const MIN_CELLS  = 8;
 const STABLE_REQ = 45;
 const HUE_RANGE  = 35;
 const SAT_RANGE  = 35;
@@ -360,7 +360,7 @@ function rgbToHsl(r,g,b){
 function hueDist(a,b){return Math.min(Math.abs(a-b),360-Math.abs(a-b));}
 function isViolet(r,g,b){
   const[h,s,l]=rgbToHsl(r,g,b);
-  return hueDist(h,targetH)<HUE_RANGE && Math.abs(s-targetS)<SAT_RANGE && l>10 && l<78 && s>15;
+  return hueDist(h,targetH)<HUE_RANGE && Math.abs(s-targetS)<SAT_RANGE && l>12 && l<90 && s>14;
 }
 
 /* ════ BLOB DETECTION ════ */
@@ -401,7 +401,7 @@ function blobCenter(blob){
 }
 
 /* ════ DETECTION LOOP ════ */
-let frameN=0, shapeStable=0;
+let frameN=0;
 function detectionLoop(){
   if(finaleDone)return;
   animId=requestAnimationFrame(detectionLoop);
@@ -411,37 +411,23 @@ function detectionLoop(){
   pCtx.drawImage(video,0,0,PROC_W,PROC_H);
   const imgData=pCtx.getImageData(0,0,PROC_W,PROC_H);
   let blobs=detectBlobs(imgData);
-  blobs.sort((a,b)=>b.length-a.length);              // größte zuerst (Rauschen aussortieren)
-  const top=blobs.slice(0,TARGET);
+  blobs.sort((a,b)=>b.length-a.length);              // größte zuerst (kleines Rauschen unten abschneiden)
   const count=Math.min(blobs.length,TARGET);
-  const centers=top.map(blobCenter);                 // normiert 0..1
-  const pts=centers.map(c=>({x:c.x*PROC_W,y:c.y*PROC_H}));
-  const tri=triangleSides(pts);
+
+  if(count===lastCount)stableFrames++; else {stableFrames=0;lastCount=count;}
 
   const ow=overlay.width,oh=overlay.height;
   oCtx.clearRect(0,0,ow,oh);
-  centers.forEach(c=>{
-    oCtx.beginPath();oCtx.arc(c.x*ow,c.y*oh,6,0,Math.PI*2);
-    oCtx.fillStyle='rgba(255,200,80,0.55)';oCtx.fill();
+  blobs.slice(0,TARGET).forEach(b=>{
+    const c=blobCenter(b);
+    oCtx.beginPath();oCtx.arc(c.x*ow,c.y*oh,12,0,Math.PI*2);
+    oCtx.fillStyle='rgba(201,168,76,0.22)';oCtx.fill();
+    oCtx.beginPath();oCtx.arc(c.x*ow,c.y*oh,12,0,Math.PI*2);
+    oCtx.strokeStyle='rgba(201,168,76,0.85)';oCtx.lineWidth=2;oCtx.stroke();
   });
 
-  if(tri){
-    const toXY=p=>({x:(p.x/PROC_W)*ow,y:(p.y/PROC_H)*oh});
-    const A=toXY(tri.A),B=toXY(tri.B),C=toXY(tri.C);
-    oCtx.save();
-    oCtx.beginPath();oCtx.moveTo(A.x,A.y);oCtx.lineTo(B.x,B.y);oCtx.lineTo(C.x,C.y);oCtx.closePath();
-    oCtx.strokeStyle='rgba(201,168,76,0.9)';oCtx.lineWidth=2.5;
-    oCtx.shadowBlur=16;oCtx.shadowColor='rgba(201,168,76,0.7)';oCtx.stroke();
-    oCtx.restore();
-    shapeStable++;
-    if(frameN%3===0)countLabel.textContent='✦ Form erkannt — haltet still ✦';
-    if(shapeStable>=STABLE_REQ&&!finaleDone)triggerFinale();
-  } else {
-    shapeStable=0;
-    if(frameN%3===0)countLabel.textContent = count>=3
-      ? `${count} Steine — formt die drei Seiten`
-      : 'Legt die zehn Steine als Dreieck-Umriss';
-  }
+  if(frameN%3===0)updateCounter(count);
+  if(count>=TARGET&&stableFrames>=STABLE_REQ&&!finaleDone)triggerFinale();
 }
 
 /* ════ CALIBRATION ════ */
@@ -456,10 +442,10 @@ function calibrateAt(clientX,clientY){
     const[h,sat,l]=rgbToHsl(s.data[i],s.data[i+1],s.data[i+2]);
     if(sat>10){sh+=h;ss+=sat;n++;}
   }
-  if(!n){camHint.textContent='Nicht erkannt — bitte auf den Stempel tippen';return;}
+  if(!n){camHint.textContent='Nicht erkannt — bitte auf eine Dose tippen';return;}
   targetH=sh/n;targetS=ss/n;calibrated=true;
   calibPulse.style.display='none';
-  camHint.textContent='Farbe eingelernt. Legt die zehn Steine als die drei Seiten des Dreiecks — die Mitte bleibt leer.';
+  camHint.textContent='Farbe eingelernt. Stellt die zehn Dosen auf die Decke — alle zehn müssen im Bild sein.';
   camHint.style.color='rgba(201,168,76,0.9)';
 }
 
@@ -469,7 +455,7 @@ videoWrap.addEventListener('touchstart',e=>{e.preventDefault();if(calibrated)ret
 document.getElementById('recalibBtn').addEventListener('click',()=>{
   calibrated=false;stableFrames=0;
   calibPulse.style.display='flex';
-  camHint.textContent='Tippe auf einen violetten Stempel';
+  camHint.textContent='Tippe auf eine Dose';
   camHint.style.color='';updateCounter(0);
 });
 
