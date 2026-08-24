@@ -119,13 +119,72 @@
   .tet-stone.apex.lit {
     box-shadow:0 0 18px rgba(201,168,76,0.95), 0 0 40px rgba(201,168,76,0.4);
   }
+  .tet-stone.pop { animation:stonePop 0.38s ease; }
+  .tet-row.flash .tet-stone.lit {
+    animation:rowGlow 0.7s ease;
+  }
+  .video-wrap.locked .tet-stone { pointer-events:none; }
+  .video-wrap.shake { animation:shakeCam 0.32s ease; }
 
   .cam-bottom { width:100%; text-align:center; z-index:1; }
   .count-label {
     font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
     color:var(--vg); text-transform:uppercase; opacity:0.7; margin-bottom:0.55rem;
   }
-  .cam-actions { display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-top:0.2rem; }
+  .cam-actions { display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-top:0.2rem; align-items:center; }
+
+  .knock-stage {
+    display:none; flex-direction:column; align-items:center; gap:0.45rem;
+  }
+  .knock-stage.show { display:flex; }
+  .knock-dots { display:flex; gap:0.55rem; }
+  .knock-dots span {
+    width:10px; height:10px; border-radius:50%;
+    border:1px solid rgba(201,168,76,0.4);
+    background:transparent; transition:background 0.2s, box-shadow 0.2s;
+  }
+  .knock-dots span.on {
+    background:var(--go);
+    box-shadow:0 0 10px rgba(201,168,76,0.8);
+  }
+  .gavel {
+    width:86px; height:86px; border-radius:50%;
+    background:rgba(201,168,76,0.08);
+    border:1.5px solid rgba(201,168,76,0.55);
+    color:var(--go); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+    box-shadow:0 0 22px rgba(201,168,76,0.18);
+    transition:transform 0.12s ease, box-shadow 0.2s;
+  }
+  .gavel svg { width:42px; height:42px; }
+  .gavel:active { transform:scale(0.9) rotate(-8deg); }
+  .gavel.hit {
+    animation:gavelHit 0.28s ease;
+    box-shadow:0 0 28px rgba(201,168,76,0.7);
+  }
+  .gavel-cap {
+    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.28em;
+    color:var(--go); text-transform:uppercase; opacity:0.8;
+  }
+  #knockFlash {
+    position:fixed; inset:0; z-index:180; pointer-events:none; opacity:0;
+    background:radial-gradient(ellipse at 50% 60%,rgba(255,236,170,0.7),rgba(201,168,76,0.12) 42%,transparent 70%);
+  }
+
+  @keyframes stonePop {
+    0%{transform:scale(1);} 40%{transform:scale(1.22);} 100%{transform:scale(1);}
+  }
+  @keyframes rowGlow {
+    0%,100%{ filter:brightness(1); } 45%{ filter:brightness(1.7); }
+  }
+  @keyframes shakeCam {
+    0%,100%{transform:translateX(0);} 20%{transform:translateX(-9px);}
+    40%{transform:translateX(8px);} 60%{transform:translateX(-5px);} 80%{transform:translateX(4px);}
+  }
+  @keyframes gavelHit {
+    0%{transform:scale(1) rotate(0);} 40%{transform:scale(0.86) rotate(-14deg);} 100%{transform:scale(1) rotate(0);}
+  }
 
   /* ── Finale ── */
   #finaleScreen {
@@ -175,12 +234,13 @@
 <body>
 <img class="zz-corner tl" src="ecke.png" alt=""><img class="zz-corner br" src="ecke.png" alt="">
 <canvas id="fxCanvas"></canvas>
+<div id="knockFlash"></div>
 
 <!-- Permission -->
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Stellt die zehn Schatullen im Dreieck auf die Decke — eins, zwei, drei, vier.<br>Dann setzt jeden Stein auf dem Bildschirm.</p>
+  <p>Stellt die zehn Schatullen im Dreieck auf — eins, zwei, drei, vier.<br>Jede Hand setzt einen Stein. Dann drei Schläge.</p>
   <div class="perm-actions">
     <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
     <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
@@ -191,7 +251,7 @@
 <div id="camScreen">
   <div class="cam-top">
     <div class="cam-title">Die zehn Steine</div>
-    <div class="cam-hint" id="camHint">Tippt jede Stelle an,<br>sobald dort ein Stein liegt.</div>
+    <div class="cam-hint" id="camHint">Eine Hand, ein Stein.<br>Reicht das Gerät weiter.</div>
   </div>
 
   <div class="video-wrap" id="videoWrap">
@@ -225,7 +285,17 @@
     <div class="count-label" id="countLabel">0 von 10 gesetzt</div>
     <div class="cam-actions">
       <button class="btn-sm" id="resetBtn">Neu legen</button>
-      <button class="btn-gold" id="sealBtn" disabled>Der Stein ist gesetzt</button>
+      <div class="knock-stage" id="knockStage">
+        <div class="knock-dots" id="knockDots"><span></span><span></span><span></span></div>
+        <button type="button" class="gavel" id="gavelBtn" aria-label="Schlag">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="28" y="26" width="8" height="28" rx="2" fill="#c9a84c"/>
+            <rect x="16" y="14" width="32" height="14" rx="3" fill="#e8d5a0"/>
+            <rect x="18" y="16" width="28" height="4" fill="#c9a84c" opacity="0.5"/>
+          </svg>
+        </button>
+        <div class="gavel-cap">Drei Schläge</div>
+      </div>
     </div>
   </div>
 </div>
@@ -249,45 +319,85 @@
 <script>
 /* ════ CONFIG ════ */
 const TARGET = 10;
+const ROWS = [[0],[1,2],[3,4,5],[6,7,8,9]];
+const ROW_NOTE = [528, 396, 330, 264];
+const LABELS = [1,2,2,3,3,3,4,4,4,4];
 
 /* ════ STATE ════ */
 let lit = Array(TARGET).fill(false);
 let finaleDone = false;
+let knocks = 0;
 
 /* ════ DOM ════ */
 const permScreen   = document.getElementById('permScreen');
 const camScreen    = document.getElementById('camScreen');
 const finaleScreen = document.getElementById('finaleScreen');
 const video        = document.getElementById('video');
+const videoWrap    = document.getElementById('videoWrap');
 const camHint      = document.getElementById('camHint');
 const countLabel   = document.getElementById('countLabel');
-const sealBtn      = document.getElementById('sealBtn');
+const knockStage   = document.getElementById('knockStage');
+const knockDots    = [...document.querySelectorAll('#knockDots span')];
+const gavelBtn     = document.getElementById('gavelBtn');
+const knockFlash   = document.getElementById('knockFlash');
 const stones       = [...document.querySelectorAll('.tet-stone')];
 const fxCanvas     = document.getElementById('fxCanvas');
 const fxCtx        = fxCanvas.getContext('2d');
 
 function litCount(){ return lit.filter(Boolean).length; }
+function rowOf(i){ return ROWS.findIndex(r => r.includes(i)); }
+function isRowComplete(r){ return ROWS[r].every(i => lit[i]); }
+
+function buzz(pattern){
+  try { if(navigator.vibrate) navigator.vibrate(pattern); } catch(e){}
+}
 
 function updateCount(){
   const n = litCount();
   countLabel.textContent = n >= TARGET ? '✦ Alle zehn vereint ✦' : n + ' von ' + TARGET + ' gesetzt';
-  sealBtn.disabled = n < TARGET;
-  if(n >= TARGET){
-    camHint.textContent = 'Das Dreieck ist vollendet.\nBesiegelt das Werk.';
+  const ready = n >= TARGET;
+  knockStage.classList.toggle('show', ready);
+  videoWrap.classList.toggle('locked', ready);
+  if(!ready && knocks){
+    knocks = 0;
+    knockDots.forEach(d => d.classList.remove('on'));
+  }
+  if(ready){
+    camHint.textContent = 'Das Dreieck steht.\nGebt drei Schläge.';
   } else if(n === 0){
-    camHint.textContent = 'Tippt jede Stelle an,\nsobald dort ein Stein liegt.';
+    camHint.textContent = 'Eine Hand, ein Stein.\nReicht das Gerät weiter.';
   } else {
-    camHint.textContent = 'Weiter — eins, zwei, drei, vier.';
+    camHint.textContent = 'Reicht das Gerät weiter.\nEins, zwei, drei, vier.';
   }
 }
 
 stones.forEach((btn, i) => {
   btn.addEventListener('click', () => {
-    if(finaleDone) return;
+    if(finaleDone || litCount() >= TARGET && !lit[i]) return;
+    if(videoWrap.classList.contains('locked')) return;
     unlockAudio();
+    const wasLit = lit[i];
     lit[i] = !lit[i];
     btn.classList.toggle('lit', lit[i]);
-    btn.textContent = lit[i] ? '✦' : String([1,2,2,3,3,3,4,4,4,4][i]);
+    btn.textContent = lit[i] ? '✦' : String(LABELS[i]);
+    btn.classList.remove('pop');
+    void btn.offsetWidth;
+    btn.classList.add('pop');
+    if(lit[i] && !wasLit){
+      const r = rowOf(i);
+      playChime(ROW_NOTE[r]);
+      buzz(18);
+      const rect = btn.getBoundingClientRect();
+      runSpark(rect.left + rect.width/2, rect.top + rect.height/2);
+      if(isRowComplete(r)){
+        const rowEl = btn.parentElement;
+        rowEl.classList.remove('flash');
+        void rowEl.offsetWidth;
+        rowEl.classList.add('flash');
+        playRowChord(r);
+        buzz([30, 40, 50]);
+      }
+    }
     updateCount();
   });
 });
@@ -295,16 +405,42 @@ stones.forEach((btn, i) => {
 document.getElementById('resetBtn').addEventListener('click', () => {
   if(finaleDone) return;
   lit = Array(TARGET).fill(false);
+  knocks = 0;
+  knockDots.forEach(d => d.classList.remove('on'));
   stones.forEach((btn, i) => {
-    btn.classList.remove('lit');
-    btn.textContent = String([1,2,2,3,3,3,4,4,4,4][i]);
+    btn.classList.remove('lit','pop');
+    btn.textContent = String(LABELS[i]);
   });
+  document.querySelectorAll('.tet-row').forEach(r => r.classList.remove('flash'));
   updateCount();
 });
 
-sealBtn.addEventListener('click', () => {
-  if(litCount() >= TARGET) triggerFinale();
+gavelBtn.addEventListener('click', () => {
+  if(finaleDone || litCount() < TARGET) return;
+  unlockAudio();
+  knocks = Math.min(3, knocks + 1);
+  knockDots.forEach((d, i) => d.classList.toggle('on', i < knocks));
+  gavelBtn.classList.remove('hit');
+  void gavelBtn.offsetWidth;
+  gavelBtn.classList.add('hit');
+  videoWrap.classList.remove('shake');
+  void videoWrap.offsetWidth;
+  videoWrap.classList.add('shake');
+  flashKnock();
+  playKnock(knocks);
+  buzz([60, 40, 90 + knocks * 30]);
+  camHint.textContent = knocks === 1 ? 'Noch zwei Schläge.' : knocks === 2 ? 'Noch ein Schlag.' : 'Der Stein ist gesetzt.';
+  if(knocks >= 3) triggerFinale();
 });
+
+function flashKnock(){
+  knockFlash.style.transition = 'none';
+  knockFlash.style.opacity = '1';
+  requestAnimationFrame(() => {
+    knockFlash.style.transition = 'opacity 0.45s ease';
+    knockFlash.style.opacity = '0';
+  });
+}
 
 function showStage(){
   permScreen.style.display = 'none';
@@ -332,7 +468,7 @@ document.getElementById('openCamBtn').addEventListener('click', () => {
 document.getElementById('skipCamBtn').addEventListener('click', () => {
   unlockAudio();
   showStage();
-  camHint.textContent = 'Ohne Kamera — setzt die Steine auf dem Dreieck.';
+  camHint.textContent = 'Ohne Kamera — eine Hand, ein Stein.';
 });
 
 /* ════ MEISTER-NOTAUSGANG ════ */
@@ -346,8 +482,7 @@ if(_camTitle) _camTitle.addEventListener('click', () => {
 
 /* ════ SOUND ════ */
 function playFinaleSound(){
-  const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
-  const ac = new AC(); if(ac.state === 'suspended') ac.resume();
+  const ac = getAC(); if(!ac) return;
   const now = ac.currentTime, master = ac.createGain();
   master.gain.setValueAtTime(0.7, now); master.connect(ac.destination);
   const freqs = [198,264,396,528,639,792,1056,1584];
@@ -410,6 +545,23 @@ class Ring{
   }
 }
 
+function runSpark(cx,cy){
+  fxCanvas.style.opacity='1';
+  const rays=[...Array(10)].map((_,i)=>new Ray(i,10,cx,cy));
+  rays.forEach(r => { r.maxLen = 90 + Math.random()*70; r.width = 1+Math.random()*2; r.speed = 1.4+Math.random()*0.5; });
+  const ring = new Ring(cx,cy,0,'255,230,140');
+  let start=null;
+  function frame(ts){
+    if(!start) start=ts;
+    const t=(ts-start)/1000;
+    fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+    rays.forEach(r=>r.draw(t)); ring.draw(t);
+    if(t<0.55) requestAnimationFrame(frame);
+    else { if(!finaleDone){ fxCtx.clearRect(0,0,fxCanvas.width,fxCanvas.height); fxCanvas.style.opacity='0'; } }
+  }
+  requestAnimationFrame(frame);
+}
+
 function runFinaleCanvas(cx,cy){
   fxCanvas.style.opacity='1';
   const rays=[...Array(36)].map((_,i)=>new Ray(i,36,cx,cy));
@@ -457,12 +609,58 @@ function triggerFinale(){
 }
 
 let audioUnlocked = false;
+let audioCtx = null;
+function getAC(){
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return null;
+  if(!audioCtx) audioCtx = new AC();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
 function unlockAudio(){
-  if(audioUnlocked) return;
-  const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
-  const ac = new AC(), buf = ac.createBuffer(1,1,22050), src = ac.createBufferSource();
-  src.buffer = buf; src.connect(ac.destination); src.start(0);
-  setTimeout(() => ac.close(), 100); audioUnlocked = true;
+  audioUnlocked = true;
+  getAC();
+}
+function playChime(freq){
+  const ac = getAC(); if(!ac) return;
+  const now = ac.currentTime;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, now);
+  g.gain.linearRampToValueAtTime(0.22, now+0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, now+0.7);
+  o.connect(g); g.connect(ac.destination);
+  o.start(now); o.stop(now+0.75);
+}
+function playRowChord(row){
+  const ac = getAC(); if(!ac) return;
+  const now = ac.currentTime;
+  const base = ROW_NOTE[row];
+  [1, 1.5, 2].forEach((m, i) => {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine'; o.frequency.value = base * m;
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.12, now+0.03+i*0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, now+1.1);
+    o.connect(g); g.connect(ac.destination);
+    o.start(now+i*0.03); o.stop(now+1.15);
+  });
+}
+function playKnock(n){
+  const ac = getAC(); if(!ac) return;
+  const now = ac.currentTime;
+  const amp = 0.28 + n * 0.12;
+  const rumble = ac.createOscillator(), rg = ac.createGain(), rf = ac.createBiquadFilter();
+  rumble.type = 'sawtooth'; rumble.frequency.setValueAtTime(48, now); rumble.frequency.exponentialRampToValueAtTime(28, now+0.18);
+  rf.type = 'lowpass'; rf.frequency.value = 180;
+  rg.gain.setValueAtTime(0, now); rg.gain.linearRampToValueAtTime(amp, now+0.012); rg.gain.exponentialRampToValueAtTime(0.001, now+0.28);
+  rumble.connect(rf); rf.connect(rg); rg.connect(ac.destination);
+  rumble.start(now); rumble.stop(now+0.32);
+  const click = ac.createOscillator(), cg = ac.createGain();
+  click.type = 'square'; click.frequency.value = 180 + n * 20;
+  cg.gain.setValueAtTime(0, now); cg.gain.linearRampToValueAtTime(0.12, now+0.005); cg.gain.exponentialRampToValueAtTime(0.001, now+0.08);
+  click.connect(cg); cg.connect(ac.destination);
+  click.start(now); click.stop(now+0.1);
 }
 </script>
 </body>
