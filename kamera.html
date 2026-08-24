@@ -257,7 +257,7 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Nur dieses Gerät bleibt am Tisch. Erlaubt das Mikrofon, legt das Handy flach auf die Platte, dann drei Schläge.</p>
+  <p>Zuerst jedes Paar mit einem Satz: was habt ihr heute bearbeitet?<br>Dann die Schatullen gemeinsam ins Dreieck. Nur dieses Gerät bleibt am Tisch. Erlaubt das Mikrofon, legt das Handy flach auf die Platte, dann drei Schläge.</p>
   <div class="perm-actions">
     <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
     <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
@@ -268,7 +268,7 @@
 <div id="camScreen">
   <div class="cam-top">
     <div class="cam-title">Die zehn Steine</div>
-    <div class="cam-hint" id="camHint">Legt die Schatullen gemeinsam.<br>Tippt die Stellen hier.</div>
+    <div class="cam-hint" id="camHint">Jedes Paar einen Satz.<br>Dann legt die Schatullen und tippt hier.</div>
   </div>
 
   <div class="video-wrap" id="videoWrap">
@@ -428,7 +428,7 @@ function updateCount(){
       ? 'Handy flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause.'
       : 'Kein Gehör — tippt den Hammer dreimal.');
   } else if(n === 0){
-    camHint.textContent = 'Legt die Schatullen gemeinsam.\nTippt die Stellen hier.';
+    camHint.textContent = 'Jedes Paar einen Satz.\nDann legt die Schatullen und tippt hier.';
   } else {
     camHint.textContent = 'Weiter — eins, zwei, drei, vier.';
   }
@@ -742,7 +742,7 @@ document.getElementById('openCamBtn').addEventListener('click', async () => {
 });
 document.getElementById('skipCamBtn').addEventListener('click', async () => {
   showStage();
-  camHint.textContent = 'Ohne Kamera — legt die Schatullen, tippt hier.';
+  camHint.textContent = 'Ohne Kamera — jedes Paar einen Satz, dann tippt hier.';
   await startCeremonialMedia(false);
 });
 

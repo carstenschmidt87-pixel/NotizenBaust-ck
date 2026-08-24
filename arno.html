@@ -265,6 +265,14 @@
     margin:-0.4rem auto 1.4rem; line-height:1.55;
   }
   .order-hint.show { display:block; animation:fadeUp 0.5s ease; }
+
+  .talk-nudge {
+    font-size:1.14rem; color:var(--vg); opacity:0.96;
+    letter-spacing:0.06em; text-align:center; margin:0.35rem auto 1.1rem;
+    line-height:1.55; max-width:300px;
+  }
+  #spokeBtn { margin:0.35rem auto 0.6rem; }
+  #afterTalk { width:100%; display:flex; flex-direction:column; align-items:center; }
 </style>
 <style>
   /* ===== Zier-Bilder (zz) ===== */
@@ -301,6 +309,7 @@
   </div>
   <div class="inp-area" style="margin-top:1.5rem;">
     <span class="inp-label">Das vollständige Wort</span>
+    <p class="talk-nudge">Sagt das Wort einander, bevor ihr öffnet.</p>
     <input class="inp" id="codeInp" type="text" maxlength="12"
       placeholder="· · · · · ·" autocomplete="off" autocorrect="off"
       autocapitalize="characters" spellcheck="false"/>
@@ -312,9 +321,11 @@
   <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
   <div class="name">Bruder Arno</div>
   <div class="rule"></div>
-  <div class="eyebrow">Die Frage für euch beide</div>
-  <p class="disc-q">Wo in deinem Leben<br>wartest du noch auf das Licht?</p>
-  <p class="disc-sub">Sprecht miteinander.</p>
+  <div class="eyebrow">Deine Frage an dein Gegenüber</div>
+  <p class="disc-q">Wem würdest du es zuerst zeigen,<br>wenn das Licht käme?</p>
+  <p class="disc-sub">Legt die Handys hin. Eine Antwort reicht.<br>Einigt euch auf einen Satz, den nur ihr beide kennt — und behaltet ihn.</p>
+  <button type="button" class="btn btn-sm" id="spokeBtn">Wir haben gesprochen</button>
+  <div id="afterTalk" class="hidden">
   <div class="divider"></div>
   <div class="eyebrow">Das Rätsel</div>
   <p class="riddle-q">Was empfängt der Lehrling,<br>wenn er aus der Dunkelheit tritt?</p>
@@ -337,6 +348,7 @@
     was dort empfangen, wenn die Dunkelheit flieht,<br>
     zuletzt die linke Säule, in Kraft erbaut.
   </p>
+  <p class="talk-nudge">Euer Wort allein reicht nicht.<br>Fragt die anderen Paare nach dem ihren.</p>
   <div class="five-wrap" id="fiveWrap">
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
     <input class="ff" type="text" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"/>
@@ -350,8 +362,9 @@
     <div class="eyebrow">Dein Splitter des Schlusssteins</div>
     <div class="frag-glyph"><span class="frag-letter" id="fragLetterP2">?</span></div>
     <div class="frag-pos">Stelle <span id="fragPosP2">?</span> von zehn</div>
-    <p class="frag-note">Merkt euch Buchstabe und Stelle.<br>Alle zehn zusammen vollenden den Schlussstein.</p>
-    <button class="btn btn-sm" id="toPh3Btn">Weiter</button>
+    <p class="frag-note">Sagt Buchstabe und Stelle eurem Gegenüber.<br>Alle zehn zusammen vollenden den Schlussstein.</p>
+    <button class="btn btn-sm" id="toPh3Btn">Gesagt — weiter</button>
+  </div>
   </div>
   <div class="foot">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
 </div>
@@ -361,7 +374,7 @@
   <div class="eyebrow">Der Schlussstein</div>
   <p class="inter">
     Zehn Splitter,<br>ein verborgenes Wort.<br>
-    Tragt sie zusammen.
+    Sagt sie einander<br>und tragt sie zusammen.
   </p>
   <div class="frag-glyph"><span class="frag-letter" id="fragLetterP3">?</span></div>
   <div class="frag-pos" style="margin-bottom:2.2rem;">Dein Splitter — Stelle <span id="fragPosP3">?</span></div>
@@ -521,6 +534,17 @@ if(COMBINED === ''){
       else eggWrap.classList.remove('glowing');
     });
   }
+}
+
+
+const spokeBtn = document.getElementById('spokeBtn');
+if(spokeBtn){
+  spokeBtn.addEventListener('click',()=>{
+    const box=document.getElementById('afterTalk');
+    if(box) box.classList.remove('hidden');
+    spokeBtn.style.display='none';
+    if(box) setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),60);
+  });
 }
 
 // Riddle
