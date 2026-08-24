@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Das Werk vollenden</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root {
-    --vd:#100818; --vg:#e2b7f4; --go:#edc75a; --gl:#f7edc4; --cr:#fffaf2;
+    --vd:#07040c; --vg:#f3d4ff; --go:#f4d36a; --gl:#fff8dc; --cr:#fffef8;
   }
-  html, body { height:100%; overflow:hidden; background:var(--vd); font-family:'Cormorant Garamond',serif; color:var(--cr); text-shadow:0 1px 12px rgba(6,0,14,.82); }
+  html, body { height:100%; overflow:hidden; background:var(--vd); font-family:'Cormorant Garamond',serif; color:var(--cr); text-shadow:0 2px 16px rgba(0,0,0,.94),0 0 4px rgba(0,0,0,.75); }
   body::before {
     content:''; position:fixed; inset:0;
-    background:radial-gradient(ellipse 75% 85% at 50% 40%,rgba(10,4,18,0.7) 0%,rgba(10,4,18,0.25) 70%);
+    background:radial-gradient(ellipse 75% 85% at 50% 40%,rgba(4,1,10,0.82) 0%,rgba(4,1,10,0.42) 70%);
     pointer-events:none; z-index:0;
   }
   #fxCanvas { position:fixed; inset:0; pointer-events:none; z-index:200; opacity:0; }
@@ -27,25 +27,25 @@
   }
   #permScreen svg { width:58px; opacity:0.82; }
   #permScreen h1 {
-    font-family:'Cinzel',serif; font-size:clamp(1.2rem,5.6vw,1.55rem);
-    letter-spacing:0.2em; color:var(--gl); text-transform:uppercase;
+    font-family:'Cinzel',serif; font-size:clamp(1.38rem,6.2vw,1.75rem);
+    font-weight:600; letter-spacing:0.18em; color:var(--gl); text-transform:uppercase;
   }
   #permScreen p {
-    font-style:italic; font-weight:400; font-size:clamp(1.18rem,4.6vw,1.4rem);
-    line-height:1.65; color:var(--cr); opacity:0.96; max-width:320px;
+    font-style:italic; font-weight:400; font-size:clamp(1.28rem,5vw,1.52rem);
+    line-height:1.7; color:var(--cr); opacity:1; max-width:340px;
   }
   .perm-actions { display:flex; flex-direction:column; align-items:center; gap:0.7rem; width:100%; }
   .btn-gold {
     background:transparent; border:1px solid rgba(201,168,76,0.5); color:var(--go);
-    font-family:'Cinzel',serif; font-size:0.88rem; letter-spacing:0.3em;
-    padding:0.8rem 2rem; text-transform:uppercase; cursor:pointer; transition:all 0.3s; border-radius:1px;
+    font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.28em;
+    padding:0.95rem 2.1rem; text-transform:uppercase; cursor:pointer; transition:all 0.3s; border-radius:1px;
   }
   .btn-gold:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
   .btn-gold:active { transform:scale(0.97); }
   .btn-gold:disabled { opacity:0.35; pointer-events:none; }
   .btn-sm {
-    background:transparent; border:1px solid rgba(201,168,76,0.2); color:rgba(201,168,76,0.5);
-    font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.25em; padding:0.45rem 1rem;
+    background:transparent; border:1px solid rgba(201,168,76,0.55); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.86rem; letter-spacing:0.22em; padding:0.55rem 1.15rem;
     text-transform:uppercase; cursor:pointer; transition:all 0.3s; border-radius:1px;
   }
   .btn-sm:hover { border-color:rgba(201,168,76,0.5); color:var(--go); }
@@ -59,12 +59,12 @@
 
   .cam-top { text-align:center; z-index:1; width:100%; }
   .cam-title {
-    font-family:'Cinzel',serif; font-size:0.82rem; letter-spacing:0.3em;
-    color:var(--go); text-transform:uppercase; opacity:0.95; margin-bottom:0.3rem;
+    font-family:'Cinzel',serif; font-size:1.02rem; font-weight:600; letter-spacing:0.28em;
+    color:var(--go); text-transform:uppercase; opacity:1; margin-bottom:0.35rem;
   }
   .cam-hint {
-    font-style:italic; font-size:clamp(1.05rem,3.8vw,1.22rem);
-    color:var(--cr); opacity:0.95; line-height:1.5;
+    font-style:italic; font-size:clamp(1.16rem,4.2vw,1.34rem);
+    color:var(--cr); opacity:1; line-height:1.55;
     white-space:pre-line;
   }
 
@@ -74,7 +74,7 @@
     border:1px solid rgba(201,168,76,0.2);
     box-shadow:0 0 30px rgba(176,106,212,0.15);
     max-height:62vh;
-    background:linear-gradient(rgba(16,8,24,.38),rgba(16,8,24,.58)),url('gewoelbe.jpg') center/cover no-repeat;
+    background:linear-gradient(rgba(7,4,12,.55),rgba(7,4,12,.72)),url('gewoelbe.jpg') center/cover no-repeat;
   }
   #video { width:100%; height:100%; object-fit:cover; display:none; }
   #video.on { display:block; }
@@ -85,7 +85,7 @@
     display:flex; flex-direction:column;
     justify-content:space-evenly; align-items:center;
     padding:7% 8% 9%;
-    background:linear-gradient(180deg,rgba(26,10,46,0.18),rgba(26,10,46,0.42));
+    background:linear-gradient(180deg,rgba(7,4,12,0.28),rgba(7,4,12,0.52));
   }
   .tet-svg {
     position:absolute; inset:8% 12% 10%;
@@ -128,8 +128,8 @@
 
   .cam-bottom { width:100%; text-align:center; z-index:1; }
   .count-label {
-    font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.3em;
-    color:var(--vg); text-transform:uppercase; opacity:0.7; margin-bottom:0.55rem;
+    font-family:'Cinzel',serif; font-size:0.92rem; letter-spacing:0.28em;
+    color:var(--vg); text-transform:uppercase; opacity:0.96; margin-bottom:0.55rem;
   }
   .cam-actions { display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-top:0.2rem; align-items:center; }
 
@@ -137,6 +137,16 @@
     display:none; flex-direction:column; align-items:center; gap:0.45rem;
   }
   .knock-stage.show { display:flex; }
+  .ear-meter {
+    width:min(220px,70vw); height:8px; border-radius:4px;
+    background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.35);
+    overflow:hidden; margin:0.15rem 0 0.2rem;
+  }
+  .ear-fill {
+    height:100%; width:0%; background:linear-gradient(90deg,#c9a84c,#f3e08a);
+    box-shadow:0 0 10px rgba(237,199,90,0.7);
+    transition:width 0.05s linear;
+  }
   .knock-dots { display:flex; gap:0.55rem; }
   .knock-dots span {
     width:10px; height:10px; border-radius:50%;
@@ -164,8 +174,8 @@
     box-shadow:0 0 28px rgba(201,168,76,0.7);
   }
   .gavel-cap {
-    font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.28em;
-    color:var(--go); text-transform:uppercase; opacity:0.95;
+    font-family:'Cinzel',serif; font-size:0.86rem; letter-spacing:0.26em;
+    color:var(--go); text-transform:uppercase; opacity:1;
   }
   .gavel-cap.listening {
     animation:listenPulse 1.6s ease-in-out infinite;
@@ -205,7 +215,7 @@
   .fin-orn svg { width:60px; opacity:0.85; }
   .fin-title {
     opacity:0; animation:fadeUp 1.2s ease forwards 0.6s;
-    font-family:'Cinzel',serif; font-size:clamp(1.2rem,5.6vw,1.55rem);
+    font-family:'Cinzel',serif; font-size:clamp(1.38rem,6.2vw,1.75rem); font-weight:600;
     letter-spacing:0.2em; color:var(--gl); text-transform:uppercase; margin-bottom:0.6rem;
   }
   .fin-rule {
@@ -216,13 +226,13 @@
   }
   .fin-text {
     opacity:0; animation:fadeUp 1.4s ease forwards 1.1s;
-    font-style:italic; font-weight:400; font-size:clamp(1.28rem,5vw,1.55rem);
-    line-height:1.75; color:var(--cr); max-width:320px;
+    font-style:italic; font-weight:400; font-size:clamp(1.34rem,5.2vw,1.62rem);
+    line-height:1.75; color:var(--cr); max-width:340px;
   }
   .fin-sub {
     opacity:0; animation:fadeUp 1.2s ease forwards 2.0s;
-    margin-top:2rem; font-family:'Cinzel',serif; font-size:0.72rem;
-    letter-spacing:0.3em; color:var(--vg); opacity:0.78;
+    margin-top:2rem; font-family:'Cinzel',serif; font-size:0.88rem;
+    letter-spacing:0.28em; color:var(--vg); opacity:0.92;
   }
   .fin-cta { display:inline-block; text-decoration:none; margin-top:2.2rem;
     opacity:0; animation:fadeUp 1.4s ease forwards 2.6s; }
@@ -234,8 +244,8 @@
   .zz-corner{position:fixed;width:44vw;max-width:250px;opacity:.9;z-index:-1;pointer-events:none}
   .zz-corner.tl{top:0;left:0}
   .zz-corner.br{bottom:0;right:0;transform:rotate(180deg)}
-  #permScreen{background:linear-gradient(rgba(16,8,24,.58),rgba(16,8,24,.72)),url('gewoelbe.jpg') center/cover no-repeat !important}
-  #finaleScreen{background:linear-gradient(rgba(16,8,24,.32),rgba(16,8,24,.62)),url('finale.jpg') center/cover no-repeat !important}
+  #permScreen{background:linear-gradient(rgba(7,4,12,.70),rgba(7,4,12,.84)),url('gewoelbe.jpg') center/cover no-repeat !important}
+  #finaleScreen{background:linear-gradient(rgba(7,4,12,.52),rgba(7,4,12,.76)),url('finale.jpg') center/cover no-repeat !important}
 </style>
 </head>
 <body>
@@ -247,7 +257,7 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Die Handys bleiben bei euch — nur dieses eine Gerät besiegelt das Werk. Dann drei Schläge auf den Tisch.</p>
+  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Nur dieses Gerät bleibt am Tisch. Erlaubt das Mikrofon, legt das Handy flach auf die Platte, dann drei Schläge.</p>
   <div class="perm-actions">
     <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
     <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
@@ -293,6 +303,7 @@
     <div class="cam-actions">
       <button class="btn-sm" id="resetBtn">Neu legen</button>
       <div class="knock-stage" id="knockStage">
+        <div class="ear-meter" aria-hidden="true"><div class="ear-fill" id="earFill"></div></div>
         <div class="knock-dots" id="knockDots"><span></span><span></span><span></span></div>
         <button type="button" class="gavel" id="gavelBtn" aria-label="Schlag">
           <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -329,6 +340,14 @@ const TARGET = 10;
 const ROWS = [[0],[1,2],[3,4,5],[6,7,8,9]];
 const ROW_NOTE = [528, 396, 330, 264];
 const LABELS = [1,2,2,3,3,3,4,4,4,4];
+const KNOCK_GAP_MIN = 380;
+const KNOCK_SEQ_RESET = 7000;
+const MIC_AUDIO = {
+  echoCancellation: false,
+  noiseSuppression: false,
+  autoGainControl: false,
+  channelCount: 1
+};
 
 /* ════ STATE ════ */
 let lit = Array(TARGET).fill(false);
@@ -337,16 +356,17 @@ let knocks = 0;
 let knockReady = false;
 let micStream = null;
 let micAnalyser = null;
-let micData = null;
+let micByte = null;
+let micFreq = null;
 let micRaf = 0;
-let micListening = false;
-let noiseFloor = 0.015;
-let lastRms = 0;
+let audioGraphReady = false;
+let motionOn = false;
+let sensorsOk = false;
+let noiseFloor = 0.04;
+let prevLevel = 0;
 let lastKnockAt = 0;
 let lastSeqAt = 0;
-let micIgnoreUntil = 0;
-let knockListenSince = 0;
-let micToken = 0;
+let ignoreUntil = 0;
 
 /* ════ DOM ════ */
 const permScreen   = document.getElementById('permScreen');
@@ -361,6 +381,7 @@ const knockDots    = [...document.querySelectorAll('#knockDots span')];
 const gavelBtn     = document.getElementById('gavelBtn');
 const gavelCap     = document.getElementById('gavelCap');
 const knockFlash   = document.getElementById('knockFlash');
+const earFill      = document.getElementById('earFill');
 const stones       = [...document.querySelectorAll('.tet-stone')];
 const fxCanvas     = document.getElementById('fxCanvas');
 const fxCtx        = fxCanvas.getContext('2d');
@@ -385,15 +406,18 @@ function updateCount(){
   }
   if(ready && !knockReady){
     knockReady = true;
-    startMic();
+    ignoreUntil = performance.now() + 900;
+    noiseFloor = 0.04;
+    prevLevel = 0;
+    armSensors();
   } else if(!ready && knockReady){
     knockReady = false;
-    stopMic();
   }
+  setMicUi(sensorsOk);
   if(ready){
-    camHint.textContent = micListening
-      ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
-      : 'Das Dreieck steht.\nDrei Schläge auf den Tisch — oder den Hammer tippen.';
+    camHint.textContent = knocks ? knockHint() : (sensorsOk
+      ? 'Handy flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause.'
+      : 'Kein Gehör — tippt den Hammer dreimal.');
   } else if(n === 0){
     camHint.textContent = 'Legt die Schatullen gemeinsam.\nTippt die Stellen hier.';
   } else {
@@ -403,30 +427,27 @@ function updateCount(){
 
 stones.forEach((btn, i) => {
   btn.addEventListener('click', () => {
-    if(finaleDone || litCount() >= TARGET && !lit[i]) return;
-    if(videoWrap.classList.contains('locked')) return;
+    if(finaleDone || videoWrap.classList.contains('locked')) return;
+    if(lit[i]) return;
     unlockAudio();
-    const wasLit = lit[i];
-    lit[i] = !lit[i];
-    btn.classList.toggle('lit', lit[i]);
-    btn.textContent = lit[i] ? '✦' : String(LABELS[i]);
+    lit[i] = true;
+    btn.classList.add('lit');
+    btn.textContent = '✦';
     btn.classList.remove('pop');
     void btn.offsetWidth;
     btn.classList.add('pop');
-    if(lit[i] && !wasLit){
-      const r = rowOf(i);
-      playChime(ROW_NOTE[r]);
-      buzz(18);
-      const rect = btn.getBoundingClientRect();
-      runSpark(rect.left + rect.width/2, rect.top + rect.height/2);
-      if(isRowComplete(r)){
-        const rowEl = btn.parentElement;
-        rowEl.classList.remove('flash');
-        void rowEl.offsetWidth;
-        rowEl.classList.add('flash');
-        playRowChord(r);
-        buzz([30, 40, 50]);
-      }
+    const r = rowOf(i);
+    playChime(ROW_NOTE[r]);
+    buzz(18);
+    const rect = btn.getBoundingClientRect();
+    runSpark(rect.left + rect.width/2, rect.top + rect.height/2);
+    if(isRowComplete(r)){
+      const rowEl = btn.parentElement;
+      rowEl.classList.remove('flash');
+      void rowEl.offsetWidth;
+      rowEl.classList.add('flash');
+      playRowChord(r);
+      buzz([30, 40, 50]);
     }
     updateCount();
   });
@@ -443,7 +464,6 @@ document.getElementById('resetBtn').addEventListener('click', () => {
     btn.textContent = String(LABELS[i]);
   });
   document.querySelectorAll('.tet-row').forEach(r => r.classList.remove('flash'));
-  stopMic();
   updateCount();
 });
 
@@ -455,19 +475,19 @@ function knockHint(){
   if(knocks === 1) return 'Noch zwei Schläge — alle zusammen.';
   if(knocks === 2) return 'Noch ein Schlag — alle zusammen.';
   if(knocks >= 3) return 'Der Stein ist gesetzt.';
-  return micListening
-    ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
-    : 'Drei Schläge auf den Tisch — oder den Hammer tippen.';
+  return sensorsOk
+    ? 'Handy flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause.'
+    : 'Kein Gehör — tippt den Hammer dreimal.';
 }
 
 function registerKnock(src){
-  if(finaleDone || litCount() < TARGET) return;
-  unlockAudio();
+  if(finaleDone || litCount() < TARGET || !knockReady) return;
   const now = performance.now();
-  if(src === 'gavel') micIgnoreUntil = now + 600;
-  if(src === 'mic') micIgnoreUntil = now + 500;
+  if(now - lastKnockAt < KNOCK_GAP_MIN) return;
+  unlockAudio();
   lastKnockAt = now;
   lastSeqAt = now;
+  ignoreUntil = now + (src === 'gavel' ? 500 : 350);
   knocks = Math.min(3, knocks + 1);
   knockDots.forEach((d, i) => d.classList.toggle('on', i < knocks));
   gavelBtn.classList.remove('hit');
@@ -477,8 +497,8 @@ function registerKnock(src){
   void videoWrap.offsetWidth;
   videoWrap.classList.add('shake');
   flashKnock();
-  playKnock(knocks);
-  buzz([60, 40, 90 + knocks * 30]);
+  if(src === 'gavel') playKnock(knocks);
+  buzz([50, 30, 80 + knocks * 20]);
   camHint.textContent = knockHint();
   if(knocks >= 3) triggerFinale();
 }
@@ -492,120 +512,150 @@ function flashKnock(){
   });
 }
 
-const KNOCK_GAP_MIN = 550;   // cluster of hands = 1 Schlag; ~1s pause dazwischen kommt durch
-const KNOCK_SEQ_RESET = 5000; // drei Schläge mit je ~1s Pause plus etwas Luft
-const MIC_CALIB_MS = 700;
-
-async function primeMic(){
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-  try{
-    const s = await navigator.mediaDevices.getUserMedia({
-      audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false }
-    });
-    s.getTracks().forEach(t => t.stop());
-  }catch(e){}
-}
-
-async function startMic(){
-  if(micListening || finaleDone) return;
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    setMicUi(false);
-    return;
-  }
-  const token = ++micToken;
-  try{
-    unlockAudio();
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false }
-    });
-    if(token !== micToken || finaleDone || !knockReady){
-      stream.getTracks().forEach(t => t.stop());
-      return;
-    }
-    micStream = stream;
-    const ac = getAC();
-    if(!ac){ setMicUi(false); return; }
-    const src = ac.createMediaStreamSource(micStream);
-    const hp = ac.createBiquadFilter();
-    hp.type = 'highpass'; hp.frequency.value = 30;
-    const lp = ac.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 1400;
-    micAnalyser = ac.createAnalyser();
-    micAnalyser.fftSize = 1024;
-    micAnalyser.smoothingTimeConstant = 0;
-    src.connect(hp); hp.connect(lp); lp.connect(micAnalyser);
-    micData = new Uint8Array(micAnalyser.fftSize);
-    noiseFloor = 0.015;
-    lastRms = 0;
-    knockListenSince = performance.now();
-    micIgnoreUntil = knockListenSince + MIC_CALIB_MS;
-    micListening = true;
-    setMicUi(true);
-    loopMic();
-  }catch(e){
-    if(token === micToken) setMicUi(false);
-  }
-}
-
 function setMicUi(on){
+  sensorsOk = !!on;
   if(!gavelCap) return;
   gavelCap.classList.toggle('listening', on);
-  gavelCap.textContent = on ? 'Lauscht dem Tisch' : 'Hammer tippen';
+  gavelCap.textContent = on ? 'Hört den Tisch' : 'Hammer tippen';
   if(knockReady && knocks === 0){
     camHint.textContent = on
-      ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
+      ? 'Handy flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause.'
       : 'Kein Gehör — tippt den Hammer dreimal.';
   }
 }
 
-function stopMic(){
-  micToken++;
-  micListening = false;
-  if(micRaf){ cancelAnimationFrame(micRaf); micRaf = 0; }
-  if(micStream){
-    micStream.getTracks().forEach(t => t.stop());
-    micStream = null;
+async function resumeAC(){
+  const ac = getAC();
+  if(ac && ac.state === 'suspended'){
+    try { await ac.resume(); } catch(e){}
   }
-  micAnalyser = null;
-  if(gavelCap){
-    gavelCap.classList.remove('listening');
-    gavelCap.textContent = 'Drei Schläge';
+  return ac;
+}
+
+async function armSensors(){
+  unlockAudio();
+  await resumeAC();
+  const micOk = await ensureMic();
+  await ensureMotion();
+  setMicUi(micOk || motionOn);
+}
+
+function liveAudioTracks(){
+  return !!(micStream && micStream.getAudioTracks().some(tr => tr.readyState === 'live'));
+}
+
+async function ensureMic(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return false;
+  try{
+    if(!liveAudioTracks()){
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: MIC_AUDIO, video: false });
+      audioGraphReady = false;
+      micAnalyser = null;
+    }
+    wireMic();
+    return audioGraphReady;
+  }catch(e){
+    return false;
   }
 }
 
-function micRms(){
-  micAnalyser.getByteTimeDomainData(micData);
-  let sum = 0;
-  for(let i = 0; i < micData.length; i++){
-    const v = (micData[i] - 128) / 128;
-    sum += v * v;
+function wireMic(){
+  if(audioGraphReady || !liveAudioTracks()) return;
+  const ac = getAC();
+  if(!ac) return;
+  const src = ac.createMediaStreamSource(micStream);
+  micAnalyser = ac.createAnalyser();
+  micAnalyser.fftSize = 2048;
+  micAnalyser.smoothingTimeConstant = 0;
+  const mute = ac.createGain();
+  mute.gain.value = 0;
+  src.connect(micAnalyser);
+  micAnalyser.connect(mute);
+  mute.connect(ac.destination);
+  micByte = new Uint8Array(micAnalyser.fftSize);
+  micFreq = new Uint8Array(micAnalyser.frequencyBinCount);
+  audioGraphReady = true;
+  noiseFloor = 0.04;
+  prevLevel = 0;
+  if(!micRaf) loopMic();
+}
+
+async function ensureMotion(){
+  try{
+    if(typeof DeviceMotionEvent === 'undefined') return false;
+    if(typeof DeviceMotionEvent.requestPermission === 'function'){
+      const r = await DeviceMotionEvent.requestPermission();
+      if(r !== 'granted') return false;
+    }
+    if(!motionOn){
+      motionOn = true;
+      window.addEventListener('devicemotion', onMotion, {passive:true});
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+function onMotion(e){
+  if(!knockReady || finaleDone) return;
+  const now = performance.now();
+  if(now < ignoreUntil) return;
+  let spike = 0;
+  if(e.acceleration && (e.acceleration.x != null || e.acceleration.y != null || e.acceleration.z != null)){
+    spike = Math.hypot(e.acceleration.x||0, e.acceleration.y||0, e.acceleration.z||0);
+  } else if(e.accelerationIncludingGravity){
+    const g = e.accelerationIncludingGravity;
+    spike = Math.abs(Math.hypot(g.x||0, g.y||0, g.z||0) - 9.81);
   }
-  return Math.sqrt(sum / micData.length);
+  if(spike >= 1.05) registerKnock('motion');
+}
+
+function sampleMic(){
+  micAnalyser.getByteTimeDomainData(micByte);
+  let peak = 0;
+  for(let i = 0; i < micByte.length; i++){
+    const v = Math.abs(micByte[i] - 128) / 128;
+    if(v > peak) peak = v;
+  }
+  micAnalyser.getByteFrequencyData(micFreq);
+  const ac = audioCtx;
+  const binHz = (ac && ac.sampleRate ? ac.sampleRate : 44100) / micAnalyser.fftSize;
+  const i0 = Math.max(1, Math.floor(50 / binHz));
+  const i1 = Math.min(micFreq.length - 1, Math.ceil(650 / binHz));
+  let thud = 0, n = 0;
+  for(let i = i0; i <= i1; i++){ thud += micFreq[i]; n++; }
+  thud = n ? thud / (n * 255) : 0;
+  return Math.max(peak, thud);
 }
 
 function loopMic(){
-  if(!micListening || finaleDone) return;
+  if(finaleDone){ micRaf = 0; return; }
   micRaf = requestAnimationFrame(loopMic);
-  const rms = micRms();
+  if(!audioGraphReady || !micAnalyser) return;
+  const level = sampleMic();
+  if(earFill) earFill.style.width = Math.min(100, level * 170) + '%';
+  noiseFloor = noiseFloor * 0.97 + Math.min(level, noiseFloor * 2.8) * 0.03;
+  const onset = level - prevLevel;
+  prevLevel = level * 0.55 + prevLevel * 0.45;
   const now = performance.now();
-  if(now - knockListenSince < MIC_CALIB_MS){
-    noiseFloor = Math.max(0.008, noiseFloor * 0.8 + rms * 0.2);
-    lastRms = rms;
-    return;
-  }
-  if(rms < noiseFloor * 1.8) noiseFloor = noiseFloor * 0.985 + rms * 0.015;
-  if(knocks > 0 && knocks < 3 && now - lastSeqAt > KNOCK_SEQ_RESET){
+  if(knockReady && knocks > 0 && knocks < 3 && now - lastSeqAt > KNOCK_SEQ_RESET){
     knocks = 0;
     knockDots.forEach(d => d.classList.remove('on'));
     camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
   }
-  if(now < micIgnoreUntil){ lastRms = rms; return; }
-  const thresh = Math.max(0.04, noiseFloor * 2.8);
-  const onset = rms > thresh && (rms > lastRms * 1.18 || rms - lastRms > 0.03);
-  if(onset && now - lastKnockAt > KNOCK_GAP_MIN){
-    registerKnock('mic');
+  if(!knockReady || now < ignoreUntil) return;
+  const thresh = Math.max(0.11, noiseFloor * 2.15);
+  if(level > thresh && onset > 0.055) registerKnock('mic');
+}
+
+function hushSensors(){
+  if(micRaf){ cancelAnimationFrame(micRaf); micRaf = 0; }
+  if(motionOn){
+    window.removeEventListener('devicemotion', onMotion);
+    motionOn = false;
   }
-  lastRms = rms;
+  if(micStream){
+    micStream.getAudioTracks().forEach(t => { try { t.stop(); } catch(e){} });
+  }
 }
 
 function showStage(){
@@ -613,30 +663,56 @@ function showStage(){
   camScreen.style.display = 'flex';
 }
 
+async function attachVideo(stream){
+  video.srcObject = stream;
+  video.classList.add('rear','on');
+  try { await video.play(); } catch(e){}
+}
+
 async function startCamera(){
-  showStage();
   try{
     const stream = await navigator.mediaDevices.getUserMedia({
       video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 } }
     });
-    video.srcObject = stream;
-    video.classList.add('rear','on');
-    video.play();
+    await attachVideo(stream);
   }catch(e){
     camHint.textContent = 'Kamera nicht verfügbar — setzt die Steine trotzdem auf dem Dreieck.';
   }
 }
 
-document.getElementById('openCamBtn').addEventListener('click', () => {
+async function startCeremonialMedia(wantCam){
   unlockAudio();
-  primeMic();
-  startCamera();
+  await resumeAC();
+  if(wantCam){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: MIC_AUDIO,
+        video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 } }
+      });
+      micStream = stream;
+      audioGraphReady = false;
+      micAnalyser = null;
+      wireMic();
+      await attachVideo(stream);
+    }catch(e){
+      await ensureMic();
+      await startCamera();
+    }
+  }else{
+    await ensureMic();
+  }
+  await ensureMotion();
+  setMicUi(audioGraphReady || motionOn);
+}
+
+document.getElementById('openCamBtn').addEventListener('click', async () => {
+  showStage();
+  await startCeremonialMedia(true);
 });
-document.getElementById('skipCamBtn').addEventListener('click', () => {
-  unlockAudio();
-  primeMic();
+document.getElementById('skipCamBtn').addEventListener('click', async () => {
   showStage();
   camHint.textContent = 'Ohne Kamera — legt die Schatullen, tippt hier.';
+  await startCeremonialMedia(false);
 });
 
 /* ════ MEISTER-NOTAUSGANG ════ */
@@ -771,7 +847,7 @@ function runFinaleCanvas(cx,cy){
 function triggerFinale(){
   if(finaleDone) return;
   finaleDone = true;
-  stopMic();
+  hushSensors();
   playFinaleSound();
   runFinaleCanvas(window.innerWidth/2, window.innerHeight/2);
   setTimeout(() => { camScreen.style.display='none'; finaleScreen.classList.add('show'); }, 500);
