@@ -167,6 +167,13 @@
     font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.28em;
     color:var(--go); text-transform:uppercase; opacity:0.8;
   }
+  .gavel-cap.listening {
+    animation:listenPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes listenPulse {
+    0%,100%{ opacity:0.7; text-shadow:none; }
+    50%{ opacity:1; text-shadow:0 0 12px rgba(201,168,76,0.7); }
+  }
   #knockFlash {
     position:fixed; inset:0; z-index:180; pointer-events:none; opacity:0;
     background:radial-gradient(ellipse at 50% 60%,rgba(255,236,170,0.7),rgba(201,168,76,0.12) 42%,transparent 70%);
@@ -240,7 +247,7 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Die Handys bleiben bei euch — nur dieses eine Gerät besiegelt das Werk. Dann drei Schläge.</p>
+  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Die Handys bleiben bei euch — nur dieses eine Gerät besiegelt das Werk. Dann drei Schläge auf den Tisch.</p>
   <div class="perm-actions">
     <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
     <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
@@ -294,7 +301,7 @@
             <rect x="18" y="16" width="28" height="4" fill="#c9a84c" opacity="0.5"/>
           </svg>
         </button>
-        <div class="gavel-cap">Drei Schläge</div>
+        <div class="gavel-cap" id="gavelCap">Drei Schläge</div>
       </div>
     </div>
   </div>
@@ -327,6 +334,19 @@ const LABELS = [1,2,2,3,3,3,4,4,4,4];
 let lit = Array(TARGET).fill(false);
 let finaleDone = false;
 let knocks = 0;
+let knockReady = false;
+let micStream = null;
+let micAnalyser = null;
+let micData = null;
+let micRaf = 0;
+let micListening = false;
+let noiseFloor = 0.015;
+let lastRms = 0;
+let lastKnockAt = 0;
+let lastSeqAt = 0;
+let micIgnoreUntil = 0;
+let knockListenSince = 0;
+let micToken = 0;
 
 /* ════ DOM ════ */
 const permScreen   = document.getElementById('permScreen');
@@ -339,6 +359,7 @@ const countLabel   = document.getElementById('countLabel');
 const knockStage   = document.getElementById('knockStage');
 const knockDots    = [...document.querySelectorAll('#knockDots span')];
 const gavelBtn     = document.getElementById('gavelBtn');
+const gavelCap     = document.getElementById('gavelCap');
 const knockFlash   = document.getElementById('knockFlash');
 const stones       = [...document.querySelectorAll('.tet-stone')];
 const fxCanvas     = document.getElementById('fxCanvas');
@@ -362,8 +383,17 @@ function updateCount(){
     knocks = 0;
     knockDots.forEach(d => d.classList.remove('on'));
   }
+  if(ready && !knockReady){
+    knockReady = true;
+    startMic();
+  } else if(!ready && knockReady){
+    knockReady = false;
+    stopMic();
+  }
   if(ready){
-    camHint.textContent = 'Das Dreieck steht.\nAlle: drei Schläge auf den Tisch.';
+    camHint.textContent = micListening
+      ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+      : 'Das Dreieck steht.\nDrei Schläge auf den Tisch — oder den Hammer tippen.';
   } else if(n === 0){
     camHint.textContent = 'Legt die Schatullen gemeinsam.\nTippt die Stellen hier.';
   } else {
@@ -406,18 +436,38 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   if(finaleDone) return;
   lit = Array(TARGET).fill(false);
   knocks = 0;
+  knockReady = false;
   knockDots.forEach(d => d.classList.remove('on'));
   stones.forEach((btn, i) => {
     btn.classList.remove('lit','pop');
     btn.textContent = String(LABELS[i]);
   });
   document.querySelectorAll('.tet-row').forEach(r => r.classList.remove('flash'));
+  stopMic();
   updateCount();
 });
 
 gavelBtn.addEventListener('click', () => {
+  registerKnock('gavel');
+});
+
+function knockHint(){
+  if(knocks === 1) return 'Noch zwei Schläge — alle zusammen.';
+  if(knocks === 2) return 'Noch ein Schlag — alle zusammen.';
+  if(knocks >= 3) return 'Der Stein ist gesetzt.';
+  return micListening
+    ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+    : 'Drei Schläge auf den Tisch — oder den Hammer tippen.';
+}
+
+function registerKnock(src){
   if(finaleDone || litCount() < TARGET) return;
   unlockAudio();
+  const now = performance.now();
+  if(src === 'gavel') micIgnoreUntil = now + 600;
+  if(src === 'mic') micIgnoreUntil = now + 500;
+  lastKnockAt = now;
+  lastSeqAt = now;
   knocks = Math.min(3, knocks + 1);
   knockDots.forEach((d, i) => d.classList.toggle('on', i < knocks));
   gavelBtn.classList.remove('hit');
@@ -429,9 +479,9 @@ gavelBtn.addEventListener('click', () => {
   flashKnock();
   playKnock(knocks);
   buzz([60, 40, 90 + knocks * 30]);
-  camHint.textContent = knocks === 1 ? 'Noch zwei Schläge — alle zusammen.' : knocks === 2 ? 'Noch ein Schlag — alle zusammen.' : 'Der Stein ist gesetzt.';
+  camHint.textContent = knockHint();
   if(knocks >= 3) triggerFinale();
-});
+}
 
 function flashKnock(){
   knockFlash.style.transition = 'none';
@@ -440,6 +490,122 @@ function flashKnock(){
     knockFlash.style.transition = 'opacity 0.45s ease';
     knockFlash.style.opacity = '0';
   });
+}
+
+const KNOCK_GAP_MIN = 700;
+const KNOCK_SEQ_RESET = 3500;
+const MIC_CALIB_MS = 900;
+
+async function primeMic(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  try{
+    const s = await navigator.mediaDevices.getUserMedia({
+      audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false }
+    });
+    s.getTracks().forEach(t => t.stop());
+  }catch(e){}
+}
+
+async function startMic(){
+  if(micListening || finaleDone) return;
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    setMicUi(false);
+    return;
+  }
+  const token = ++micToken;
+  try{
+    unlockAudio();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false }
+    });
+    if(token !== micToken || finaleDone || !knockReady){
+      stream.getTracks().forEach(t => t.stop());
+      return;
+    }
+    micStream = stream;
+    const ac = getAC();
+    if(!ac){ setMicUi(false); return; }
+    const src = ac.createMediaStreamSource(micStream);
+    const hp = ac.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 50;
+    const lp = ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 900;
+    micAnalyser = ac.createAnalyser();
+    micAnalyser.fftSize = 1024;
+    micAnalyser.smoothingTimeConstant = 0;
+    src.connect(hp); hp.connect(lp); lp.connect(micAnalyser);
+    micData = new Uint8Array(micAnalyser.fftSize);
+    noiseFloor = 0.015;
+    lastRms = 0;
+    knockListenSince = performance.now();
+    micIgnoreUntil = knockListenSince + MIC_CALIB_MS;
+    micListening = true;
+    setMicUi(true);
+    loopMic();
+  }catch(e){
+    if(token === micToken) setMicUi(false);
+  }
+}
+
+function setMicUi(on){
+  if(!gavelCap) return;
+  gavelCap.classList.toggle('listening', on);
+  gavelCap.textContent = on ? 'Lauscht dem Tisch' : 'Hammer tippen';
+  if(knockReady && knocks === 0){
+    camHint.textContent = on
+      ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+      : 'Kein Gehör — tippt den Hammer dreimal.';
+  }
+}
+
+function stopMic(){
+  micToken++;
+  micListening = false;
+  if(micRaf){ cancelAnimationFrame(micRaf); micRaf = 0; }
+  if(micStream){
+    micStream.getTracks().forEach(t => t.stop());
+    micStream = null;
+  }
+  micAnalyser = null;
+  if(gavelCap){
+    gavelCap.classList.remove('listening');
+    gavelCap.textContent = 'Drei Schläge';
+  }
+}
+
+function micRms(){
+  micAnalyser.getByteTimeDomainData(micData);
+  let sum = 0;
+  for(let i = 0; i < micData.length; i++){
+    const v = (micData[i] - 128) / 128;
+    sum += v * v;
+  }
+  return Math.sqrt(sum / micData.length);
+}
+
+function loopMic(){
+  if(!micListening || finaleDone) return;
+  micRaf = requestAnimationFrame(loopMic);
+  const rms = micRms();
+  const now = performance.now();
+  if(now - knockListenSince < MIC_CALIB_MS){
+    noiseFloor = Math.max(0.008, noiseFloor * 0.8 + rms * 0.2);
+    lastRms = rms;
+    return;
+  }
+  if(rms < noiseFloor * 1.6) noiseFloor = noiseFloor * 0.97 + rms * 0.03;
+  if(knocks > 0 && knocks < 3 && now - lastSeqAt > KNOCK_SEQ_RESET){
+    knocks = 0;
+    knockDots.forEach(d => d.classList.remove('on'));
+    camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
+  }
+  if(now < micIgnoreUntil){ lastRms = rms; return; }
+  const thresh = Math.max(0.11, noiseFloor * 5.5);
+  const onset = rms > thresh && rms > lastRms * 1.45;
+  if(onset && now - lastKnockAt > KNOCK_GAP_MIN){
+    registerKnock('mic');
+  }
+  lastRms = rms;
 }
 
 function showStage(){
@@ -463,10 +629,12 @@ async function startCamera(){
 
 document.getElementById('openCamBtn').addEventListener('click', () => {
   unlockAudio();
+  primeMic();
   startCamera();
 });
 document.getElementById('skipCamBtn').addEventListener('click', () => {
   unlockAudio();
+  primeMic();
   showStage();
   camHint.textContent = 'Ohne Kamera — legt die Schatullen, tippt hier.';
 });
@@ -603,6 +771,7 @@ function runFinaleCanvas(cx,cy){
 function triggerFinale(){
   if(finaleDone) return;
   finaleDone = true;
+  stopMic();
   playFinaleSound();
   runFinaleCanvas(window.innerWidth/2, window.innerHeight/2);
   setTimeout(() => { camScreen.style.display='none'; finaleScreen.classList.add('show'); }, 500);
