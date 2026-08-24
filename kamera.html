@@ -357,7 +357,6 @@ let knockReady = false;
 let micStream = null;
 let micAnalyser = null;
 let micByte = null;
-let micFreq = null;
 let micRaf = 0;
 let audioGraphReady = false;
 let sensorsOk = false;
@@ -366,6 +365,9 @@ let prevLevel = 0;
 let lastKnockAt = 0;
 let lastSeqAt = 0;
 let ignoreUntil = 0;
+let loudMs = 0;
+let rumbleUntil = 0;
+let pendingKnock = null;
 
 /* ════ DOM ════ */
 const permScreen   = document.getElementById('permScreen');
@@ -408,6 +410,9 @@ function updateCount(){
     ignoreUntil = performance.now() + 900;
     noiseFloor = 0.04;
     prevLevel = 0;
+    loudMs = 0;
+    rumbleUntil = 0;
+    pendingKnock = null;
     armSensors();
   } else if(!ready && knockReady){
     knockReady = false;
@@ -571,49 +576,65 @@ function wireMic(){
   micAnalyser.connect(mute);
   mute.connect(ac.destination);
   micByte = new Uint8Array(micAnalyser.fftSize);
-  micFreq = new Uint8Array(micAnalyser.frequencyBinCount);
   audioGraphReady = true;
   noiseFloor = 0.04;
   prevLevel = 0;
+  loudMs = 0;
+  rumbleUntil = 0;
+  pendingKnock = null;
   if(!micRaf) loopMic();
 }
 
 function sampleMic(){
   micAnalyser.getByteTimeDomainData(micByte);
-  let peak = 0;
+  let peak = 0, sum = 0;
   for(let i = 0; i < micByte.length; i++){
     const v = Math.abs(micByte[i] - 128) / 128;
     if(v > peak) peak = v;
+    sum += v * v;
   }
-  micAnalyser.getByteFrequencyData(micFreq);
-  const ac = audioCtx;
-  const binHz = (ac && ac.sampleRate ? ac.sampleRate : 44100) / micAnalyser.fftSize;
-  const i0 = Math.max(1, Math.floor(50 / binHz));
-  const i1 = Math.min(micFreq.length - 1, Math.ceil(650 / binHz));
-  let thud = 0, n = 0;
-  for(let i = i0; i <= i1; i++){ thud += micFreq[i]; n++; }
-  thud = n ? thud / (n * 255) : 0;
-  return Math.max(peak, thud);
+  const rms = Math.sqrt(sum / micByte.length);
+  return { peak, rms };
 }
 
 function loopMic(){
   if(finaleDone){ micRaf = 0; return; }
   micRaf = requestAnimationFrame(loopMic);
   if(!audioGraphReady || !micAnalyser) return;
-  const level = sampleMic();
-  if(earFill) earFill.style.width = Math.min(100, level * 170) + '%';
-  noiseFloor = noiseFloor * 0.97 + Math.min(level, noiseFloor * 2.8) * 0.03;
-  const onset = level - prevLevel;
-  prevLevel = level * 0.55 + prevLevel * 0.45;
+  const { peak, rms } = sampleMic();
+  if(earFill) earFill.style.width = Math.min(100, peak * 170) + '%';
+  noiseFloor = noiseFloor * 0.97 + Math.min(rms, noiseFloor * 2.8) * 0.03;
+  const onset = peak - prevLevel;
+  prevLevel = peak * 0.55 + prevLevel * 0.45;
   const now = performance.now();
+  const quiet = Math.max(0.045, noiseFloor * 1.7);
+  if(rms > quiet) loudMs = Math.min(500, loudMs + 16);
+  else loudMs = Math.max(0, loudMs - 28);
+  if(loudMs > 120){
+    rumbleUntil = now + 320;
+    pendingKnock = null;
+  }
   if(knockReady && knocks > 0 && knocks < 3 && now - lastSeqAt > KNOCK_SEQ_RESET){
     knocks = 0;
     knockDots.forEach(d => d.classList.remove('on'));
     camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
   }
-  if(!knockReady || now < ignoreUntil) return;
-  const thresh = Math.max(0.18, noiseFloor * 2.7);
-  if(level > thresh && onset > 0.09) registerKnock('mic');
+  if(!knockReady || now < ignoreUntil || now < rumbleUntil) return;
+  const thresh = Math.max(0.22, noiseFloor * 3.0);
+  const crest = peak / (rms + 0.012);
+  if(!pendingKnock){
+    if(peak > thresh && onset > 0.12 && crest >= 2.5 && loudMs < 80){
+      pendingKnock = { t: now };
+    }
+    return;
+  }
+  const age = now - pendingKnock.t;
+  if(rms < quiet && age >= 28 && age <= 150){
+    pendingKnock = null;
+    registerKnock('mic');
+  } else if(age > 150){
+    pendingKnock = null;
+  }
 }
 
 function hushSensors(){
