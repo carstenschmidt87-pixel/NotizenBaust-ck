@@ -368,6 +368,9 @@ let ignoreUntil = 0;
 let loudMs = 0;
 let rumbleUntil = 0;
 let pendingKnock = null;
+let moveMs = 0;
+let moveBlockUntil = 0;
+let moveGuardOn = false;
 
 /* ════ DOM ════ */
 const permScreen   = document.getElementById('permScreen');
@@ -413,6 +416,8 @@ function updateCount(){
     loudMs = 0;
     rumbleUntil = 0;
     pendingKnock = null;
+    moveMs = 0;
+    moveBlockUntil = 0;
     armSensors();
   } else if(!ready && knockReady){
     knockReady = false;
@@ -487,6 +492,7 @@ function knockHint(){
 function registerKnock(src){
   if(finaleDone || litCount() < TARGET || !knockReady) return;
   const now = performance.now();
+  if(src === 'mic' && now < moveBlockUntil) return;
   if(now - lastKnockAt < KNOCK_GAP_MIN) return;
   unlockAudio();
   lastKnockAt = now;
@@ -540,6 +546,7 @@ async function armSensors(){
   unlockAudio();
   await resumeAC();
   const micOk = await ensureMic();
+  await ensureMoveGuard();
   setMicUi(micOk);
 }
 
@@ -582,7 +589,41 @@ function wireMic(){
   loudMs = 0;
   rumbleUntil = 0;
   pendingKnock = null;
+  moveMs = 0;
   if(!micRaf) loopMic();
+}
+
+async function ensureMoveGuard(){
+  try{
+    if(typeof DeviceMotionEvent === 'undefined') return false;
+    if(typeof DeviceMotionEvent.requestPermission === 'function'){
+      const r = await DeviceMotionEvent.requestPermission();
+      if(r !== 'granted') return false;
+    }
+    if(!moveGuardOn){
+      moveGuardOn = true;
+      window.addEventListener('devicemotion', onMoveGuard, {passive:true});
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+function onMoveGuard(e){
+  const now = performance.now();
+  let a = 0;
+  if(e.acceleration && (e.acceleration.x != null || e.acceleration.y != null || e.acceleration.z != null)){
+    a = Math.hypot(e.acceleration.x||0, e.acceleration.y||0, e.acceleration.z||0);
+  } else if(e.accelerationIncludingGravity){
+    const g = e.accelerationIncludingGravity;
+    a = Math.abs(Math.hypot(g.x||0, g.y||0, g.z||0) - 9.81);
+  }
+  const step = e.interval > 0 ? e.interval : 16;
+  if(a >= 1.6) moveMs = Math.min(700, moveMs + step);
+  else moveMs = Math.max(0, moveMs - step * 1.4);
+  if(moveMs > 140){
+    moveBlockUntil = now + 500;
+    pendingKnock = null;
+  }
 }
 
 function sampleMic(){
@@ -619,7 +660,7 @@ function loopMic(){
     knockDots.forEach(d => d.classList.remove('on'));
     camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
   }
-  if(!knockReady || now < ignoreUntil || now < rumbleUntil) return;
+  if(!knockReady || now < ignoreUntil || now < rumbleUntil || now < moveBlockUntil) return;
   const thresh = Math.max(0.22, noiseFloor * 3.0);
   const crest = peak / (rms + 0.012);
   if(!pendingKnock){
@@ -639,6 +680,10 @@ function loopMic(){
 
 function hushSensors(){
   if(micRaf){ cancelAnimationFrame(micRaf); micRaf = 0; }
+  if(moveGuardOn){
+    window.removeEventListener('devicemotion', onMoveGuard);
+    moveGuardOn = false;
+  }
   if(micStream){
     micStream.getAudioTracks().forEach(t => { try { t.stop(); } catch(e){} });
   }
@@ -687,6 +732,7 @@ async function startCeremonialMedia(wantCam){
   }else{
     await ensureMic();
   }
+  await ensureMoveGuard();
   setMicUi(audioGraphReady);
 }
 
