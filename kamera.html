@@ -240,7 +240,7 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Stellt die zehn Schatullen im Dreieck auf — eins, zwei, drei, vier.<br>Jede Hand setzt einen Stein. Dann drei Schläge.</p>
+  <p>Stellt die zehn Schatullen gemeinsam ins Dreieck.<br>Die Handys bleiben bei euch — nur dieses eine Gerät besiegelt das Werk. Dann drei Schläge.</p>
   <div class="perm-actions">
     <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
     <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
@@ -251,7 +251,7 @@
 <div id="camScreen">
   <div class="cam-top">
     <div class="cam-title">Die zehn Steine</div>
-    <div class="cam-hint" id="camHint">Eine Hand, ein Stein.<br>Reicht das Gerät weiter.</div>
+    <div class="cam-hint" id="camHint">Legt die Schatullen gemeinsam.<br>Tippt die Stellen hier.</div>
   </div>
 
   <div class="video-wrap" id="videoWrap">
@@ -363,11 +363,11 @@ function updateCount(){
     knockDots.forEach(d => d.classList.remove('on'));
   }
   if(ready){
-    camHint.textContent = 'Das Dreieck steht.\nGebt drei Schläge.';
+    camHint.textContent = 'Das Dreieck steht.\nAlle: drei Schläge auf den Tisch.';
   } else if(n === 0){
-    camHint.textContent = 'Eine Hand, ein Stein.\nReicht das Gerät weiter.';
+    camHint.textContent = 'Legt die Schatullen gemeinsam.\nTippt die Stellen hier.';
   } else {
-    camHint.textContent = 'Reicht das Gerät weiter.\nEins, zwei, drei, vier.';
+    camHint.textContent = 'Weiter — eins, zwei, drei, vier.';
   }
 }
 
@@ -429,7 +429,7 @@ gavelBtn.addEventListener('click', () => {
   flashKnock();
   playKnock(knocks);
   buzz([60, 40, 90 + knocks * 30]);
-  camHint.textContent = knocks === 1 ? 'Noch zwei Schläge.' : knocks === 2 ? 'Noch ein Schlag.' : 'Der Stein ist gesetzt.';
+  camHint.textContent = knocks === 1 ? 'Noch zwei Schläge — alle zusammen.' : knocks === 2 ? 'Noch ein Schlag — alle zusammen.' : 'Der Stein ist gesetzt.';
   if(knocks >= 3) triggerFinale();
 });
 
@@ -468,7 +468,7 @@ document.getElementById('openCamBtn').addEventListener('click', () => {
 document.getElementById('skipCamBtn').addEventListener('click', () => {
   unlockAudio();
   showStage();
-  camHint.textContent = 'Ohne Kamera — eine Hand, ein Stein.';
+  camHint.textContent = 'Ohne Kamera — legt die Schatullen, tippt hier.';
 });
 
 /* ════ MEISTER-NOTAUSGANG ════ */
