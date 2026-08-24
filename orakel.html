@@ -103,8 +103,8 @@
 
   #finale {
     position:fixed; inset:0; z-index:150; display:none;
-    flex-direction:column; align-items:center; justify-content:center;
-    padding:2rem; text-align:center; background:var(--vd); overflow-y:auto;
+    flex-direction:column; align-items:center; justify-content:flex-start;
+    padding:3.5rem 2rem 3rem; text-align:center; background:var(--vd); overflow-y:auto;
   }
   #finale.show { display:flex; }
   .fin-orn { opacity:0; animation:rise 1.2s ease forwards 0.3s; margin-bottom:2rem; }
@@ -132,6 +132,59 @@
     opacity:0; animation:rise 1.2s ease forwards 2.6s;
     margin-top:1.6rem; font-family:'Cinzel',serif; font-size:0.88rem;
     letter-spacing:0.28em; color:var(--vg); opacity:0.92;
+  }
+  /* ── Ein Satz bleibt ── */
+  .fin-mosaik {
+    opacity:0; animation:rise 1.4s ease forwards 3.2s;
+    width:100%; max-width:400px; margin-top:2.6rem; padding-top:2rem;
+    border-top:1px solid rgba(201,168,76,0.18);
+  }
+  .mo-title {
+    font-family:'Cinzel',serif; font-size:clamp(1.05rem,4.6vw,1.25rem);
+    letter-spacing:0.24em; color:var(--go); text-transform:uppercase; margin-bottom:0.8rem;
+  }
+  .mo-lead {
+    font-style:italic; font-size:1.18rem; line-height:1.7;
+    color:var(--cr); opacity:0.96; margin-bottom:1.4rem;
+  }
+  .mo-list { display:flex; flex-direction:column; gap:0.7rem; margin-bottom:1.4rem; }
+  .mo-item {
+    font-style:italic; font-size:clamp(1.2rem,4.6vw,1.38rem); line-height:1.6;
+    color:var(--gl); animation:rise 0.7s ease;
+    padding:0.55rem 0.9rem; border:1px solid rgba(201,168,76,0.18);
+    border-radius:4px; background:rgba(61,26,110,0.32);
+  }
+  .mo-bar { display:flex; gap:0.5rem; align-items:center; margin-bottom:0.7rem; }
+  .mo-bar input {
+    flex:1; background:rgba(255,255,255,0.12); border:1px solid rgba(201,168,76,0.45);
+    text-shadow:none; border-radius:22px; color:var(--gl);
+    font-family:'Cormorant Garamond',serif; font-size:1.24rem;
+    padding:0.65rem 1.1rem; outline:none; -webkit-appearance:none;
+  }
+  .mo-bar input::placeholder { color:rgba(201,168,76,0.5); font-style:italic; }
+  .mo-bar input:focus { border-color:rgba(201,168,76,0.6); }
+  .mo-bar button {
+    flex:0 0 auto; background:transparent; border:1px solid rgba(201,168,76,0.4);
+    color:var(--go); font-family:'Cinzel',serif; font-size:0.88rem;
+    letter-spacing:0.22em; padding:0.65rem 1.2rem; text-transform:uppercase;
+    cursor:pointer; border-radius:22px; transition:all 0.25s;
+  }
+  .mo-bar button:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .mo-count {
+    font-family:'Cinzel',serif; font-size:0.82rem; letter-spacing:0.22em;
+    color:var(--vg); opacity:0.92; margin-bottom:1.8rem;
+  }
+  .mo-cta {
+    display:inline-block; text-decoration:none;
+    background:transparent; border:1px solid rgba(201,168,76,0.45); color:var(--go);
+    font-family:'Cinzel',serif; font-size:0.98rem; letter-spacing:0.26em;
+    padding:0.85rem 1.9rem; text-transform:uppercase; border-radius:1px;
+    transition:all 0.3s;
+  }
+  .mo-cta:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
+  .mo-note {
+    font-style:italic; font-size:1.08rem; line-height:1.6;
+    color:var(--vg); opacity:0.95; margin-top:0.9rem;
   }
   @keyframes rise { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
   @keyframes fade { from{opacity:0;} to{opacity:1;} }
@@ -179,7 +232,30 @@
   <p class="fin-text">Drei Säulen tragen nun euren Tempel.</p>
   <div class="fin-word">WEISHEIT · STÄRKE · SCHÖNHEIT</div>
   <p class="fin-text" style="animation-delay:2.1s;">Weisheit, ihn zu führen.<br>Stärke, ihn zu tragen.<br>Schönheit, ihn zu vollenden.<br><br>Geht in Frieden, Schwestern und Brüder.</p>
-  <div class="fin-sub">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
+
+  <div class="fin-mosaik">
+    <div class="mo-title">Ein Satz bleibt</div>
+    <p class="mo-lead">
+      Jedes Paar hat heute einen Satz bewahrt.<br>
+      Reicht dieses Gerät im Kreis — jedes Paar<br>
+      legt seinen Satz in das Mosaik des Abends.<br>
+      Ohne Namen. Nur die Worte bleiben.
+    </p>
+    <div class="mo-list" id="moList"></div>
+    <div class="mo-bar">
+      <input id="moInp" type="text" maxlength="140" placeholder="Euer Satz…"
+        autocomplete="off" autocorrect="off" spellcheck="false"/>
+      <button id="moAdd">Legen</button>
+    </div>
+    <div class="mo-count" id="moCount">Noch liegt kein Satz im Mosaik.</div>
+    <a class="mo-cta" href="urkunde.html">✦ &nbsp; Zur Lehrlingsurkunde &nbsp; ✦</a>
+    <p class="mo-note">
+      Öffnet die Urkunde danach auch auf den eigenen Handys —<br>
+      tragt euren Namen ein und speichert sie als PDF.
+    </p>
+  </div>
+
+  <div class="fin-sub" style="margin-top:2rem;">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
 </div>
 
 <script>
@@ -197,10 +273,33 @@
      solveLine: Antwort des Orakels beim Lösen (darf das Wort nennen)
    WICHTIG: Ausser in solveLine darf KEIN Text das eigene Lösungswort enthalten.
    ══════════════════════════════════════════════════════════ */
+/* Das Orakel kennt die Namen des Abends. */
+const NAMES = [
+  'Schwester Sabrina Yvonne','Bruder Constantin',
+  'Schwester Sabrina','Bruder Arno',
+  'Schwester Stefanie','Bruder Sven',
+  'Schwester Sandra','Bruder Uwe',
+  'Schwester Ursula','Bruder Carsten'
+];
+function randName(){ return NAMES[Math.floor(Math.random()*NAMES.length)]; }
+
+/* Vor jeder Säule fragt das Orakel die Runde etwas zurück (Feld "ask").
+   Erst nach einer Antwort stellt es sein Rätsel. */
+const ASK_ACKS = [
+  'So ist es gut. Ich verwahre eure Worte — wie ich eure Namen verwahre, {n}, deinen und die aller anderen. Hört nun…',
+  'Eure Antwort ist angenommen. Ja, {n} — ich kenne euch alle, jede und jeden an diesem Tisch. Hört nun…',
+  'Das Orakel vergisst nichts, was ihm anvertraut wird. Nicht eure Worte, nicht eure Namen — nicht einmal deinen, {n}. Hört nun…'
+];
+const ASK_SHORT = [
+  'Zu knapp für ein Orakel. Sprecht in einem ganzen Satz.',
+  'Mehr will ich hören. Beratet euch kurz und schreibt mir einen ganzen Satz.'
+];
+
 const RIDDLES = [
   { /* 1 — BENENNEN */
     answer:'WEISHEIT', accepts:['weisheit'], prog:'Erste Säule',
     openCls:'oracle',
+    ask:'Ihr tretet vor mich — doch ein Orakel gibt nicht nur, es nimmt auch. Ehe ich die erste Säule frage, fragt euch mein erstes Wort: Was hat euch an diesem Abend überrascht? Beratet euch, einigt euch auf eine Antwort und schreibt sie mir.',
     opening:'Ihr habt das Werk vollendet und das Licht des Ostens entzündet. Doch das Licht trägt einen Namen — die erste der drei Säulen, die jeden Tempel tragen. Der Lehrling kennt sie nicht; die Gesellin beginnt, sie zu ahnen. Fragt mich, Schwestern — doch nennen müsst ihr mich selbst. Wie heiße ich?',
     rules:[
       {keys:['saule','pfeiler','erste','drei'],responses:[
@@ -225,6 +324,7 @@ const RIDDLES = [
   { /* 2 — ZAHLEN-CODE */
     answer:'STÄRKE', accepts:['starke','staerke'], prog:'Zweite Säule',
     openCls:'oracle',
+    ask:'Die zweite Säule hat ihren Preis. Sagt mir zuerst: Was hat euer Gegenüber heute getan, das euch geholfen hat? Eine Antwort für die Runde genügt — sprecht sie laut, dann schreibt sie mir.',
     opening:'Die erste Säule habt ihr genannt. Die zweite spreche ich euch in Zahlen — jede Zahl ein Buchstabe, wie er im Alphabet steht. A ist eins, B ist zwei. Fügt sie zusammen und nennt die zweite Säule.',
     openLine2:'19 · 20 · 1 · 18 · 11 · 5',
     rules:[
@@ -244,6 +344,7 @@ const RIDDLES = [
   { /* 3 — ANAGRAMM */
     answer:'SCHÖNHEIT', accepts:['schonheit','schoenheit'], prog:'Dritte Säule',
     openCls:'oracle',
+    ask:'Ein Letztes will ich wissen, ehe ich die dritte Säule gebe: Was nehmt ihr aus diesem Abend mit — hinaus in die Welt vor diesen Toren? Einigt euch auf eine Antwort und schreibt sie mir.',
     opening:'Zwei Säulen tragen schon. Die dritte gebe ich euch zerfallen — neun Steine in falscher Ordnung. Fügt sie neu und nennt die Säule, die das Werk vollendet.',
     openLine2:'N · E · I · H · C · S · H · Ö · T',
     rules:[
@@ -275,7 +376,7 @@ const log = document.getElementById('log');
 const inp = document.getElementById('inp');
 const send = document.getElementById('send');
 const prog = document.getElementById('prog');
-let ri = 0, turns = 0, finished = false;
+let ri = 0, turns = 0, finished = false, awaitingAsk = false;
 const ruleIdx = {};
 
 function norm(s){
@@ -298,21 +399,38 @@ function oracleSays(text,cls){
 }
 function presentRiddle(){
   const R=RIDDLES[ri]; prog.textContent=R.prog||('Rätsel '+(ri+1));
+  if(R.ask){ awaitingAsk=true; oracleSays(R.ask); return; }
+  showOpening();
+}
+function showOpening(){
+  const R=RIDDLES[ri];
   oracleSays(R.opening, R.openCls);
   if(R.openLine2){ setTimeout(()=>addMsg(R.openLine2,'cipher'), 1500); }
 }
 
+// Gelegentlich spricht das Orakel jemanden mit Namen an.
+function withName(text){
+  return Math.random()<0.45 ? randName()+' — '+text : text;
+}
+
 function respond(raw){
   const m=norm(raw); const R=RIDDLES[ri];
+  if(awaitingAsk){
+    if(m.length<6) return oracleSays(pick(ASK_SHORT,'ashort'));
+    awaitingAsk=false;
+    oracleSays(pick(ASK_ACKS,'aack').replace('{n}',randName()));
+    setTimeout(showOpening, 2600);
+    return;
+  }
   if(R.accepts.some(a=>m.includes(a))) return solveRiddle();
   turns++;
   if(META_KEYS.some(k=>m.includes(norm(k)))) return oracleSays(pick(META,'meta'));
   for(let r=0;r<R.rules.length;r++){
     if(R.rules[r].keys.some(k=>m.includes(k))) return oracleSays(pick(R.rules[r].responses,'r'+ri+'_'+r));
   }
-  if(turns<3) return oracleSays(pick(R.nudges.early,'ne'+ri));
-  if(turns<6) return oracleSays(pick(R.nudges.mid,'nm'+ri));
-  return oracleSays(pick(R.nudges.late,'nl'+ri));
+  if(turns<3) return oracleSays(withName(pick(R.nudges.early,'ne'+ri)));
+  if(turns<6) return oracleSays(withName(pick(R.nudges.mid,'nm'+ri)));
+  return oracleSays(withName(pick(R.nudges.late,'nl'+ri)));
 }
 
 function submit(){
@@ -354,6 +472,41 @@ document.getElementById('seal').addEventListener('click',()=>{
 });
 
 window.addEventListener('load',()=>{ setTimeout(presentRiddle,500); inp.focus(); });
+
+/* ════ Ein Satz bleibt — das Mosaik des Abends ════ */
+const moInp = document.getElementById('moInp');
+const moAdd = document.getElementById('moAdd');
+const moList = document.getElementById('moList');
+const moCount = document.getElementById('moCount');
+/* Sätze überleben ein versehentliches Neuladen — aber nur am selben Tag,
+   damit Probeläufe von früher das Mosaik des Abends nicht füllen. */
+const moDay = new Date().toISOString().slice(0,10);
+let moS = [];
+try{
+  const st = JSON.parse(localStorage.getItem('orakelMosaik')||'null');
+  if(st && st.d===moDay && Array.isArray(st.s)) moS = st.s;
+}catch(e){ moS=[]; }
+function moRender(){
+  moList.innerHTML='';
+  moS.forEach(s=>{
+    const d=document.createElement('div'); d.className='mo-item';
+    d.textContent='„'+s+'“'; moList.appendChild(d);
+  });
+  if(moS.length===0) moCount.textContent='Noch liegt kein Satz im Mosaik.';
+  else if(moS.length>=5) moCount.textContent='Fünf Sätze — das Mosaik des Abends ist vollendet.';
+  else moCount.textContent=moS.length+' von 5 Sätzen gelegt.';
+}
+function moSubmit(){
+  const v=moInp.value.trim(); if(!v) return;
+  moS.push(v);
+  try{ localStorage.setItem('orakelMosaik',JSON.stringify({d:moDay,s:moS})); }catch(e){}
+  moInp.value=''; moRender(); moInp.focus();
+}
+if(moAdd){
+  moAdd.addEventListener('click',moSubmit);
+  moInp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); moSubmit(); }});
+  moRender();
+}
 
 /* ════ FX & Klang (wie auf den anderen Seiten) ════ */
 const fxCanvas=document.getElementById('fxCanvas'), fxCtx=fxCanvas.getContext('2d');

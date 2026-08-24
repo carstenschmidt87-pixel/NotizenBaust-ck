@@ -280,6 +280,24 @@
   }
   #spokeBtn { margin:0.35rem auto 0.6rem; }
   #afterTalk { width:100%; display:flex; flex-direction:column; align-items:center; }
+
+  /* ── Das sechste Wort (Bonus) ── */
+  .bonus-wrap {
+    display:flex; flex-direction:column; align-items:center; width:100%;
+    margin-top:3rem; padding-top:2rem;
+    border-top:1px solid rgba(201,168,76,0.14);
+  }
+  .bonus-win {
+    display:none; text-align:center; margin-top:1.2rem;
+    font-family:'Cinzel',serif; font-size:1.55rem; letter-spacing:0.3em;
+    color:var(--go); text-shadow:0 0 26px rgba(201,168,76,0.55);
+  }
+  .bonus-win small {
+    display:block; margin-top:0.55rem; font-family:'Cormorant Garamond',serif;
+    font-style:italic; font-size:1.1rem; letter-spacing:0.04em; color:var(--vg);
+    line-height:1.5;
+  }
+  .bonus-win.show { display:block; animation:fadeUp 0.8s ease; }
 </style>
 <style>
   /* ===== Zier-Bilder (zz) ===== */
@@ -385,6 +403,23 @@
   <div class="frag-glyph"><span class="frag-letter" id="fragLetterP3">?</span></div>
   <div class="frag-pos" style="margin-bottom:2.2rem;">Dein Splitter — Stelle <span id="fragPosP3">?</span></div>
   <button class="btn-cam" id="camBtn">✦ &nbsp; Zum Schlussstein</button>
+
+  <div class="bonus-wrap">
+    <div class="eyebrow" style="opacity:.9;">Das verborgene sechste Wort</div>
+    <p class="verse" style="max-width:290px;">
+      Während ihr auf die anderen wartet:<br>
+      In den fünf Worten glimmt ein sechstes —<br>
+      aus jedem genau <b>ein</b> Buchstabe.<br>
+      Fünf Funken, ein Zeichen des Gesellen.
+    </p>
+    <div class="riddle-wrap">
+      <input class="inp" id="bonusInp" type="text" maxlength="8"
+        placeholder="· · · · ·" autocomplete="off" autocorrect="off"
+        autocapitalize="characters" spellcheck="false"/>
+      <button class="btn btn-sm" id="bonusBtn">Prüfen</button>
+    </div>
+    <div class="bonus-win" id="bonusWin">✦ &nbsp;STERN&nbsp; ✦<br><small>Der Flammende Stern — das Zeichen des Gesellen.<br>Flüstert es dem Meister.</small></div>
+  </div>
 </div>
 
 <script>
@@ -605,6 +640,22 @@ document.getElementById('camBtn').addEventListener('click',()=>{window.location.
   const c=document.getElementById('checkBtn');if(c)c.addEventListener('click',checkFive);
   const b=document.getElementById('toPh3Btn');
   if(b)b.addEventListener('click',()=>{ph2.classList.add('hidden');ph3.classList.remove('hidden');window.scrollTo(0,0);});
+})();
+
+// ── Das sechste Wort (Bonus) ──
+(function(){
+  const bi=document.getElementById('bonusInp'), bb=document.getElementById('bonusBtn'), bw=document.getElementById('bonusWin');
+  if(!bi||!bb||!bw) return;
+  function checkBonus(){
+    if(bi.value.trim().toUpperCase()==='STERN'){
+      bi.classList.add('solved'); bb.style.display='none'; bw.classList.add('show');
+      runFX(window.innerWidth/2, window.innerHeight/2);
+    } else {
+      bi.classList.add('wrong'); setTimeout(()=>bi.classList.remove('wrong'),500); bi.value='';
+    }
+  }
+  bb.addEventListener('click',checkBonus);
+  bi.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); checkBonus(); }});
 })();
 </script>
 </body>
