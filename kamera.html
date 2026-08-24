@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Das Werk vollenden</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root {
-    --vd:#1a0a2e; --vg:#b06ad4; --go:#c9a84c; --gl:#e8d5a0; --cr:#f5f0e8;
+    --vd:#100818; --vg:#e2b7f4; --go:#edc75a; --gl:#f7edc4; --cr:#fffaf2;
   }
-  html, body { height:100%; overflow:hidden; background:var(--vd); font-family:'Cormorant Garamond',serif; color:var(--cr); }
+  html, body { height:100%; overflow:hidden; background:var(--vd); font-family:'Cormorant Garamond',serif; color:var(--cr); text-shadow:0 1px 12px rgba(6,0,14,.82); }
   body::before {
     content:''; position:fixed; inset:0;
-    background:radial-gradient(ellipse 70% 80% at 50% 40%,rgba(61,26,110,0.95) 0%,transparent 70%);
+    background:radial-gradient(ellipse 75% 85% at 50% 40%,rgba(10,4,18,0.7) 0%,rgba(10,4,18,0.25) 70%);
     pointer-events:none; z-index:0;
   }
   #fxCanvas { position:fixed; inset:0; pointer-events:none; z-index:200; opacity:0; }
@@ -25,19 +25,19 @@
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:2rem; gap:1.4rem; text-align:center;
   }
-  #permScreen svg { width:52px; opacity:0.5; }
+  #permScreen svg { width:58px; opacity:0.82; }
   #permScreen h1 {
-    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    font-family:'Cinzel',serif; font-size:clamp(1.2rem,5.6vw,1.55rem);
     letter-spacing:0.2em; color:var(--gl); text-transform:uppercase;
   }
   #permScreen p {
-    font-style:italic; font-weight:300; font-size:clamp(1rem,4vw,1.2rem);
-    line-height:1.65; color:var(--cr); opacity:0.8; max-width:320px;
+    font-style:italic; font-weight:400; font-size:clamp(1.18rem,4.6vw,1.4rem);
+    line-height:1.65; color:var(--cr); opacity:0.96; max-width:320px;
   }
   .perm-actions { display:flex; flex-direction:column; align-items:center; gap:0.7rem; width:100%; }
   .btn-gold {
     background:transparent; border:1px solid rgba(201,168,76,0.5); color:var(--go);
-    font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+    font-family:'Cinzel',serif; font-size:0.88rem; letter-spacing:0.3em;
     padding:0.8rem 2rem; text-transform:uppercase; cursor:pointer; transition:all 0.3s; border-radius:1px;
   }
   .btn-gold:hover { border-color:var(--go); background:rgba(201,168,76,0.06); }
@@ -45,7 +45,7 @@
   .btn-gold:disabled { opacity:0.35; pointer-events:none; }
   .btn-sm {
     background:transparent; border:1px solid rgba(201,168,76,0.2); color:rgba(201,168,76,0.5);
-    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.25em; padding:0.45rem 1rem;
+    font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.25em; padding:0.45rem 1rem;
     text-transform:uppercase; cursor:pointer; transition:all 0.3s; border-radius:1px;
   }
   .btn-sm:hover { border-color:rgba(201,168,76,0.5); color:var(--go); }
@@ -59,12 +59,12 @@
 
   .cam-top { text-align:center; z-index:1; width:100%; }
   .cam-title {
-    font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
-    color:var(--go); text-transform:uppercase; opacity:0.8; margin-bottom:0.3rem;
+    font-family:'Cinzel',serif; font-size:0.82rem; letter-spacing:0.3em;
+    color:var(--go); text-transform:uppercase; opacity:0.95; margin-bottom:0.3rem;
   }
   .cam-hint {
-    font-style:italic; font-size:clamp(0.85rem,3vw,1rem);
-    color:var(--cr); opacity:0.75; line-height:1.5;
+    font-style:italic; font-size:clamp(1.05rem,3.8vw,1.22rem);
+    color:var(--cr); opacity:0.95; line-height:1.5;
     white-space:pre-line;
   }
 
@@ -74,7 +74,7 @@
     border:1px solid rgba(201,168,76,0.2);
     box-shadow:0 0 30px rgba(176,106,212,0.15);
     max-height:62vh;
-    background:linear-gradient(rgba(26,10,46,.55),rgba(26,10,46,.72)),url('gewoelbe.jpg') center/cover no-repeat;
+    background:linear-gradient(rgba(16,8,24,.38),rgba(16,8,24,.58)),url('gewoelbe.jpg') center/cover no-repeat;
   }
   #video { width:100%; height:100%; object-fit:cover; display:none; }
   #video.on { display:block; }
@@ -97,7 +97,7 @@
     display:flex; gap:clamp(10px,4.5vw,26px); justify-content:center; align-items:center;
   }
   .tet-stone {
-    width:clamp(38px,11.5vw,54px); height:clamp(38px,11.5vw,54px);
+    width:clamp(44px,13vw,62px); height:clamp(44px,13vw,62px);
     border-radius:50%;
     border:1.5px solid rgba(201,168,76,0.38);
     background:rgba(26,10,46,0.38);
@@ -128,7 +128,7 @@
 
   .cam-bottom { width:100%; text-align:center; z-index:1; }
   .count-label {
-    font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.3em;
+    font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.3em;
     color:var(--vg); text-transform:uppercase; opacity:0.7; margin-bottom:0.55rem;
   }
   .cam-actions { display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-top:0.2rem; align-items:center; }
@@ -164,8 +164,8 @@
     box-shadow:0 0 28px rgba(201,168,76,0.7);
   }
   .gavel-cap {
-    font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.28em;
-    color:var(--go); text-transform:uppercase; opacity:0.8;
+    font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.28em;
+    color:var(--go); text-transform:uppercase; opacity:0.95;
   }
   .gavel-cap.listening {
     animation:listenPulse 1.6s ease-in-out infinite;
@@ -202,10 +202,10 @@
   }
   #finaleScreen.show { display:flex; }
   .fin-orn { margin-bottom:2rem; opacity:0; animation:fadeUp 1.2s ease forwards 0.3s; }
-  .fin-orn svg { width:52px; opacity:0.6; }
+  .fin-orn svg { width:60px; opacity:0.85; }
   .fin-title {
     opacity:0; animation:fadeUp 1.2s ease forwards 0.6s;
-    font-family:'Cinzel',serif; font-size:clamp(1rem,5vw,1.3rem);
+    font-family:'Cinzel',serif; font-size:clamp(1.2rem,5.6vw,1.55rem);
     letter-spacing:0.2em; color:var(--gl); text-transform:uppercase; margin-bottom:0.6rem;
   }
   .fin-rule {
@@ -216,13 +216,13 @@
   }
   .fin-text {
     opacity:0; animation:fadeUp 1.4s ease forwards 1.1s;
-    font-style:italic; font-weight:300; font-size:clamp(1.1rem,4.5vw,1.35rem);
+    font-style:italic; font-weight:400; font-size:clamp(1.28rem,5vw,1.55rem);
     line-height:1.75; color:var(--cr); max-width:320px;
   }
   .fin-sub {
     opacity:0; animation:fadeUp 1.2s ease forwards 2.0s;
-    margin-top:2rem; font-family:'Cinzel',serif; font-size:0.55rem;
-    letter-spacing:0.3em; color:var(--vg); opacity:0.5;
+    margin-top:2rem; font-family:'Cinzel',serif; font-size:0.72rem;
+    letter-spacing:0.3em; color:var(--vg); opacity:0.78;
   }
   .fin-cta { display:inline-block; text-decoration:none; margin-top:2.2rem;
     opacity:0; animation:fadeUp 1.4s ease forwards 2.6s; }
@@ -231,11 +231,11 @@
 </style>
 <style>
   /* ===== Zier-Bilder (zz) ===== */
-  .zz-corner{position:fixed;width:30vw;max-width:160px;opacity:.55;z-index:-1;pointer-events:none}
+  .zz-corner{position:fixed;width:44vw;max-width:250px;opacity:.9;z-index:-1;pointer-events:none}
   .zz-corner.tl{top:0;left:0}
   .zz-corner.br{bottom:0;right:0;transform:rotate(180deg)}
-  #permScreen{background:linear-gradient(rgba(26,10,46,.80),rgba(26,10,46,.88)),url('gewoelbe.jpg') center/cover no-repeat !important}
-  #finaleScreen{background:linear-gradient(rgba(26,10,46,.55),rgba(26,10,46,.80)),url('finale.jpg') center/cover no-repeat !important}
+  #permScreen{background:linear-gradient(rgba(16,8,24,.58),rgba(16,8,24,.72)),url('gewoelbe.jpg') center/cover no-repeat !important}
+  #finaleScreen{background:linear-gradient(rgba(16,8,24,.32),rgba(16,8,24,.62)),url('finale.jpg') center/cover no-repeat !important}
 </style>
 </head>
 <body>
