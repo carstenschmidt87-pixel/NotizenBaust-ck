@@ -392,7 +392,7 @@ function updateCount(){
   }
   if(ready){
     camHint.textContent = micListening
-      ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+      ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
       : 'Das Dreieck steht.\nDrei Schläge auf den Tisch — oder den Hammer tippen.';
   } else if(n === 0){
     camHint.textContent = 'Legt die Schatullen gemeinsam.\nTippt die Stellen hier.';
@@ -456,7 +456,7 @@ function knockHint(){
   if(knocks === 2) return 'Noch ein Schlag — alle zusammen.';
   if(knocks >= 3) return 'Der Stein ist gesetzt.';
   return micListening
-    ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+    ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
     : 'Drei Schläge auf den Tisch — oder den Hammer tippen.';
 }
 
@@ -492,9 +492,9 @@ function flashKnock(){
   });
 }
 
-const KNOCK_GAP_MIN = 700;
-const KNOCK_SEQ_RESET = 3500;
-const MIC_CALIB_MS = 900;
+const KNOCK_GAP_MIN = 550;   // cluster of hands = 1 Schlag; ~1s pause dazwischen kommt durch
+const KNOCK_SEQ_RESET = 5000; // drei Schläge mit je ~1s Pause plus etwas Luft
+const MIC_CALIB_MS = 700;
 
 async function primeMic(){
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
@@ -527,9 +527,9 @@ async function startMic(){
     if(!ac){ setMicUi(false); return; }
     const src = ac.createMediaStreamSource(micStream);
     const hp = ac.createBiquadFilter();
-    hp.type = 'highpass'; hp.frequency.value = 50;
+    hp.type = 'highpass'; hp.frequency.value = 30;
     const lp = ac.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 900;
+    lp.type = 'lowpass'; lp.frequency.value = 1400;
     micAnalyser = ac.createAnalyser();
     micAnalyser.fftSize = 1024;
     micAnalyser.smoothingTimeConstant = 0;
@@ -553,7 +553,7 @@ function setMicUi(on){
   gavelCap.textContent = on ? 'Lauscht dem Tisch' : 'Hammer tippen';
   if(knockReady && knocks === 0){
     camHint.textContent = on
-      ? 'Legt dieses Handy auf den Tisch.\nSchlagt dreimal fest darauf.'
+      ? 'Legt dieses Handy auf den Tisch.\nDrei Schläge, etwa eine Sekunde Abstand.'
       : 'Kein Gehör — tippt den Hammer dreimal.';
   }
 }
@@ -593,15 +593,15 @@ function loopMic(){
     lastRms = rms;
     return;
   }
-  if(rms < noiseFloor * 1.6) noiseFloor = noiseFloor * 0.97 + rms * 0.03;
+  if(rms < noiseFloor * 1.8) noiseFloor = noiseFloor * 0.985 + rms * 0.015;
   if(knocks > 0 && knocks < 3 && now - lastSeqAt > KNOCK_SEQ_RESET){
     knocks = 0;
     knockDots.forEach(d => d.classList.remove('on'));
     camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
   }
   if(now < micIgnoreUntil){ lastRms = rms; return; }
-  const thresh = Math.max(0.11, noiseFloor * 5.5);
-  const onset = rms > thresh && rms > lastRms * 1.45;
+  const thresh = Math.max(0.04, noiseFloor * 2.8);
+  const onset = rms > thresh && (rms > lastRms * 1.18 || rms - lastRms > 0.03);
   if(onset && now - lastKnockAt > KNOCK_GAP_MIN){
     registerKnock('mic');
   }
