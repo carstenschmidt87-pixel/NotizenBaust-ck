@@ -340,7 +340,7 @@ const TARGET = 10;
 const ROWS = [[0],[1,2],[3,4,5],[6,7,8,9]];
 const ROW_NOTE = [528, 396, 330, 264];
 const LABELS = [1,2,2,3,3,3,4,4,4,4];
-const KNOCK_GAP_MIN = 380;
+const KNOCK_GAP_MIN = 450;
 const KNOCK_SEQ_RESET = 7000;
 const MIC_AUDIO = {
   echoCancellation: false,
@@ -360,7 +360,6 @@ let micByte = null;
 let micFreq = null;
 let micRaf = 0;
 let audioGraphReady = false;
-let motionOn = false;
 let sensorsOk = false;
 let noiseFloor = 0.04;
 let prevLevel = 0;
@@ -487,7 +486,7 @@ function registerKnock(src){
   unlockAudio();
   lastKnockAt = now;
   lastSeqAt = now;
-  ignoreUntil = now + (src === 'gavel' ? 500 : 350);
+  ignoreUntil = now + (src === 'gavel' ? 500 : 420);
   knocks = Math.min(3, knocks + 1);
   knockDots.forEach((d, i) => d.classList.toggle('on', i < knocks));
   gavelBtn.classList.remove('hit');
@@ -536,8 +535,7 @@ async function armSensors(){
   unlockAudio();
   await resumeAC();
   const micOk = await ensureMic();
-  await ensureMotion();
-  setMicUi(micOk || motionOn);
+  setMicUi(micOk);
 }
 
 function liveAudioTracks(){
@@ -580,35 +578,6 @@ function wireMic(){
   if(!micRaf) loopMic();
 }
 
-async function ensureMotion(){
-  try{
-    if(typeof DeviceMotionEvent === 'undefined') return false;
-    if(typeof DeviceMotionEvent.requestPermission === 'function'){
-      const r = await DeviceMotionEvent.requestPermission();
-      if(r !== 'granted') return false;
-    }
-    if(!motionOn){
-      motionOn = true;
-      window.addEventListener('devicemotion', onMotion, {passive:true});
-    }
-    return true;
-  }catch(e){ return false; }
-}
-
-function onMotion(e){
-  if(!knockReady || finaleDone) return;
-  const now = performance.now();
-  if(now < ignoreUntil) return;
-  let spike = 0;
-  if(e.acceleration && (e.acceleration.x != null || e.acceleration.y != null || e.acceleration.z != null)){
-    spike = Math.hypot(e.acceleration.x||0, e.acceleration.y||0, e.acceleration.z||0);
-  } else if(e.accelerationIncludingGravity){
-    const g = e.accelerationIncludingGravity;
-    spike = Math.abs(Math.hypot(g.x||0, g.y||0, g.z||0) - 9.81);
-  }
-  if(spike >= 1.05) registerKnock('motion');
-}
-
 function sampleMic(){
   micAnalyser.getByteTimeDomainData(micByte);
   let peak = 0;
@@ -643,16 +612,12 @@ function loopMic(){
     camHint.textContent = 'Noch einmal: drei Schläge hintereinander.';
   }
   if(!knockReady || now < ignoreUntil) return;
-  const thresh = Math.max(0.11, noiseFloor * 2.15);
-  if(level > thresh && onset > 0.055) registerKnock('mic');
+  const thresh = Math.max(0.18, noiseFloor * 2.7);
+  if(level > thresh && onset > 0.09) registerKnock('mic');
 }
 
 function hushSensors(){
   if(micRaf){ cancelAnimationFrame(micRaf); micRaf = 0; }
-  if(motionOn){
-    window.removeEventListener('devicemotion', onMotion);
-    motionOn = false;
-  }
   if(micStream){
     micStream.getAudioTracks().forEach(t => { try { t.stop(); } catch(e){} });
   }
@@ -701,8 +666,7 @@ async function startCeremonialMedia(wantCam){
   }else{
     await ensureMic();
   }
-  await ensureMotion();
-  setMicUi(audioGraphReady || motionOn);
+  setMicUi(audioGraphReady);
 }
 
 document.getElementById('openCamBtn').addEventListener('click', async () => {
