@@ -122,6 +122,12 @@
     color:var(--vg); opacity:0.9; text-align:center; margin-top:2.4rem;
   }
 
+  #gateScreen { justify-content:center; }
+  .gate-seal {
+    font-size:2.4rem; color:var(--go); margin-bottom:1.2rem;
+    text-shadow:0 0 24px rgba(201,168,76,0.45);
+  }
+
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
   @keyframes shake {
     0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);}
@@ -145,8 +151,20 @@
 <img class="zz-corner tl" src="ecke.png" alt=""><img class="zz-corner br" src="ecke.png" alt="">
 <canvas id="fxCanvas"></canvas>
 
+<!-- ══ Schloss noch versiegelt ══ -->
+<div id="gateScreen" class="screen">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="name">Der Schlussstein</div>
+  <div class="rule"></div>
+  <div class="gate-seal">✦</div>
+  <div class="eyebrow">Noch versiegelt</div>
+  <p class="lead">Der Stein öffnet sich erst,<br>wenn euer Schloss geöffnet ist.</p>
+  <p class="sub">Kehrt zu eurer Seite zurück.<br>Findet das Paar, das euren Schlüssel trägt,<br>und scannt ihn — dann führt der Weg hierher.</p>
+  <button class="meister" id="gateMeister">✦</button>
+</div>
+
 <!-- ══ Eingabe ══ -->
-<div id="ph1" class="screen">
+<div id="ph1" class="screen hidden">
   <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
   <div class="name">Der Schlussstein</div>
   <div class="rule"></div>
@@ -185,10 +203,37 @@
 const KEYSTONE = 'PYTHAGORAS';
 const CAMERA_URL = 'kamera.html';
 const N = KEYSTONE.length;
+const GS_DAY = new Date().toISOString().slice(0,10);
 
+function gsIsOpen(){
+  try{ return localStorage.getItem('gsSchlossOffen') === GS_DAY; }catch(e){ return false; }
+}
+function gsMarkOpen(){
+  try{ localStorage.setItem('gsSchlossOffen', GS_DAY); }catch(e){}
+}
+
+const gateScreen = document.getElementById('gateScreen');
 const slotsWrap = document.getElementById('slots');
 const ph1  = document.getElementById('ph1');
 const done = document.getElementById('done');
+const fromMeister = /(?:\?|&)tor=1(?:&|$)/.test(location.search);
+
+function admitToStone(persist){
+  if(persist) gsMarkOpen();
+  gateScreen.classList.add('hidden');
+  ph1.classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+if(gsIsOpen()){
+  admitToStone(false);
+} else if(fromMeister){
+  admitToStone(false);
+} else {
+  let gc=0;
+  document.getElementById('gateMeister').addEventListener('click',()=>{
+    gc++; if(gc>=3){ gc=0; admitToStone(true); }
+  });
+}
 
 // Stellen aufbauen
 const inputs = [];
