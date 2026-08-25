@@ -187,18 +187,58 @@
     color:var(--pb); margin-top:1.5rem;
   }
 
-  /* ── Druck: nur die Urkunde, hell auf weiß ── */
+  /* ── Druck: Pergament wie am Bildschirm, eine A4-Seite ── */
   @media print {
-    @page { margin:1.2cm; }
-    body { background:#fff !important; }
-    body::before, .zz-corner, .ctrl, #camOverlay { display:none !important; }
-    .wrap { padding:0; max-width:none; }
-    .cert {
-      max-width:none; width:100%; box-shadow:none;
-      background:#fdfaf2; border-radius:0;
-      -webkit-print-color-adjust:exact; print-color-adjust:exact;
+    @page { size:A4 portrait; margin:10mm 12mm; }
+    * {
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      color-adjust:exact !important;
     }
-    .cert-photo img { display:block !important; }
+    html, body {
+      background:#f6eed9 !important;
+      background-image:none !important;
+      min-height:0 !important;
+      height:auto !important;
+      overflow:visible !important;
+      color:var(--pt);
+    }
+    body::before, .zz-corner, .ctrl, #camOverlay { display:none !important; }
+    .wrap {
+      padding:0; max-width:none; margin:0;
+      display:block;
+    }
+    .cert {
+      max-width:none; width:100%;
+      background:#f6eed9 !important;
+      box-shadow:none; border-radius:0; padding:3mm;
+      page-break-inside:avoid; break-inside:avoid;
+    }
+    .cert-frame {
+      padding:7mm 8mm 6mm;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 0%,rgba(138,109,47,0.08),transparent 60%),
+        radial-gradient(ellipse 120% 80% at 50% 100%,rgba(138,109,47,0.08),transparent 60%),
+        #f6eed9 !important;
+    }
+    .cert svg.cemblem { width:34px; margin-bottom:2.5mm; }
+    .cert-eyebrow { font-size:7.5pt; margin-bottom:2mm; }
+    .cert-title { font-size:15pt; letter-spacing:0.12em; margin-bottom:1mm; }
+    .cert-rule { margin:2.5mm auto 4mm; }
+    .cert-text { font-size:11pt; line-height:1.4; }
+    .cert-name { font-size:16pt; letter-spacing:0.12em; margin:2mm 0; }
+    .cert-deeds {
+      font-size:10pt; line-height:1.45; margin:3.5mm auto;
+      max-width:none;
+    }
+    .cert-verdict { font-size:11pt; line-height:1.35; margin-bottom:3.5mm; }
+    .cert-photo {
+      width:52mm; max-width:52mm; aspect-ratio:4/3; margin:0 auto 4mm;
+    }
+    .cert-date { font-size:9pt; margin-bottom:5mm; }
+    .sign-line { width:150px; }
+    .sign-role { font-size:8pt; }
+    .cert-foot { font-size:8pt; margin-top:4mm; }
   }
 </style>
 </head>
