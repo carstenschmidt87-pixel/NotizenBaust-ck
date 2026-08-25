@@ -717,7 +717,17 @@ function checkFive(){
     }
   }
 }
-document.getElementById('camBtn').addEventListener('click',()=>{window.location.href=CAMERA_URL;});
+document.getElementById('camBtn').addEventListener('click',()=>{
+  const day=new Date().toISOString().slice(0,10);
+  let ok=false; try{ ok=localStorage.getItem('gsSchlossOffen')===day; }catch(e){}
+  if(!ok){
+    const k=document.getElementById('phKey'), p3=document.getElementById('ph3');
+    if(p3) p3.classList.add('hidden');
+    if(k){ k.classList.remove('hidden'); window.scrollTo(0,0); }
+    return;
+  }
+  window.location.href=CAMERA_URL;
+});
 
 // ── Splitter ──
 ['fragLetterP2','fragLetterP3'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='A';});
@@ -776,6 +786,7 @@ const LOCK_CIPHER_B64 = 'BWV3Y2EhMUM0LRQmLFJ4D1UhMUI9IhSxwqJ4JlE3J0R4AVE6MUI9PhQ
 
   function unlock(text){
     if(opened) return; opened=true;
+    try{ localStorage.setItem('gsSchlossOffen', new Date().toISOString().slice(0,10)); }catch(e){}
     closeScanner();
     lockBox.classList.add('hidden');
     keyMsg.textContent=text;
