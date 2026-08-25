@@ -69,10 +69,16 @@
   }
   .btn-pdf:hover { border-color:var(--go); background:rgba(201,168,76,0.16); }
   .btn-pdf:active { transform:scale(0.97); }
+  .ctrl-row {
+    display:flex; flex-wrap:wrap; gap:0.55rem; justify-content:center;
+    margin:0 auto 0.9rem; max-width:360px;
+  }
+  .btn-pdf.sm { font-size:0.86rem; padding:0.65rem 1.1rem; letter-spacing:0.16em; }
   .ctrl-note {
     font-style:italic; font-size:1.04rem; color:var(--vg); opacity:0.95;
     line-height:1.55; margin-top:0.8rem;
   }
+  #fileInp { display:none !important; }
 
   /* ── Die Urkunde ── */
   .cert {
@@ -120,6 +126,49 @@
     font-size:clamp(1.12rem,4.4vw,1.26rem); line-height:1.7; font-style:italic;
     margin-bottom:1.5rem;
   }
+  .cert-photo {
+    width:min(82%, 290px); aspect-ratio:4/3; margin:0 auto 1.25rem;
+    border:3px double var(--pb); background:rgba(138,109,47,0.07);
+    overflow:hidden; position:relative; border-radius:2px;
+  }
+  .cert-photo img {
+    width:100%; height:100%; object-fit:cover; display:none;
+  }
+  .cert-photo.has-img img { display:block; }
+  .cert-photo .ph-empty {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-style:italic; font-size:1.08rem; color:rgba(51,38,15,0.38); padding:0.8rem;
+    line-height:1.45;
+  }
+  .cert-photo.has-img .ph-empty { display:none; }
+
+  /* ── Kamera-Overlay ── */
+  #camOverlay {
+    display:none; position:fixed; inset:0; z-index:80;
+    background:rgba(4,1,10,0.96); flex-direction:column;
+    align-items:center; justify-content:center; gap:1rem; padding:1.4rem;
+    text-align:center;
+  }
+  #camOverlay.show { display:flex; }
+  #camVideo {
+    width:min(92vw, 420px); max-height:58vh; object-fit:cover;
+    border-radius:8px; border:1px solid rgba(201,168,76,0.5);
+    background:#000; transform:scaleX(-1);
+  }
+  .cam-hint {
+    font-style:italic; font-size:1.12rem; color:var(--vg); line-height:1.5;
+    text-shadow:0 2px 16px rgba(0,0,0,.94);
+  }
+  .cam-err { font-style:italic; font-size:1.04rem; color:#ffb0a6; min-height:1.3em; }
+  .shutter {
+    width:68px; height:68px; border-radius:50%;
+    background:rgba(201,168,76,0.15); border:2px solid rgba(201,168,76,0.75);
+    cursor:pointer; box-shadow:0 0 18px rgba(201,168,76,0.25);
+  }
+  .shutter::after {
+    content:''; display:block; width:46px; height:46px; margin:9px auto;
+    border-radius:50%; background:var(--go);
+  }
   .cert-date {
     font-family:'Cinzel',serif; font-size:0.86rem; letter-spacing:0.18em;
     color:rgba(51,38,15,0.85); margin-bottom:1.8rem;
@@ -142,12 +191,14 @@
   @media print {
     @page { margin:1.2cm; }
     body { background:#fff !important; }
-    body::before, .zz-corner, .ctrl { display:none !important; }
+    body::before, .zz-corner, .ctrl, #camOverlay { display:none !important; }
     .wrap { padding:0; max-width:none; }
     .cert {
       max-width:none; width:100%; box-shadow:none;
       background:#fdfaf2; border-radius:0;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact;
     }
+    .cert-photo img { display:block !important; }
   }
 </style>
 </head>
@@ -160,9 +211,9 @@
     <div class="ctrl-title">Lehrlingsurkunde</div>
     <div class="ctrl-rule"></div>
     <p class="ctrl-lead">
-      Trage deinen Namen ein —<br>
-      dann <b>speichere die Urkunde als PDF</b>,<br>
-      als Andenken an diesen Abend.
+      Trage deinen Namen ein, nimm ein Foto von dir<br>
+      oder mit deinem Gegenüber —<br>
+      dann <b>speichere die Lehrlingsurkunde als PDF</b>.
     </p>
     <input id="nameInp" type="text" maxlength="40" list="nameList"
       placeholder="Dein Name" autocomplete="off" autocorrect="off" spellcheck="false"/>
@@ -178,6 +229,11 @@
       <option value="Schwester Ursula"></option>
       <option value="Bruder Carsten"></option>
     </datalist>
+    <div class="ctrl-row">
+      <button type="button" class="btn-pdf sm" id="camBtn">Foto aufnehmen</button>
+      <button type="button" class="btn-pdf sm" id="galBtn">Aus der Galerie</button>
+    </div>
+    <input id="fileInp" type="file" accept="image/*" hidden/>
     <button class="btn-pdf" id="pdfBtn">✦ &nbsp; Als PDF speichern &nbsp; ✦</button>
     <p class="ctrl-note">
       Im Druck-Dialog „Als PDF speichern“ wählen.<br>
@@ -191,6 +247,10 @@
       <div class="cert-eyebrow">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
       <div class="cert-title">Lehrlingsurkunde</div>
       <div class="cert-rule"></div>
+      <div class="cert-photo" id="certPhoto">
+        <img id="certImg" alt="Foto auf der Urkunde"/>
+        <div class="ph-empty">Foto von dir<br>oder euch beiden</div>
+      </div>
       <p class="cert-text">
         Kund und zu wissen sei hiermit, dass
         <span class="cert-name empty" id="certName">— euer Name —</span>
@@ -205,8 +265,7 @@
         die drei Säulen <b>Weisheit</b>, <b>Stärke</b> und <b>Schönheit</b> benannt
       </p>
       <p class="cert-verdict">
-        und darum in den Kreis der<br>
-        <b>Lehrlinge dieser Runde</b> aufgenommen ist.
+        Zum Andenken an diesen gemeinsamen Abend.
       </p>
       <div class="cert-date" id="certDate">Gegeben am …</div>
       <div class="cert-sign">
@@ -215,16 +274,31 @@
           <div class="sign-role">Der Meister des Abends</div>
         </div>
       </div>
-      <div class="cert-foot">✦ &nbsp; Gesellenstück — Carsten &nbsp; ✦</div>
+      <div class="cert-foot">✦ &nbsp; Lehrlingsurkunde &nbsp; ✦</div>
     </div>
   </div>
 
+</div>
+
+<div id="camOverlay">
+  <video id="camVideo" playsinline muted autoplay></video>
+  <p class="cam-hint">Ein Foto von dir — oder mit deinem Gegenüber.</p>
+  <div class="cam-err" id="camErr"></div>
+  <button type="button" class="shutter" id="shutterBtn" aria-label="Auslösen"></button>
+  <button type="button" class="btn-pdf sm" id="camCancel">Abbrechen</button>
 </div>
 
 <script>
 const nameInp = document.getElementById('nameInp');
 const certName = document.getElementById('certName');
 const certDate = document.getElementById('certDate');
+const certPhoto = document.getElementById('certPhoto');
+const certImg = document.getElementById('certImg');
+const camOverlay = document.getElementById('camOverlay');
+const camVideo = document.getElementById('camVideo');
+const camErr = document.getElementById('camErr');
+const fileInp = document.getElementById('fileInp');
+let camStream = null;
 
 const d = new Date();
 certDate.textContent = 'Gegeben am ' + d.toLocaleDateString('de-DE',
@@ -237,11 +311,69 @@ function syncName(){
 }
 nameInp.addEventListener('input', syncName);
 
+function setPhoto(dataUrl){
+  certImg.src = dataUrl;
+  certPhoto.classList.add('has-img');
+}
+
+function stopCam(){
+  if(camStream){
+    camStream.getTracks().forEach(t => { try { t.stop(); } catch(e){} });
+    camStream = null;
+  }
+  camVideo.srcObject = null;
+  camOverlay.classList.remove('show');
+}
+
+async function openCam(){
+  camErr.textContent = '';
+  camOverlay.classList.add('show');
+  try{
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'user', width:{ ideal:1280 }, height:{ ideal:720 } },
+      audio:false
+    });
+    camVideo.srcObject = camStream;
+    try { await camVideo.play(); } catch(e){}
+  }catch(e){
+    camErr.textContent = 'Kamera nicht verfügbar — nimm „Aus der Galerie“.';
+  }
+}
+
+function capturePhoto(){
+  if(!camStream || camVideo.videoWidth < 8){
+    camErr.textContent = 'Warte, bis das Bild da ist — oder nimm die Galerie.';
+    return;
+  }
+  const w = camVideo.videoWidth, h = camVideo.videoHeight;
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  const cx = cv.getContext('2d');
+  cx.translate(w, 0); cx.scale(-1, 1);
+  cx.drawImage(camVideo, 0, 0, w, h);
+  setPhoto(cv.toDataURL('image/jpeg', 0.88));
+  stopCam();
+}
+
+document.getElementById('camBtn').addEventListener('click', openCam);
+document.getElementById('camCancel').addEventListener('click', stopCam);
+document.getElementById('shutterBtn').addEventListener('click', capturePhoto);
+document.getElementById('galBtn').addEventListener('click', () => fileInp.click());
+fileInp.addEventListener('change', () => {
+  const f = fileInp.files && fileInp.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = () => setPhoto(r.result);
+  r.readAsDataURL(f);
+  fileInp.value = '';
+});
+
 document.getElementById('pdfBtn').addEventListener('click', () => {
   syncName();
   window.print();
 });
 window.addEventListener('beforeprint', syncName);
+window.addEventListener('pagehide', stopCam);
 </script>
 </body>
 </html>
