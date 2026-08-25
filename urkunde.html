@@ -189,7 +189,7 @@
 
   /* ── Druck: Pergament wie am Bildschirm, eine A4-Seite ── */
   @media print {
-    @page { size:A4 portrait; margin:10mm 12mm; }
+    @page { size:A4 portrait; margin:0; }
     * {
       -webkit-print-color-adjust:exact !important;
       print-color-adjust:exact !important;
@@ -198,47 +198,53 @@
     html, body {
       background:#f6eed9 !important;
       background-image:none !important;
-      min-height:0 !important;
-      height:auto !important;
-      overflow:visible !important;
+      width:210mm; height:297mm;
+      min-height:0 !important; max-height:297mm;
+      overflow:hidden !important;
+      margin:0; padding:0;
       color:var(--pt);
     }
     body::before, .zz-corner, .ctrl, #camOverlay { display:none !important; }
     .wrap {
       padding:0; max-width:none; margin:0;
+      width:210mm; height:297mm;
       display:block;
     }
     .cert {
-      max-width:none; width:100%;
+      width:210mm; height:297mm; max-width:none;
       background:#f6eed9 !important;
-      box-shadow:none; border-radius:0; padding:3mm;
+      box-shadow:none; border-radius:0;
+      padding:11mm 13mm;
+      overflow:hidden;
       page-break-inside:avoid; break-inside:avoid;
     }
     .cert-frame {
-      padding:7mm 8mm 6mm;
+      height:100%;
+      padding:8mm 9mm 7mm;
       background:
         radial-gradient(ellipse 120% 80% at 50% 0%,rgba(138,109,47,0.08),transparent 60%),
         radial-gradient(ellipse 120% 80% at 50% 100%,rgba(138,109,47,0.08),transparent 60%),
         #f6eed9 !important;
     }
-    .cert svg.cemblem { width:34px; margin-bottom:2.5mm; }
-    .cert-eyebrow { font-size:7.5pt; margin-bottom:2mm; }
-    .cert-title { font-size:15pt; letter-spacing:0.12em; margin-bottom:1mm; }
-    .cert-rule { margin:2.5mm auto 4mm; }
-    .cert-text { font-size:11pt; line-height:1.4; }
-    .cert-name { font-size:16pt; letter-spacing:0.12em; margin:2mm 0; }
+    .cert svg.cemblem { width:36px; margin-bottom:3mm; }
+    .cert-eyebrow { font-size:8pt; margin-bottom:2.5mm; }
+    .cert-title { font-size:16pt; letter-spacing:0.12em; margin-bottom:1.5mm; }
+    .cert-rule { margin:3mm auto 5mm; }
+    .cert-text { font-size:12pt; line-height:1.4; }
+    .cert-name { font-size:17pt; letter-spacing:0.12em; margin:2.5mm 0; }
     .cert-deeds {
-      font-size:10pt; line-height:1.45; margin:3.5mm auto;
+      font-size:11pt; line-height:1.5; margin:4.5mm auto;
       max-width:none;
     }
-    .cert-verdict { font-size:11pt; line-height:1.35; margin-bottom:3.5mm; }
+    .cert-verdict { font-size:12pt; line-height:1.4; margin-bottom:5mm; }
     .cert-photo {
-      width:52mm; max-width:52mm; aspect-ratio:4/3; margin:0 auto 4mm;
+      width:68mm; max-width:68mm; aspect-ratio:4/3; margin:0 auto 5mm;
     }
-    .cert-date { font-size:9pt; margin-bottom:5mm; }
-    .sign-line { width:150px; }
-    .sign-role { font-size:8pt; }
-    .cert-foot { font-size:8pt; margin-top:4mm; }
+    .cert-photo.has-img img { display:block !important; }
+    .cert-date { font-size:9.5pt; margin-bottom:7mm; }
+    .sign-line { width:160px; }
+    .sign-role { font-size:8.5pt; }
+    .cert-foot { font-size:8.5pt; margin-top:6mm; }
   }
 </style>
 </head>
