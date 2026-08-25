@@ -281,6 +281,49 @@
   #spokeBtn { margin:0.35rem auto 0.6rem; }
   #afterTalk { width:100%; display:flex; flex-direction:column; align-items:center; }
 
+  /* ── Schlüssel und Schloss ── */
+  #lockBox { display:flex; flex-direction:column; align-items:center; width:100%; }
+  .cipher-runes {
+    font-size:1.35rem; letter-spacing:0.16em; line-height:1.9; text-align:center;
+    color:var(--go); opacity:0.85; max-width:300px; margin:0.2rem auto 1.5rem;
+    word-break:break-all; white-space:pre-line;
+    text-shadow:0 0 14px rgba(201,168,76,0.4);
+  }
+  .key-alt {
+    background:none; border:none; cursor:pointer; margin-top:1rem;
+    font-style:italic; font-family:'Cormorant Garamond',serif; font-size:1.06rem;
+    color:var(--vg); opacity:0.9; text-decoration:underline;
+    text-shadow:0 2px 16px rgba(0,0,0,.94);
+  }
+  .key-msg {
+    display:none; font-style:italic; font-size:clamp(1.3rem,5vw,1.5rem); line-height:1.85;
+    color:var(--cr); text-align:center; max-width:330px; margin-top:1.2rem;
+  }
+  .key-msg.show { display:block; animation:fadeUp 1s ease; }
+  .qr-card {
+    background:#f6eed9; padding:14px; border-radius:6px;
+    box-shadow:0 10px 34px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.5);
+    margin:0.4rem 0 0.8rem;
+  }
+  .qr-card svg { display:block; width:186px; height:186px; }
+  .key-code {
+    font-family:'Cinzel',serif; font-size:0.86rem; letter-spacing:0.2em;
+    color:var(--vg); opacity:0.94;
+  }
+  .key-code b { color:var(--go); letter-spacing:0.3em; }
+  #scanOverlay {
+    position:fixed; inset:0; z-index:300; background:rgba(4,1,10,0.97);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:1.1rem; padding:1.5rem; text-align:center;
+  }
+  #scanVideo {
+    width:min(86vw,340px); height:min(86vw,340px); object-fit:cover;
+    border-radius:8px; border:1px solid rgba(201,168,76,0.5);
+    background:#000;
+  }
+  .scan-hint { font-style:italic; font-size:1.12rem; color:var(--vg); }
+  .scan-err { font-style:italic; font-size:1.08rem; color:#ffb0a6; min-height:1.5em; }
+
   /* ── Das sechste Wort (Bonus) ── */
   .bonus-wrap {
     display:flex; flex-direction:column; align-items:center; width:100%;
@@ -393,6 +436,45 @@
   <div class="foot">✦ &nbsp; Gesellenstück &nbsp; ✦</div>
 </div>
 
+<div id="phKey" class="screen hidden">
+  <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
+  <div class="name" style="font-size:clamp(1.15rem,5.2vw,1.45rem);">Schlüssel und Schloss</div>
+  <div class="rule"></div>
+
+  <div id="lockBox">
+    <div class="eyebrow">Euer versiegeltes Schloss</div>
+    <div class="cipher-runes" id="cipherRunes"></div>
+    <p class="verse" style="max-width:310px;">
+      Euren Schlüssel trägt das Paar, dessen Wort<br><b>der Lernende selbst</b> war — der,<br>der seinen Blick nach Osten richtet.
+    </p>
+    <p class="talk-nudge">Fragt die Runde, wer dieses Wort trug.<br>Findet das Paar — und scannt seinen Schlüssel.</p>
+    <button class="btn" id="scanBtn">✦ &nbsp; Schlüssel scannen</button>
+    <button class="key-alt" id="altBtn" type="button">Kamera streikt? Code eintippen</button>
+    <div class="riddle-wrap hidden" id="altWrap" style="margin-top:0.8rem;">
+      <input class="inp" id="altInp" type="text" maxlength="6"
+        placeholder="· · · · · ·" autocomplete="off" autocorrect="off"
+        autocapitalize="characters" spellcheck="false"/>
+      <button class="btn btn-sm" id="altGo">Öffnen</button>
+    </div>
+  </div>
+
+  <div class="key-msg" id="keyMsg"></div>
+  <button class="btn hidden" id="keyNext" style="margin-top:1.8rem;">Geöffnet — weiter</button>
+
+  <div class="divider" style="margin-top:2.8rem;"></div>
+  <div class="eyebrow" style="opacity:.9;">Euer Schlüssel — für ein fremdes Schloss</div>
+  <p class="talk-nudge">Er öffnet nicht euer eigenes.<br>Zeigt ihn dem Paar, das nach ihm fragt.</p>
+  <div class="qr-card"><div id="qrBox"></div></div>
+  <div class="key-code">Notfall-Code: <b>K4ZR7T</b></div>
+</div>
+
+<div id="scanOverlay" class="hidden">
+  <video id="scanVideo" playsinline muted autoplay></video>
+  <div class="scan-hint">Haltet den fremden Schlüssel in das Bild.</div>
+  <div class="scan-err" id="scanErr"></div>
+  <button class="btn btn-sm" id="scanCancel">Abbrechen</button>
+</div>
+
 <div id="ph3" class="screen hidden">
   <div class="orn"><svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg></div>
   <div class="eyebrow">Der Schlussstein</div>
@@ -422,6 +504,8 @@
   </div>
 </div>
 
+<script src="lib-qrcode.js"></script>
+<script src="lib-jsqr.js"></script>
 <script>
 const ANSWER   = 'BOAS';
 const COMBINED = 'JAKIN';  // empty string = tap-to-open
@@ -639,7 +723,7 @@ document.getElementById('camBtn').addEventListener('click',()=>{window.location.
 (function(){
   const c=document.getElementById('checkBtn');if(c)c.addEventListener('click',checkFive);
   const b=document.getElementById('toPh3Btn');
-  if(b)b.addEventListener('click',()=>{ph2.classList.add('hidden');ph3.classList.remove('hidden');window.scrollTo(0,0);});
+  if(b)b.addEventListener('click',()=>{ph2.classList.add('hidden');document.getElementById('phKey').classList.remove('hidden');window.scrollTo(0,0);});
 })();
 
 // ── Das sechste Wort (Bonus) ──
@@ -656,6 +740,136 @@ document.getElementById('camBtn').addEventListener('click',()=>{window.location.
   }
   bb.addEventListener('click',checkBonus);
   bi.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); checkBonus(); }});
+})();
+
+// ── Schlüssel und Schloss ──
+const PAIR_ID = 'P1';
+const OWN_KEY_SECRET = 'K4ZR7T';
+const LOCK_CIPHER_B64 = 'AGB5a2oxJUE/KlhwHkU5Klc1Z0Y4IBkTKF0lMFg+M1o4ZNvQ0xM/LEtwL1I0MBkaJlg/KhkxMlUxIUs5JFsiIU18Z1c/IRkiIlA+MFxwFPDyMVU1aRMbIUs7MxMzMVo4Z1c/IUo1KRMXJlw+Iwl2E1gjZ0khIVBwLl12IVA+IkF2F00lKVczZF+T+1QzKhVwLFI4Khk7Ilo4IUtwJl86IVA+aRMTMVwiZ2A1LFU/NEB2LUokZ1wwIlw+Z9HW0Bk3IlsiZE41LkczNhc=';
+
+(function(){
+  // Eigenen Schlüssel als QR zeichnen
+  try{
+    const q = qrcode(0,'M');
+    q.addData('GS1:'+PAIR_ID+':'+OWN_KEY_SECRET);
+    q.make();
+    document.getElementById('qrBox').innerHTML = q.createSvgTag({cellSize:6,margin:0});
+  }catch(e){}
+
+  // Das versiegelte Schloss als Runen andeuten
+  try{
+    const runes='ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ';
+    const bytes=Uint8Array.from(atob(LOCK_CIPHER_B64),c=>c.charCodeAt(0));
+    let s='';
+    const n=Math.min(bytes.length,63);
+    for(let i=0;i<n;i++){ s+=runes[bytes[i]%runes.length]; if(i%21===20&&i<n-1)s+='\n'; }
+    document.getElementById('cipherRunes').textContent=s+' …';
+  }catch(e){}
+
+  const lockBox=document.getElementById('lockBox');
+  const keyMsg=document.getElementById('keyMsg');
+  const keyNext=document.getElementById('keyNext');
+  const scanErr=document.getElementById('scanErr');
+  let opened=false;
+
+  function unlock(text){
+    if(opened) return; opened=true;
+    closeScanner();
+    lockBox.classList.add('hidden');
+    keyMsg.textContent=text;
+    keyMsg.classList.add('show');
+    keyNext.classList.remove('hidden');
+    runFX(window.innerWidth/2, window.innerHeight*0.35);
+    setTimeout(()=>keyMsg.scrollIntoView({behavior:'smooth',block:'center'}),200);
+  }
+
+  // true = geöffnet, 'own' = eigener Schlüssel, false = passt nicht
+  function tryKey(raw){
+    let secret=String(raw||'').trim();
+    const m=secret.match(/^GS1:(P\d):([A-Z0-9]{6})$/i);
+    if(m) secret=m[2];
+    secret=secret.toUpperCase();
+    if(!/^[A-Z0-9]{6}$/.test(secret)) return false;
+    if(secret===OWN_KEY_SECRET) return 'own';
+    try{
+      const bytes=Uint8Array.from(atob(LOCK_CIPHER_B64),c=>c.charCodeAt(0));
+      for(let i=0;i<bytes.length;i++) bytes[i]^=secret.charCodeAt(i%secret.length);
+      const text=new TextDecoder().decode(bytes);
+      if(text.slice(0,4)!=='GS//') return false;
+      unlock(text.slice(4));
+      return true;
+    }catch(e){ return false; }
+  }
+  window.__tryKey=tryKey; // Notausgang/Test
+
+  // Scanner
+  let scanStream=null, scanRaf=0;
+  async function openScanner(){
+    const ov=document.getElementById('scanOverlay');
+    const video=document.getElementById('scanVideo');
+    scanErr.textContent='';
+    ov.classList.remove('hidden');
+    try{
+      scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    }catch(e){
+      scanErr.textContent='Kamera nicht verfügbar — nutzt den Notfall-Code des anderen Paares.';
+      return;
+    }
+    video.srcObject=scanStream;
+    try{ await video.play(); }catch(e){}
+    const cv=document.createElement('canvas');
+    const cx=cv.getContext('2d',{willReadFrequently:true});
+    let lastBad='';
+    const loop=()=>{
+      if(!scanStream) return;
+      if(video.readyState>=2 && video.videoWidth>0){
+        cv.width=video.videoWidth; cv.height=video.videoHeight;
+        cx.drawImage(video,0,0);
+        const img=cx.getImageData(0,0,cv.width,cv.height);
+        const code=(typeof jsQR==='function')?jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'}):null;
+        if(code&&code.data){
+          const r=tryKey(code.data);
+          if(r===true) return;
+          if(code.data!==lastBad){
+            lastBad=code.data;
+            scanErr.textContent=(r==='own')
+              ?'Das ist euer eigener Schlüssel — er öffnet ein fremdes Schloss.'
+              :'Dieser Schlüssel passt nicht zu eurem Schloss.';
+          }
+        }
+      }
+      scanRaf=requestAnimationFrame(loop);
+    };
+    scanRaf=requestAnimationFrame(loop);
+  }
+  function closeScanner(){
+    if(scanRaf){cancelAnimationFrame(scanRaf);scanRaf=0;}
+    if(scanStream){scanStream.getTracks().forEach(t=>{try{t.stop();}catch(e){}});scanStream=null;}
+    document.getElementById('scanOverlay').classList.add('hidden');
+  }
+
+  document.getElementById('scanBtn').addEventListener('click',openScanner);
+  document.getElementById('scanCancel').addEventListener('click',closeScanner);
+  document.getElementById('altBtn').addEventListener('click',()=>{
+    document.getElementById('altWrap').classList.remove('hidden');
+    document.getElementById('altInp').focus();
+  });
+  const altInp=document.getElementById('altInp');
+  function altTry(){
+    const r=tryKey(altInp.value);
+    if(r===true) return;
+    altInp.classList.add('wrong');
+    setTimeout(()=>altInp.classList.remove('wrong'),500);
+    altInp.value='';
+    altInp.placeholder=(r==='own')?'euer eigener…':'· · · · · ·';
+  }
+  document.getElementById('altGo').addEventListener('click',altTry);
+  altInp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();altTry();} });
+  keyNext.addEventListener('click',()=>{
+    document.getElementById('phKey').classList.add('hidden');
+    ph3.classList.remove('hidden');
+    window.scrollTo(0,0);
+  });
 })();
 </script>
 </body>
