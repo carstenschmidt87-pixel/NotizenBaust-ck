@@ -79,41 +79,14 @@
   #video { width:100%; height:100%; object-fit:cover; display:none; }
   #video.on { display:block; }
   #video.rear { transform:scaleX(1); }
-  #freezeShot {
-    width:100%; height:100%; object-fit:cover; display:none;
-  }
-  #freezeShot.on { display:block; }
-
-  .shutter {
-    width:72px; height:72px; border-radius:50%;
-    background:rgba(201,168,76,0.12);
-    border:2px solid rgba(201,168,76,0.7);
-    color:var(--go); cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    -webkit-tap-highlight-color:transparent;
-    box-shadow:0 0 22px rgba(201,168,76,0.22);
-  }
-  .shutter:active { transform:scale(0.92); }
-  .shutter::after {
-    content:''; width:48px; height:48px; border-radius:50%;
-    background:var(--go); box-shadow:0 0 16px rgba(201,168,76,0.55);
-  }
-  .shutter-cap {
-    font-family:'Cinzel',serif; font-size:0.86rem; letter-spacing:0.22em;
-    color:var(--go); text-transform:uppercase; margin-top:0.35rem;
-  }
-  #shotStage { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
-  #shotStage.hidden, #resetBtn.hidden { display:none !important; }
 
   .tet-overlay {
     position:absolute; inset:0;
-    display:none; flex-direction:column;
+    display:flex; flex-direction:column;
     justify-content:space-evenly; align-items:center;
     padding:7% 8% 9%;
     background:linear-gradient(180deg,rgba(7,4,12,0.28),rgba(7,4,12,0.52));
-    pointer-events:none;
   }
-  .video-wrap.sealed .tet-overlay { display:flex; }
   .tet-svg {
     position:absolute; inset:8% 12% 10%;
     width:76%; height:82%; margin:auto;
@@ -152,7 +125,6 @@
   }
   .video-wrap.locked .tet-stone { pointer-events:none; }
   .video-wrap.shake { animation:shakeCam 0.32s ease; }
-  .video-wrap.sealed { max-height:36vh; }
 
   .cam-bottom { width:100%; text-align:center; z-index:1; }
   .count-label {
@@ -285,10 +257,10 @@
 <div id="permScreen">
   <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="12" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="8" x2="48" y2="48" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/><path d="M 14 42 Q 30 52 46 42" stroke="#c9a84c" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M 15 28 L 15 16 L 45 16" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="32" font-family="Cinzel,serif" font-size="9" fill="#c9a84c" text-anchor="middle" dominant-baseline="middle">G</text></svg>
   <h1>Das Werk vollenden</h1>
-  <p>Zuerst jedes Paar mit einem Satz: was habt ihr heute bearbeitet?<br>Dann legt ihr die Schatullen gemeinsam ins Dreieck. <b>Jede und jeder</b> fotografiert das Dreieck mit dem eigenen Handy. Danach legt ihr <b>alle Handys</b> flach auf den Tisch — und schlagt zusammen dreimal.</p>
+  <p>Zuerst jedes Paar mit einem Satz: was habt ihr heute bearbeitet?<br>Dann legt ihr die Schatullen gemeinsam ins Dreieck. <b>Jede und jeder</b> öffnet die Kamera, nimmt das Dreieck ins Bild und tippt die zehn Steine. Danach legt ihr <b>alle Handys</b> flach auf den Tisch — und schlagt zusammen dreimal.</p>
   <div class="perm-actions">
-    <button class="btn-gold" id="openCamBtn">Kamera öffnen</button>
-    <button class="btn-sm" id="skipCamBtn">Ohne Foto fortfahren</button>
+    <button class="btn-gold" id="openCamBtn">Mit Blick auf den Tisch</button>
+    <button class="btn-sm" id="skipCamBtn">Ohne Kamera fortfahren</button>
   </div>
 </div>
 
@@ -296,12 +268,11 @@
 <div id="camScreen">
   <div class="cam-top">
     <div class="cam-title">Die zehn Steine</div>
-    <div class="cam-hint" id="camHint">Nehmt das Dreieck der Schatullen ins Bild<br>und fotografiert.</div>
+    <div class="cam-hint" id="camHint">Jedes Paar einen Satz.<br>Dann legt die Schatullen — jede und jeder tippt hier.</div>
   </div>
 
   <div class="video-wrap" id="videoWrap">
     <video id="video" playsinline autoplay muted></video>
-    <img id="freezeShot" alt="">
     <svg class="tet-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <polygon points="50,6 94,94 6,94" fill="none" stroke="#c9a84c" stroke-width="0.8"/>
     </svg>
@@ -328,13 +299,9 @@
   </div>
 
   <div class="cam-bottom">
-    <div class="count-label" id="countLabel">Das Dreieck fotografieren</div>
+    <div class="count-label" id="countLabel">0 von 10 gesetzt</div>
     <div class="cam-actions">
-      <div id="shotStage">
-        <button type="button" class="shutter" id="shotBtn" aria-label="Fotografieren"></button>
-        <div class="shutter-cap">Fotografieren</div>
-      </div>
-      <button class="btn-sm hidden" id="resetBtn">Noch einmal</button>
+      <button class="btn-sm" id="resetBtn">Neu legen</button>
       <div class="knock-stage" id="knockStage">
         <div class="ear-meter" aria-hidden="true"><div class="ear-fill" id="earFill"></div></div>
         <div class="knock-dots" id="knockDots"><span></span><span></span><span></span></div>
@@ -383,10 +350,10 @@ const MIC_AUDIO = {
 };
 
 /* ════ STATE ════ */
+let lit = Array(TARGET).fill(false);
 let finaleDone = false;
 let knocks = 0;
 let knockReady = false;
-let shotDone = false;
 let micStream = null;
 let micAnalyser = null;
 let micByte = null;
@@ -410,13 +377,9 @@ const permScreen   = document.getElementById('permScreen');
 const camScreen    = document.getElementById('camScreen');
 const finaleScreen = document.getElementById('finaleScreen');
 const video        = document.getElementById('video');
-const freezeShot   = document.getElementById('freezeShot');
 const videoWrap    = document.getElementById('videoWrap');
 const camHint      = document.getElementById('camHint');
 const countLabel   = document.getElementById('countLabel');
-const shotStage    = document.getElementById('shotStage');
-const shotBtn      = document.getElementById('shotBtn');
-const resetBtn     = document.getElementById('resetBtn');
 const knockStage   = document.getElementById('knockStage');
 const knockDots    = [...document.querySelectorAll('#knockDots span')];
 const gavelBtn     = document.getElementById('gavelBtn');
@@ -427,31 +390,25 @@ const stones       = [...document.querySelectorAll('.tet-stone')];
 const fxCanvas     = document.getElementById('fxCanvas');
 const fxCtx        = fxCanvas.getContext('2d');
 
+function litCount(){ return lit.filter(Boolean).length; }
+function rowOf(i){ return ROWS.findIndex(r => r.includes(i)); }
+function isRowComplete(r){ return ROWS[r].every(i => lit[i]); }
+
 function buzz(pattern){
   try { if(navigator.vibrate) navigator.vibrate(pattern); } catch(e){}
 }
 
-function knockCopy(){
-  if(knocks === 1) return 'Noch zwei Schläge — alle zusammen.';
-  if(knocks === 2) return 'Noch ein Schlag — alle zusammen.';
-  if(knocks >= 3) return 'Der Stein ist gesetzt.';
-  return sensorsOk
-    ? 'Alle Handys flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause — gemeinsam.'
-    : 'Kein Gehör — tippt den Hammer dreimal. Alle zusammen.';
-}
-
-function enterKnockStage(){
-  shotDone = true;
-  shotStage.classList.add('hidden');
-  resetBtn.classList.remove('hidden');
-  knockStage.classList.add('show');
-  videoWrap.classList.add('sealed','locked');
-  countLabel.textContent = '✦ Das Dreieck ist im Bild ✦';
-  stones.forEach((btn, i) => {
-    btn.classList.add('lit');
-    btn.textContent = '✦';
-  });
-  if(!knockReady){
+function updateCount(){
+  const n = litCount();
+  countLabel.textContent = n >= TARGET ? '✦ Alle zehn vereint ✦' : n + ' von ' + TARGET + ' gesetzt';
+  const ready = n >= TARGET;
+  knockStage.classList.toggle('show', ready);
+  videoWrap.classList.toggle('locked', ready);
+  if(!ready && knocks){
+    knocks = 0;
+    knockDots.forEach(d => d.classList.remove('on'));
+  }
+  if(ready && !knockReady){
     knockReady = true;
     ignoreUntil = performance.now() + 900;
     noiseFloor = 0.04;
@@ -461,76 +418,79 @@ function enterKnockStage(){
     pendingKnock = null;
     moveMs = 0;
     moveBlockUntil = 0;
-    knocks = 0;
-    knockDots.forEach(d => d.classList.remove('on'));
     armSensors();
+  } else if(!ready && knockReady){
+    knockReady = false;
   }
   setMicUi(sensorsOk);
-  camHint.textContent = knockCopy();
-}
-
-function stopVideoTracks(){
-  const streams = [];
-  if(video.srcObject) streams.push(video.srcObject);
-  if(micStream) streams.push(micStream);
-  streams.forEach(s => {
-    s.getVideoTracks().forEach(t => { try { t.stop(); } catch(e){} });
-  });
-  video.srcObject = null;
-  video.classList.remove('on');
-}
-
-function captureShot(){
-  if(finaleDone || shotDone) return;
-  unlockAudio();
-  const live = video.srcObject && video.videoWidth > 0;
-  if(live){
-    const cv = document.createElement('canvas');
-    cv.width = video.videoWidth;
-    cv.height = video.videoHeight;
-    cv.getContext('2d').drawImage(video, 0, 0);
-    freezeShot.src = cv.toDataURL('image/jpeg', 0.86);
-    freezeShot.classList.add('on');
+  if(ready){
+    camHint.textContent = knocks ? knockHint() : (sensorsOk
+      ? 'Alle Handys flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause — gemeinsam.'
+      : 'Kein Gehör — tippt den Hammer dreimal. Alle zusammen.');
+  } else if(n === 0){
+    camHint.textContent = 'Jedes Paar einen Satz.\nDann legt die Schatullen — jede und jeder tippt hier.';
+  } else {
+    camHint.textContent = 'Weiter — eins, zwei, drei, vier.';
   }
-  stopVideoTracks();
-  playRowChord(0);
-  buzz([20, 30, 40]);
-  const r = videoWrap.getBoundingClientRect();
-  runSpark(r.left + r.width/2, r.top + r.height/2);
-  enterKnockStage();
 }
 
-shotBtn.addEventListener('click', captureShot);
+stones.forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    if(finaleDone || videoWrap.classList.contains('locked')) return;
+    if(lit[i]) return;
+    unlockAudio();
+    lit[i] = true;
+    btn.classList.add('lit');
+    btn.textContent = '✦';
+    btn.classList.remove('pop');
+    void btn.offsetWidth;
+    btn.classList.add('pop');
+    const r = rowOf(i);
+    playChime(ROW_NOTE[r]);
+    buzz(18);
+    const rect = btn.getBoundingClientRect();
+    runSpark(rect.left + rect.width/2, rect.top + rect.height/2);
+    if(isRowComplete(r)){
+      const rowEl = btn.parentElement;
+      rowEl.classList.remove('flash');
+      void rowEl.offsetWidth;
+      rowEl.classList.add('flash');
+      playRowChord(r);
+      buzz([30, 40, 50]);
+    }
+    updateCount();
+  });
+});
 
-resetBtn.addEventListener('click', async () => {
+document.getElementById('resetBtn').addEventListener('click', () => {
   if(finaleDone) return;
-  shotDone = false;
-  knockReady = false;
+  lit = Array(TARGET).fill(false);
   knocks = 0;
+  knockReady = false;
   knockDots.forEach(d => d.classList.remove('on'));
-  knockStage.classList.remove('show');
-  shotStage.classList.remove('hidden');
-  resetBtn.classList.add('hidden');
-  videoWrap.classList.remove('sealed','locked');
-  freezeShot.classList.remove('on');
-  freezeShot.removeAttribute('src');
   stones.forEach((btn, i) => {
     btn.classList.remove('lit','pop');
     btn.textContent = String(LABELS[i]);
   });
-  countLabel.textContent = 'Das Dreieck fotografieren';
-  camHint.textContent = 'Nehmt das Dreieck der Schatullen ins Bild\nund fotografiert.';
-  await startCamera();
+  document.querySelectorAll('.tet-row').forEach(r => r.classList.remove('flash'));
+  updateCount();
 });
 
 gavelBtn.addEventListener('click', () => {
   registerKnock('gavel');
 });
 
-function knockHint(){ return knockCopy(); }
+function knockHint(){
+  if(knocks === 1) return 'Noch zwei Schläge — alle zusammen.';
+  if(knocks === 2) return 'Noch ein Schlag — alle zusammen.';
+  if(knocks >= 3) return 'Der Stein ist gesetzt.';
+  return sensorsOk
+    ? 'Alle Handys flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause — gemeinsam.'
+    : 'Kein Gehör — tippt den Hammer dreimal. Alle zusammen.';
+}
 
 function registerKnock(src){
-  if(finaleDone || !knockReady) return;
+  if(finaleDone || litCount() < TARGET || !knockReady) return;
   const now = performance.now();
   if(src === 'mic' && now < moveBlockUntil) return;
   if(now - lastKnockAt < KNOCK_GAP_MIN) return;
@@ -568,7 +528,9 @@ function setMicUi(on){
   gavelCap.classList.toggle('listening', on);
   gavelCap.textContent = on ? 'Hört den Tisch' : 'Hammer tippen';
   if(knockReady && knocks === 0){
-    camHint.textContent = knockCopy();
+    camHint.textContent = on
+      ? 'Alle Handys flach auf den Tisch.\nDrei feste Schläge, eine Sekunde Pause — gemeinsam.'
+      : 'Kein Gehör — tippt den Hammer dreimal. Alle zusammen.';
   }
 }
 
@@ -745,7 +707,7 @@ async function startCamera(){
     });
     await attachVideo(stream);
   }catch(e){
-    camHint.textContent = 'Kamera nicht verfügbar — fotografiert mit einem anderen Handy oder fahrt ohne Foto fort.';
+    camHint.textContent = 'Kamera nicht verfügbar — setzt die Steine trotzdem auf dem Dreieck.';
   }
 }
 
@@ -780,9 +742,8 @@ document.getElementById('openCamBtn').addEventListener('click', async () => {
 });
 document.getElementById('skipCamBtn').addEventListener('click', async () => {
   showStage();
-  camHint.textContent = 'Ohne Foto — alle Handys auf den Tisch.\nDann drei Schläge gemeinsam.';
+  camHint.textContent = 'Ohne Kamera — jede und jeder tippt die Steine,\ndann alle Handys auf den Tisch.';
   await startCeremonialMedia(false);
-  enterKnockStage();
 });
 
 /* ════ MEISTER-NOTAUSGANG ════ */
