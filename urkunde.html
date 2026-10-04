@@ -257,8 +257,8 @@
     <div class="ctrl-title">Lehrlingsurkunde</div>
     <div class="ctrl-rule"></div>
     <p class="ctrl-lead">
-      Trage deinen Namen ein, nimm ein Foto von dir<br>
-      oder mit deinem Gegenüber —<br>
+      Trage deinen Namen ein.<br>
+      Nimm das Foto <b>zu zweit mit deinem Partner</b> auf —<br>
       dann <b>speichere die Lehrlingsurkunde als PDF</b>.
     </p>
     <input id="nameInp" type="text" maxlength="40" list="nameList"
@@ -297,13 +297,13 @@
       <div class="cert-rule"></div>
       <div class="cert-photo" id="certPhoto">
         <img id="certImg" alt="Foto auf der Urkunde"/>
-        <div class="ph-empty">Foto von dir<br>oder euch beiden</div>
+        <div class="ph-empty">Foto zu zweit<br>mit deinem Partner</div>
       </div>
       <p class="cert-text">
         Kund und zu wissen sei hiermit, dass
         <span class="cert-name empty" id="certName">— euer Name —</span>
         an diesem Abend in geselliger Tafelrunde<br>
-        das Gesellenstück bestanden hat:
+        das Lehrlingsstück bestanden hat:
       </p>
       <p class="cert-deeds">
         das geteilte Wort gefügt und das Ei geöffnet<br>
@@ -316,12 +316,6 @@
         Zum Andenken an diesen gemeinsamen Abend.
       </p>
       <div class="cert-date" id="certDate">Gegeben am …</div>
-      <div class="cert-sign">
-        <div class="sign-block">
-          <div class="sign-line"></div>
-          <div class="sign-role">Der Meister des Abends</div>
-        </div>
-      </div>
       <div class="cert-foot">✦ &nbsp; Lehrlingsurkunde &nbsp; ✦</div>
     </div>
   </div>
@@ -330,7 +324,7 @@
 
 <div id="camOverlay">
   <video id="camVideo" playsinline muted autoplay></video>
-  <p class="cam-hint">Ein Foto von dir — oder mit deinem Gegenüber.</p>
+  <p class="cam-hint">Fotografiert euch zu zweit — mit deinem Partner.</p>
   <div class="cam-err" id="camErr"></div>
   <button type="button" class="shutter" id="shutterBtn" aria-label="Auslösen"></button>
   <button type="button" class="btn-pdf sm" id="camCancel">Abbrechen</button>

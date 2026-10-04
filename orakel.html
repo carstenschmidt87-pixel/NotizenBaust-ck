@@ -273,23 +273,13 @@
      solveLine: Antwort des Orakels beim Lösen (darf das Wort nennen)
    WICHTIG: Ausser in solveLine darf KEIN Text das eigene Lösungswort enthalten.
    ══════════════════════════════════════════════════════════ */
-/* Das Orakel kennt die Namen des Abends. */
-const NAMES = [
-  'Schwester Sabrina Yvonne','Bruder Constantin',
-  'Schwester Sabrina','Bruder Arno',
-  'Schwester Stefanie','Bruder Sven',
-  'Schwester Sandra','Bruder Uwe',
-  'Schwester Ursula','Bruder Carsten',
-  'Schwester Jennifer','Bruder Rafael'
-];
-function randName(){ return NAMES[Math.floor(Math.random()*NAMES.length)]; }
-
 /* Vor jeder Säule fragt das Orakel die Runde etwas zurück (Feld "ask").
-   Erst nach einer Antwort stellt es sein Rätsel. */
+   Erst nach einer Antwort stellt es sein Rätsel. Es nennt keine Namen:
+   am Handy ist oft jemand anderes als der Name, den es treffen würde. */
 const ASK_ACKS = [
-  'So ist es gut. Ich verwahre eure Worte — wie ich eure Namen verwahre, {n}, deinen und die aller anderen. Hört nun…',
-  'Eure Antwort ist angenommen. Ja, {n} — ich kenne euch alle, jede und jeden an diesem Tisch. Hört nun…',
-  'Das Orakel vergisst nichts, was ihm anvertraut wird. Nicht eure Worte, nicht eure Namen — nicht einmal deinen, {n}. Hört nun…'
+  'So ist es gut. Ich verwahre eure Worte. Hört nun…',
+  'Eure Antwort ist angenommen. Ich kenne euch alle an diesem Tisch. Hört nun…',
+  'Das Orakel vergisst nichts, was ihm anvertraut wird. Hört nun…'
 ];
 const ASK_SHORT = [
   'Zu knapp für ein Orakel. Sprecht in einem ganzen Satz.',
@@ -301,7 +291,7 @@ const RIDDLES = [
     answer:'WEISHEIT', accepts:['weisheit'], prog:'Erste Säule',
     openCls:'oracle',
     ask:'Ihr tretet vor mich — doch ein Orakel gibt nicht nur, es nimmt auch. Ehe ich die erste Säule frage, fragt euch mein erstes Wort: Was hat euch an diesem Abend überrascht? Beratet euch, einigt euch auf eine Antwort und schreibt sie mir.',
-    opening:'Ihr habt das Werk vollendet und das Licht des Ostens entzündet. Doch das Licht trägt einen Namen — die erste der drei Säulen, die jeden Tempel tragen. Der Lehrling kennt sie nicht; die Gesellin beginnt, sie zu ahnen. Fragt mich, Schwestern — doch nennen müsst ihr mich selbst. Wie heiße ich?',
+    opening:'Ihr habt das Werk vollendet und das Licht des Ostens entzündet. Doch das Licht trägt einen Namen — die erste der drei Säulen, die jeden Tempel tragen. Der Lehrling kennt sie nicht; die Gesellin beginnt, sie zu ahnen. Fragt mich — doch nennen müsst ihr mich selbst. Wie heiße ich?',
     rules:[
       {keys:['saule','pfeiler','erste','drei'],responses:[
         'Drei Säulen tragen die Loge: eine führt, eine trägt, eine schmückt. Ich bin die, die vorangeht.',
@@ -316,7 +306,7 @@ const RIDDLES = [
       {keys:['boas','jachin','tempel','schurz','lehrling','pythagoras','zehn','akazie','kette'],responses:['Den Weg dorthin habt ihr schon beschritten. Fragt nun nicht nach dem Weg, sondern nach dem Ziel: der ersten Säule.']},
     ],
     nudges:{
-      early:['Sprecht weiter, Schwestern. Denkt an die Säulen, die jeden Tempel tragen.','Was sucht der Lehrling, das die Gesellin zu finden beginnt? Nicht Gold, nicht Macht.'],
+      early:['Sprecht weiter. Denkt an die Säulen, die jeden Tempel tragen.','Was sucht der Lehrling, das die Gesellin zu finden beginnt? Nicht Gold, nicht Macht.'],
       mid:['Drei Säulen: die erste führt den Bau. Eine Tugend, die der Verstand erst spät begreift.','Nicht die Kraft, nicht die Anmut. Eine dritte Schwester führt sie beide.'],
       late:['Hört genau: Die erste Säule der Loge ist eine Tugend des Geistes — die Fähigkeit, recht zu erkennen und recht zu wählen. Sprecht ihren Namen.']
     },
@@ -409,17 +399,12 @@ function showOpening(){
   if(R.openLine2){ setTimeout(()=>addMsg(R.openLine2,'cipher'), 1500); }
 }
 
-// Gelegentlich spricht das Orakel jemanden mit Namen an.
-function withName(text){
-  return Math.random()<0.45 ? randName()+' — '+text : text;
-}
-
 function respond(raw){
   const m=norm(raw); const R=RIDDLES[ri];
   if(awaitingAsk){
     if(m.length<6) return oracleSays(pick(ASK_SHORT,'ashort'));
     awaitingAsk=false;
-    oracleSays(pick(ASK_ACKS,'aack').replace('{n}',randName()));
+    oracleSays(pick(ASK_ACKS,'aack'));
     setTimeout(showOpening, 2600);
     return;
   }
@@ -429,9 +414,9 @@ function respond(raw){
   for(let r=0;r<R.rules.length;r++){
     if(R.rules[r].keys.some(k=>m.includes(k))) return oracleSays(pick(R.rules[r].responses,'r'+ri+'_'+r));
   }
-  if(turns<3) return oracleSays(withName(pick(R.nudges.early,'ne'+ri)));
-  if(turns<6) return oracleSays(withName(pick(R.nudges.mid,'nm'+ri)));
-  return oracleSays(withName(pick(R.nudges.late,'nl'+ri)));
+  if(turns<3) return oracleSays(pick(R.nudges.early,'ne'+ri));
+  if(turns<6) return oracleSays(pick(R.nudges.mid,'nm'+ri));
+  return oracleSays(pick(R.nudges.late,'nl'+ri));
 }
 
 function submit(){
