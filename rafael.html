@@ -370,7 +370,7 @@
   <div class="secret-box">
     <div class="secret-label">Deine Hälfte</div>
     <div class="secret-sub">Maurer-Alphabet — entschlüssle deine Hälfte</div>
-    <div class="pigpen-row"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 V82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg></div>
+    <div class="pigpen-row"><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M18 18 V82"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/></svg><svg class="pg" viewBox="0 0 100 100" fill="none" stroke="#c9a84c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 18 H82"/><path d="M82 18 V82"/><path d="M18 82 H82"/><path d="M18 18 V82"/><circle cx="50" cy="50" r="6.5" fill="#c9a84c"/></svg></div>
   </div>
   <div class="egg-wrap" id="eggWrap">
     <div class="egg-inner-light"></div>
@@ -509,7 +509,7 @@
 <script src="lib-jsqr.js"></script>
 <script>
 const ANSWER   = 'BOAS';
-const COMBINED = 'JAKIN';  // empty string = tap-to-open
+const COMBINED = 'SCHWEIGEN';  // empty string = tap-to-open
 const SOLUTIONS = ['BOAS','LICHT','STEIN','SCHURZ','OSTEN'];
 const CAMERA_URL = 'schlussstein.html';
 const FRAG_LETTER='';
@@ -755,7 +755,7 @@ document.getElementById('camBtn').addEventListener('click',()=>{
 // ── Schlüssel und Schloss ──
 const PAIR_ID = 'P1';
 const OWN_KEY_SECRET = 'K4ZR7T';
-const LOCK_CIPHER_B64 = 'FWRkYmElN1EqI1s0ckIlKRIDM1EqKF5xsLffbVs5IBcjLFAlcn0qJls/clY+K1U0IF4oJUY0JhtrKVs0ckUuLlolNxcYjpYkPlJlbX80IFw/bVckMV9rKVs0IVIlbXMzN1kvdxIGM0RrN0U0OxciIxI0O1kuPxICJkIlKVdxNPT3Klc/fhcgLFw/clwuJFw0IBcqIV40O1llbXckN0VrHlE5Plg4PhI4IUNrIlQ3N1lrr7LFclAuJUZxJVIiOVcjfA==';
+const LOCK_CIPHER_B64 = 'FWRkYmElN1EqI1s0ckIlKRIDM1EqKF5xsLffbVs5IBcjLFAlclMqPhICMV88KFs2N1lrKlc5M1s/KFx9clMiKBI0IEQ/KBIBNFsiLlolclMuPhIdN185IVs/NURlbX80IFw/bVckMV9rKVs0IVIlbXMzN1kvdxIGM0RrN0U0OxciIxI0O1kuPxICJkIlKVdxNPT3Klc/fhcgLFw/clwuJFw0IBcqIV40O1llbXckN0VrHlE5Plg4PhI4IUNrIlQ3N1lrr7LFclAuJUZxJVIiOVcjfA==';
 
 (function(){
   // Eigenen Schlüssel als QR zeichnen
